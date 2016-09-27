@@ -1,7 +1,6 @@
 import { create, createTriple, entityUpdate } from 'redux-graph'
-import { isAnonymous } from 'cape-redux-auth'
+import { isAnonymous, selectUser } from 'cape-redux-auth'
 
-import { getUser } from '../select/user'
 import { createCollectionItemTriple, endListItem } from './entity'
 import {
   buildCollectionList, favsListSelector, itemListCreated, userHasCollections,
@@ -23,10 +22,11 @@ export function ensureUserHasCollection(dispatch, getState) {
   return !userHasCollections(getState()) && createUserFavCollection(dispatch, getState)
 }
 // We know user is anon and has a favs collection. Create new listItem for favs collection.
-export function addItemToFavs(item) {
+export function addItemToFavs(item, user) {
   return (dispatch, getState) => {
     const state = getState()
-    const triple = createCollectionItemTriple(favsListSelector(state), item, getUser(state))
+    const usr = user || selectUser(state)
+    const triple = createCollectionItemTriple(favsListSelector(state), item, usr)
     createTriple(dispatch, triple)
   }
 }
