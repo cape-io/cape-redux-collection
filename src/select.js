@@ -4,13 +4,12 @@ import {
 import { createSelector, createStructuredSelector } from 'reselect'
 import find from 'lodash/fp/find'
 import pickBy from 'lodash/fp/pickBy'
-import { boolSelector, getProps, select, simpleSelector } from 'cape-select'
+import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
 
 // import { getDataFeed, getWebApp } from '../select'
 // import { itemsFilled } from '../select/items'
 
-import { createCollectionList } from './entity'
 import {
   findActionCreated, fixListItems, listItemIndex, orderListItems, invertListItems,
   setListItemsCollection,
@@ -39,9 +38,12 @@ export const favsListSelector = createSelector(userCollections, find(isFavList))
 export const favListElements = select(favsListSelector, 'itemListElement')
 export const userHasFavorites = boolSelector(favListElements)
 
-// export const listItems = createSelector(favListElements, itemsFilled, fixListItems)
-// export const listItemsSorted = createSelector(listItems, orderListItems)
-// export const favsItemIndex = createSelector(listItems, listItemIndex)
+export function itemsSelectors(selectItems) {
+  const listItems = createSelector(favListElements, selectItems, fixListItems)
+  const listItemsSorted = createSelector(listItems, orderListItems)
+  const favsItemIndex = createSelector(listItems, listItemIndex)
+  return { listItems, listItemsSorted, favsItemIndex }
+}
 
 // ITEM LISTS & COLLECTIONS. Uses item prop.
 
