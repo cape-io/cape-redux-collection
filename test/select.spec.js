@@ -1,15 +1,15 @@
 import test from 'tape'
 
-import { getItemId, getTitle } from '../../src/redux/project/select'
+import { getItemId, getTitle } from '../src/select'
 
-import { state, props } from '../mock'
+import { state, props } from './mock'
 
-test('getItemId()', t => {
+test('getItemId()', (t) => {
   t.equal(getItemId(state, props), 'bar', 'getItemId')
   t.end()
 })
 
-test('getTitle', t => {
+test('getTitle', (t) => {
   t.equal(getTitle(state, props), 'strawberry', 'getTitle with prop')
   t.equal(getTitle(state), 'Favorites', 'no props')
   t.end()

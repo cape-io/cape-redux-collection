@@ -44,5 +44,5 @@ export function invertLiCollection(res, { collection, ...listItem }) {
 }
 // Invert from list -> collection to collection -> list
 export function invertListItems(lists) {
-  return lists && reduce(lists, invertLiCollection, {}) || null
+  return lists ? reduce(lists, invertLiCollection, {}) : null
 }

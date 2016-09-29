@@ -8,7 +8,7 @@ export const predicateValueIdMatches = curry((entity, predicateValues) =>
 )
 export function collectionReduceFilter(predicate, entity) {
   return (res, item, key) =>
-    predicateValueIdMatches(entity, item[predicate]) && set(res, key, item) || res
+    (predicateValueIdMatches(entity, item[predicate]) && set(res, key, item)) || res
 }
 export const predicateValueContains = curry((predicate, collection, entity) =>
   reduce(collection, collectionReduceFilter(predicate, entity), {})

@@ -5,10 +5,10 @@ import { createSelector, createStructuredSelector } from 'reselect'
 import find from 'lodash/fp/find'
 import pickBy from 'lodash/fp/pickBy'
 import { boolSelector, getProps, select, simpleSelector } from 'cape-select'
+import { selectUser } from 'cape-redux-auth'
 
-import { getDataFeed, getWebApp } from '../select'
-import { getUser } from '../select/user'
-import { itemsFilled } from '../select/items'
+// import { getDataFeed, getWebApp } from '../select'
+// import { itemsFilled } from '../select/items'
 
 import { createCollectionList } from './entity'
 import {
@@ -31,17 +31,17 @@ export const listItemSelector = entityTypeSelector(liType)
 
 // Find user collections.
 export const userCollections = createSelector(
-  collections, getUser, predicateValueContains('creator')
+  collections, selectUser, predicateValueContains('creator')
 )
 export const userHasCollections = boolSelector(userCollections)
 // Find (first) user favs project from list entities.
 export const favsListSelector = createSelector(userCollections, find(isFavList))
 export const favListElements = select(favsListSelector, 'itemListElement')
 export const userHasFavorites = boolSelector(favListElements)
-export const listItems = createSelector(favListElements, itemsFilled, fixListItems)
 
-export const listItemsSorted = createSelector(listItems, orderListItems)
-export const favsItemIndex = createSelector(listItems, listItemIndex)
+// export const listItems = createSelector(favListElements, itemsFilled, fixListItems)
+// export const listItemsSorted = createSelector(listItems, orderListItems)
+// export const favsItemIndex = createSelector(listItems, listItemIndex)
 
 // ITEM LISTS & COLLECTIONS. Uses item prop.
 
@@ -69,15 +69,16 @@ export const itemFavCollection = createSelector(itemCollections, find(isFavList)
 
 // Gep props.litlte or return favTitle default.
 export const getTitle = select(getProps, 'title', favTitle)
+
 // Return user if there was a title set. Otherwise return webApp.
-export function collectionListAgent(state, props) {
-  if (getTitle(state, props) !== favTitle) return getUser(state)
-  return getWebApp(state)
-}
+// export function collectionListAgent(state, props) {
+//   if (getTitle(state, props) !== favTitle) return selectUser(state)
+//   return getWebApp(state)
+// }
 // create a new Favs list for the user.
-export const buildCollectionList = simpleSelector(
-  collectionListAgent, getUser, getDataFeed, getTitle, createCollectionList
-)
+// export const buildCollectionList = simpleSelector(
+//   collectionListAgent, selectUser, getDataFeed, getTitle, createCollectionList
+// )
 
 // ITEM CONTAINER
 // Used in the ItemFav container.
