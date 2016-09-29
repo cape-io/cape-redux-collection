@@ -1,7 +1,7 @@
 {
   "name": "cape-redux-collection",
   "version": "1.0.1",
-  "description": "A redux reducer for some authentication state.",
+  "description": "Redux functions for managing lists of stuff.",
   "main": "lib/index.js",
   "author": "Kai Curry <kai@cape.io> (http://www.cape.io/)",
   "repository": "cape-io/cape-redux-collection",
