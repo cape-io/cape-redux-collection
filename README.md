@@ -1,4 +1,4 @@
-# cape-redux-collection v1.0.1
+# cape-redux-collection v1.0.2
 
 Redux functions for managing lists of stuff
 
