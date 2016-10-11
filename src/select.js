@@ -77,10 +77,6 @@ export const getTitle = select(getProps, 'title', favTitle)
 //   if (getTitle(state, props) !== favTitle) return selectUser(state)
 //   return getWebApp(state)
 // }
-// create a new Favs list for the user.
-// export const buildCollectionList = simpleSelector(
-//   collectionListAgent, selectUser, getDataFeed, getTitle, createCollectionList
-// )
 
 // ITEM CONTAINER
 // Used in the ItemFav container.
