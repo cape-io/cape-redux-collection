@@ -20,7 +20,7 @@
     "cape-redux-auth": "^1.1.2",
     "cape-select": "^2.2.1",
     "lodash": "^4.15.0",
-    "redux-graph": "^1.4.3",
+    "redux-graph": "^1.5.1",
     "reselect": "^2.5.4"
   },
   "devDependencies": {
