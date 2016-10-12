@@ -28,7 +28,7 @@ export const listItemSelector = entityTypeSelector(liType)
 
 // USER COLLECTIONS - No props needed.
 
-// Find user collections.
+// Find user collections. Returns empty object when nothing found.
 export const userCollections = createSelector(
   collections, selectUser, predicateValueContains('creator')
 )
