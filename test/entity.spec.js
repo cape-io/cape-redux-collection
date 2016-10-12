@@ -1,6 +1,6 @@
 import test from 'tape'
 import { isDate, matches, property } from 'lodash'
-import { collectionListBuilder, getTitle } from '../src/entity'
+import { collectionListBuilder, collectionListBuilderDefault, getTitle } from '../src/entity'
 
 import { collectionList, store, props } from './mock'
 
@@ -21,5 +21,11 @@ test('collectionListBuilder', (t) => {
   const objSelector = { foo }
   const collection3 = collectionListBuilder(objSelector)(store.getState())
   t.equal(collection3.foo, foo(store.getState()), 'foo entity')
+  t.end()
+})
+test('collectionListBuilderDefault', (t) => {
+  const collection = collectionListBuilderDefault(store.getState())
+  t.ok(matches(collectionList)(collection), 'matches')
+  t.ok(isDate(collection.dateCreated), 'isDate')
   t.end()
 })

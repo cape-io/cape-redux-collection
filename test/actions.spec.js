@@ -7,11 +7,11 @@ import { store } from './mock'
 const state = store.getState()
 
 test('userNeedsCollection', (t) => {
-  t.equal(userNeedsCollection(state), true)
+  t.equal(userNeedsCollection(null, store.getState), true)
   t.end()
 })
 test('ensureUserHasCollection', (t) => {
-  const res = ensureUserHasCollection()(null, store.getState)
+  const res = ensureUserHasCollection()(store.dispatch, store.getState)
   console.log(res)
   t.end()
 })

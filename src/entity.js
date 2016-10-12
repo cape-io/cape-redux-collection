@@ -23,7 +23,7 @@ export const listCreatorTitle = {
 export function collectionListBuilder(selectorObj = {}) {
   return flow(structuredSelector(merge(listCreatorTitle, selectorObj)), collectionList)
 }
-export const collectionListBuilderDefault = collectionListBuilder
+export const collectionListBuilderDefault = collectionListBuilder()
 
 // Describe the list.
 //   agent,
