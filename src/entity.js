@@ -1,4 +1,4 @@
-import { partial } from 'lodash'
+import { flow } from 'lodash'
 import { merge } from 'cape-redux'
 import { getProps, select, structuredSelector } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
@@ -7,6 +7,7 @@ import { collectionType, favTitle, liType } from './const'
 
 export function collectionList(props) {
   return {
+    dateCreated: new Date(),
     itemListOrder: 'Ascending',
     type: collectionType,
     ...props,
@@ -20,7 +21,7 @@ export const listCreatorTitle = structuredSelector({
   creator: selectUser, // User that created the thing.
   title: getTitle, // Title for this CollectionList.
 })
-export const buildCollectionList = partial(merge, collectionList, listCreatorTitle)
+export const buildCollectionList = flow(listCreatorTitle, collectionList)
 
 // Describe the list.
 //   agent,

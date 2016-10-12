@@ -4,8 +4,9 @@ import {
   collectionListSelector, collections, getItemId, userHasCollections,
 } from '../src/select'
 
-import { state, props } from './mock'
+import { store, props } from './mock'
 
+const state = store.getState()
 test('collectionListSelector', (t) => {
   t.deepEqual(collectionListSelector(state), state.graph.entity)
   t.end()

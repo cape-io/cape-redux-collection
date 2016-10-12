@@ -1,4 +1,3 @@
-import immutable from 'seamless-immutable'
 import { combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
 import graph from 'redux-graph'
@@ -22,7 +21,7 @@ export const user2 = {
   id: 'auth',
   name: 'Auth User',
 }
-export const state = immutable()
+
 export const props = {
   item: { id: 'bar' },
   title: 'strawberry',
@@ -52,4 +51,10 @@ export const collection = {
       anon: user,
     },
   },
+}
+export const collectionList = {
+  itemListOrder: 'Ascending',
+  type: 'CollectionList',
+  creator: { id: 'anonUser', type: 'Person', name: 'Anonymous' },
+  title: 'Favorites',
 }
