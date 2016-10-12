@@ -7,7 +7,11 @@ const reducer = combineReducers({
   graph,
 })
 const initState = {
-  graph: { entity: { foo: { id: 'foo', type: 'CollectionList' } } },
+  graph: {
+    entity: { foo: { id: 'foo', type: 'CollectionList' } },
+    triple: { spo: {}, sop: {}, osp: {}, ops: {}, pos: {}, pso: {} },
+    typeIndex: {},
+  },
 }
 export const store = createStore(reducer, initState)
 export const user = {

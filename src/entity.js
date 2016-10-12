@@ -15,14 +15,14 @@ export function collectionList(props) {
 }
 // Gep props.title or return favTitle default.
 export const getTitle = select(getProps, 'title', favTitle)
-
-// create a new Favs list for the user.
-export const listCreatorTitle = structuredSelector({
+export const listCreatorTitle = {
   creator: selectUser, // User that created the thing.
   title: getTitle, // Title for this CollectionList.
-})
-export const buildCollectionList = flow(listCreatorTitle, collectionList)
-
+}
+// create a new Favs list for the user.
+export function collectionListBuilder(selectorObj = {}) {
+  return flow(structuredSelector(merge(listCreatorTitle, selectorObj)), collectionList)
+}
 // Describe the list.
 //   agent,
 //   creator,

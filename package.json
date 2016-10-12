@@ -18,7 +18,7 @@
     "cape-lodash": "^1.4.0",
     "cape-redux": "^1.5.0",
     "cape-redux-auth": "^1.1.2",
-    "cape-select": "^2.2.0",
+    "cape-select": "^2.2.1",
     "lodash": "^4.15.0",
     "redux-graph": "^1.4.3",
     "reselect": "^2.5.4"

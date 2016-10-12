@@ -12,6 +12,7 @@ test('collectionListSelector', (t) => {
   t.end()
 })
 test('collections', (t) => {
+  t.deepEqual(collections(state), state.graph.entity)
   t.end()
 })
 
