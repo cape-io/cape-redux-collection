@@ -15,7 +15,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "cape-lodash": "^1.4.0",
+    "cape-lodash": "^1.4.1",
     "cape-redux": "^1.5.0",
     "cape-redux-auth": "^1.1.2",
     "cape-select": "^2.2.1",
