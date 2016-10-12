@@ -16,7 +16,7 @@ import {
 } from './helpers'
 import { isFavList, isValidListItem } from './lang'
 import { predicateValueContains } from './util'
-import { collectionType, liType, favTitle } from './const'
+import { collectionType, liType } from './const'
 
 // COLLECTIONS
 
@@ -69,14 +69,6 @@ export const itemFavCollection = createSelector(itemCollections, find(isFavList)
 
 // CREATE
 
-// Gep props.litlte or return favTitle default.
-export const getTitle = select(getProps, 'title', favTitle)
-
-// Return user if there was a title set. Otherwise return webApp.
-// export function collectionListAgent(state, props) {
-//   if (getTitle(state, props) !== favTitle) return selectUser(state)
-//   return getWebApp(state)
-// }
 
 // ITEM CONTAINER
 // Used in the ItemFav container.

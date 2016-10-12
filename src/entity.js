@@ -1,24 +1,42 @@
+import { partial } from 'lodash'
 import { merge } from 'cape-redux'
-import { collectionType, liType } from './const'
+import { getProps, select, structuredSelector } from 'cape-select'
+import { selectUser } from 'cape-redux-auth'
 
-export const collectionList = {
-  additionalType: 'ProjectDelanyLong',
-  itemListOrder: 'Ascending',
-  type: collectionType,
+import { collectionType, favTitle, liType } from './const'
+
+export function collectionList(props) {
+  return {
+    itemListOrder: 'Ascending',
+    type: collectionType,
+    ...props,
+  }
 }
+// Gep props.title or return favTitle default.
+export const getTitle = select(getProps, 'title', favTitle)
+
+// create a new Favs list for the user.
+export const listCreatorTitle = structuredSelector({
+  creator: selectUser, // User that created the thing.
+  title: getTitle, // Title for this CollectionList.
+})
+export const buildCollectionList = partial(merge, collectionList, listCreatorTitle)
 
 // Describe the list.
 //   agent,
-//   creator, // User that created the thing.
+//   creator,
 //   mainEntity, // List of what.
 //   title,
-export const createCollectionList = merge(collectionList)
+// export const createCollectionList = merge(collectionList)
 
-export const collectionItem = {
-  actionStatus: 'created',
-  startTime: new Date(),
-  type: liType,
-  position: 100,
+export function collectionItem(props) {
+  return {
+    actionStatus: 'created',
+    startTime: new Date(),
+    type: liType,
+    position: 100,
+    ...props,
+  }
 }
 
 // agent,

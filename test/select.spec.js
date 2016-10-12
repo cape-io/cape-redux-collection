@@ -1,16 +1,20 @@
 import test from 'tape'
 
-import { getItemId, getTitle } from '../src/select'
+import {
+  collectionListSelector, collections, getItemId, userHasCollections,
+} from '../src/select'
 
 import { state, props } from './mock'
 
-test('getItemId()', (t) => {
-  t.equal(getItemId(state, props), 'bar', 'getItemId')
+test('collectionListSelector', (t) => {
+  t.deepEqual(collectionListSelector(state), state.graph.entity)
+  t.end()
+})
+test('collections', (t) => {
   t.end()
 })
 
-test('getTitle', (t) => {
-  t.equal(getTitle(state, props), 'strawberry', 'getTitle with prop')
-  t.equal(getTitle(state), 'Favorites', 'no props')
+test('getItemId()', (t) => {
+  t.equal(getItemId(state, props), 'bar', 'getItemId')
   t.end()
 })

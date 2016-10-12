@@ -1,4 +1,5 @@
 import immutable from 'seamless-immutable'
+
 export const user = {
   type: 'Person',
   id: 'anon',
@@ -11,6 +12,7 @@ export const user2 = {
   name: 'Auth User',
 }
 export const state = immutable({
+  graph: { entity: { foo: { id: 'foo', type: 'CollectionList' } } },
   user,
 })
 export const props = {
