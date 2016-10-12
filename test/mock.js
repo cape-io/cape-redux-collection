@@ -62,3 +62,8 @@ export const collectionList = {
   creator: { id: 'anonUser', type: 'Person', name: 'Anonymous' },
   title: 'Favorites',
 }
+export const collectionListEntity = {
+  itemListOrder: 'Ascending',
+  type: 'CollectionList',
+  title: 'Favorites',
+}

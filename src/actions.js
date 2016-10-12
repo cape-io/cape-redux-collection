@@ -16,7 +16,7 @@ export function confirmActive(dispatch, state) {
 // Create favs collection for user.
 export const userNeedsCollection = negate(thunkSelect(userHasCollections))
 
-// Make sure the user has a favs collection created.
+// Make sure the user has a favs collection created. Returns created entity or undefined.
 export function ensureUserHasCollection(buildCollectionList = collectionListBuilderDefault) {
   return cond([ [ userNeedsCollection, selectorCreate(buildCollectionList) ] ])
 }
