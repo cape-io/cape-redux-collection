@@ -1,22 +1,16 @@
 import test from 'tape'
 import { keys } from 'lodash'
 
-import { collection, user } from './mock'
+import { collections, user } from './mock'
 
-import { findCreator, predicateValueContains } from '../src/util'
-import { isFavList } from '../src/lang'
+import { predicateValueContains } from '../src/util'
 
-const userCollections = predicateValueContains('creator', collection, user)
+const userCollections = predicateValueContains('creator', collections, user)
 test('predicateValueContains', (t) => {
   t.deepEqual(keys(userCollections), [ 'a1', 'a3' ], 'keys match')
   t.equal(userCollections.a1.creator.anon, user, 'a1')
-  t.equal(userCollections.a1, collection.a1)
+  t.equal(userCollections.a1, collections.a1)
   t.equal(userCollections.a3.creator.anon, user, 'a3')
-  t.equal(userCollections.a3, collection.a3)
+  t.equal(userCollections.a3, collections.a3)
   t.end()
 })
-// test('findCreator', (t) => {
-//   const res = findCreator(isFavList)(userCollections)
-//   t.equal(res, userCollections.a3, 'find favs')
-//   t.end()
-// })

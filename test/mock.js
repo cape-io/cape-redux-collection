@@ -1,9 +1,11 @@
 import { combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
 import graph from 'redux-graph'
+import collection from '../src/'
 
 const reducer = combineReducers({
   auth,
+  collection,
   graph,
 })
 const initState = {
@@ -30,7 +32,7 @@ export const props = {
   item: { id: 'bar' },
   title: 'strawberry',
 }
-export const collection = {
+export const collections = {
   a1: {
     id: 'a1',
     type: 'Sample',

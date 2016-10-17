@@ -1,4 +1,4 @@
-import { cond, negate, over, property, stubTrue } from 'lodash'
+import { cond, negate, noop, over, property, stubTrue } from 'lodash'
 import { selectorCreate, createTriple, entityUpdate } from 'redux-graph'
 import { isAnonymous, selectUser } from 'cape-redux-auth'
 import { createAction, thunkSelect } from 'cape-redux'
@@ -30,15 +30,23 @@ export function addItemToFavs(item, user) {
   }
 }
 
+export function endFavorite(id) {
+  return entityUpdate(endListItem(id))
+}
+
+// REDUCER ACTIONS
+
 export const ITEM = 'collection/ITEM'
-export const openItem = createAction(ITEM, property('id'))
+// Send it an item object that has an id property.
+export const open = createAction(ITEM, property('id'))
+export const isAnon = thunkSelect(isAnonymous)
 // Create new list item.
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
-export function addOrOpen(item) {
+export function addOrOpen(item, user) {
   return cond([
-    [ thunkSelect(isAnonymous), addItemToFavs(item) ],
-    [ stubTrue, dispatch => dispatch(openItem(item)) ],
+    [ isAnon, addItemToFavs(item, user) ],
+    [ stubTrue, dispatch => dispatch(open(item)) ],
   ])
 }
 // Action to dispatch when a user clicks the (+) favorite button.
@@ -46,10 +54,7 @@ export function editItemCollections(createFavObj, item) {
   return over(ensureUserHasCollection(createFavObj), addOrOpen(item))
 }
 
-export function endFavorite(id) {
-  return entityUpdate(endListItem(id))
-}
-
 export const CLOSE = 'collection/CLOSE'
+export const close = createAction(CLOSE, noop)
 export const COLLECTION = 'collection/COLLECTION'
 export const LISTITEM = 'collection/LISTITEM'
