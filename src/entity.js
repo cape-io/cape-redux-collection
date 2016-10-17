@@ -1,4 +1,4 @@
-import { flow, partial, set } from 'lodash'
+import { flow } from 'lodash'
 import { merge } from 'cape-redux'
 import { getProps, select, structuredSelector } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'

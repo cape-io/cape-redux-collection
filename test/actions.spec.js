@@ -10,6 +10,7 @@ test('userNeedsCollection', (t) => {
   t.equal(userNeedsCollection(null, store.getState), true)
   t.end()
 })
+// Make sure the user has a collection.
 test('ensureUserHasCollection', (t) => {
   const res = ensureUserHasCollection()(store.dispatch, store.getState)
   t.equal(res.type, 'CollectionList', 'type')
