@@ -15,7 +15,10 @@ const initState = {
     typeIndex: {},
   },
 }
-export const store = createStore(reducer, initState)
+export function configStore() {
+  return createStore(reducer, initState)
+}
+
 export const user = {
   type: 'Person',
   id: 'anon',

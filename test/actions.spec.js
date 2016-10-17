@@ -1,31 +1,42 @@
 import test from 'tape'
 import { isString, matches } from 'lodash'
 import { login, logout } from 'cape-redux-auth'
-import { collectionListEntity, store } from './mock'
+import { entityPut } from 'redux-graph'
+import { collectionListEntity, configStore } from './mock'
+import { userCollections } from '../src/select'
 import {
-  close, ensureUserHasCollection, isAnon, open, userNeedsCollection,
+  addItemToFavs, close, ensureUserHasCollection, isAnon, open, userNeedsCollection,
 } from '../src/actions'
 
+const { dispatch, getState } = configStore()
+const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
+dispatch(entityPut(sailboat))
+
 test('userNeedsCollection', (t) => {
-  t.equal(userNeedsCollection(null, store.getState), true)
+  t.equal(userNeedsCollection(null, getState), true)
   t.end()
 })
 // Make sure the user has a collection.
 test('ensureUserHasCollection', (t) => {
-  const res = ensureUserHasCollection()(store.dispatch, store.getState)
+  const res = ensureUserHasCollection()(dispatch, getState)
   t.equal(res.type, 'CollectionList', 'type')
   t.true(isString(res.id), 'id')
   t.true(matches(collectionListEntity)(res))
-  const res2 = ensureUserHasCollection()(store.dispatch, store.getState)
+  const res2 = ensureUserHasCollection()(dispatch, getState)
   t.equal(res2, undefined, 'undefined when has collection')
   t.end()
 })
+test('addItemToFavs', (t) => {
+  addItemToFavs(sailboat)(dispatch, getState)
+  console.log(userCollections(getState()))
+  t.end()
+})
 test('isAnon', (t) => {
-  t.true(isAnon(store.dispatch, store.getState))
-  store.dispatch(login({ id: 'testUser' }))
-  t.false(isAnon(store.dispatch, store.getState))
-  store.dispatch(logout())
-  t.true(isAnon(store.dispatch, store.getState))
+  t.true(isAnon(dispatch, getState))
+  dispatch(login({ id: 'testUser' }))
+  t.false(isAnon(dispatch, getState))
+  dispatch(logout())
+  t.true(isAnon(dispatch, getState))
   t.end()
 })
 test('open', (t) => {

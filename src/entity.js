@@ -52,13 +52,13 @@ const listItemDefaults = {
 // Adding an item to a list requires a new triple. Adding a field value to the collection.
 // @list: The project/collection this item is being added/attached to.
 export function listItemBuilder(listSelector, selectorObj = {}) {
-  return {
+  return structuredSelector({
     // Create the ListItem.
     object: flow(structuredSelector(merge(listItemDefaults, selectorObj)), collectionItem),
     // The item is attached to the list by adding an itemListElement predicate triple.
     subject: listSelector,
     predicate: 'itemListElement',
-  }
+  })
 }
 export function endListItem(id) {
   return { id, actionStatus: 'ended', endTime: new Date() }

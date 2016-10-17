@@ -1,18 +1,21 @@
 import test from 'tape'
-import { isEmpty, isPlainObject } from 'lodash'
+import { isEmpty, isPlainObject, matches, pickBy } from 'lodash'
 import {
   collectionListSelector, collections, getItemId, userCollections, userHasCollections,
 } from '../src/select'
+import { configStore, props } from './mock'
 
-import { store, props } from './mock'
+const store = configStore()
 
 const state = store.getState()
 test('collectionListSelector', (t) => {
-  t.deepEqual(collectionListSelector(state), state.graph.entity)
+  t.deepEqual(
+    collectionListSelector(state),
+    pickBy(state.graph.entity, matches({ type: 'CollectionList' })))
   t.end()
 })
 test('collections', (t) => {
-  t.deepEqual(collections(state), state.graph.entity)
+  t.deepEqual(collections(state), { foo: { id: 'foo', type: 'CollectionList' } })
   t.end()
 })
 

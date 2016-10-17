@@ -2,7 +2,9 @@ import test from 'tape'
 import { isDate, matches, property } from 'lodash'
 import { collectionListBuilder, collectionListBuilderDefault, getTitle } from '../src/entity'
 
-import { collectionList, store, props } from './mock'
+import { collectionList, configStore, props } from './mock'
+
+const store = configStore()
 
 test('getTitle', (t) => {
   t.equal(getTitle(null, props), 'strawberry', 'getTitle with prop')

@@ -1,4 +1,4 @@
-import { cond, flow, negate, noop, over, property, stubTrue } from 'lodash'
+import { cond, negate, noop, over, property, stubTrue } from 'lodash'
 import { selectorCreate, entityUpdate } from 'redux-graph'
 import { isAnonymous } from 'cape-redux-auth'
 import { createAction, thunkSelect } from 'cape-redux'
@@ -26,10 +26,7 @@ export function ensureUserHasCollection(buildCollectionList = {}) {
 
 // We know user has a favs collection. Create new listItem for favs collection.
 export function addItemToFavs(item) {
-  return flow(
-    listItemBuilder(favsListSelector, { item }),
-    selectorCreate
-  )
+  return selectorCreate(listItemBuilder(favsListSelector, { item }))
 }
 
 export function endFavorite(id) {
