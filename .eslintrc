@@ -27,6 +27,7 @@
       "properties": "never",
       "exceptions": ["t", "io", "id", "fs", "$", "_"]
     }],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.spec.js"]}],
     "import/no-named-as-default": 2,
     "import/default": 0,
     "no-console": 1,
