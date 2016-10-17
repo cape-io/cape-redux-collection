@@ -3,7 +3,7 @@ import { selectorCreate, createTriple, entityUpdate } from 'redux-graph'
 import { isAnonymous, selectUser } from 'cape-redux-auth'
 import { createAction, thunkSelect } from 'cape-redux'
 
-import { collectionListBuilderDefault, createCollectionItemTriple, endListItem } from './entity'
+import { collectionListBuilder, listItemBuilder, endListItem } from './entity'
 import { favsListSelector, itemListCreated, userHasCollections } from './select'
 
 export function confirmFavorite(id) {
@@ -17,15 +17,18 @@ export function confirmActive(dispatch, state) {
 export const userNeedsCollection = negate(thunkSelect(userHasCollections))
 
 // Make sure the user has a favs collection created. Returns created entity or undefined.
-export function ensureUserHasCollection(buildCollectionList = collectionListBuilderDefault) {
-  return cond([ [ userNeedsCollection, selectorCreate(buildCollectionList) ] ])
+export function ensureUserHasCollection(buildCollectionList = {}) {
+  const entitySelector = collectionListBuilder(buildCollectionList)
+  return cond([
+    [ userNeedsCollection, selectorCreate(entitySelector) ],
+  ])
 }
+
 // We know user has a favs collection. Create new listItem for favs collection.
-export function addItemToFavs(item, user) {
+export function addItemToFavs(item, props) {
+  const list = thunkSelect(favsListSelector)
   return (dispatch, getState) => {
-    const state = getState()
-    const usr = user || selectUser(state)
-    const triple = createCollectionItemTriple(favsListSelector(state), item, usr)
+    const triple = listItemBuilder(favsListSelector(state), item, usr)
     createTriple(dispatch, triple)
   }
 }
