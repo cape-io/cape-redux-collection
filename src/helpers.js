@@ -1,8 +1,8 @@
 import { key0, val0 } from 'redux-graph'
 import {
-  conforms, find, get, isDate, isNumber, isString, keyBy, mapValues, orderBy, reduce, set,
+  conforms, get, isDate, isNumber, isString, keyBy, mapValues, orderBy, reduce, set,
 } from 'lodash'
-import { eq } from 'lodash/fp'
+import { eq, find } from 'lodash/fp'
 
 import { isValidListItem } from './lang'
 
