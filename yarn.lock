@@ -880,24 +880,24 @@ camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
-cape-lodash@^1.0.0, cape-lodash@^1.3.0, cape-lodash@^1.4.0, cape-lodash@^1.4.1:
+cape-lodash@^1.0.0, cape-lodash@^1.3.0, cape-lodash@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.4.1.tgz#106be70d52269114ca372eac1c7d18c3899f2d2f"
   dependencies:
     lodash "^4.15.0"
 
-cape-redux-auth@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/cape-redux-auth/-/cape-redux-auth-1.2.1.tgz#8e74a94fdea99081c6c3a170e7907e8699d45499"
+cape-redux-auth:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/cape-redux-auth/-/cape-redux-auth-1.2.2.tgz#9cceec01044b0397b4c19fa53df2f0c5cf6a89d7"
   dependencies:
     cape-redux "^1.5.0"
     cape-select "^2.2.1"
     lodash "^4.16.4"
-    redux-graph "^1.6.0"
-    redux-history-sync "^3.0.0"
+    redux-graph "^1.6.1"
+    redux-history-sync "^3.0.1"
     seamless-immutable "^6.3.0"
 
-cape-redux@^1.4.2, cape-redux@^1.5.0:
+cape-redux@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-1.5.0.tgz#c285a86aaf6cf0ce49ad928205ae31d096e39372"
   dependencies:
@@ -955,7 +955,7 @@ circular-json@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.1.tgz#be8b36aefccde8b3ca7aa2d6afc07a37242c0d2d"
 
-classnames@^2.2.3, classnames@^2.2.5:
+classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
@@ -2019,7 +2019,7 @@ lodash.pickby@^4.0.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.pickby/-/lodash.pickby-4.6.0.tgz#7dea21d8c18d7703a27c704c15d3b84a67e33aff"
 
-lodash@^4.0.0, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1:
+lodash@^4.0.0, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.16.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.4.tgz#01ce306b9bad1319f2a5528674f88297aeb70127"
 
@@ -2488,7 +2488,7 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-redux-graph:
+redux-graph, redux-graph@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/redux-graph/-/redux-graph-1.6.1.tgz#b93e6ee8c3822ec7473e2514791d5248650223a5"
   dependencies:
@@ -2499,27 +2499,7 @@ redux-graph:
     reselect "^2.5.4"
     seamless-immutable "^6.3.0"
 
-redux-graph@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/redux-graph/-/redux-graph-1.6.0.tgz#e6c7ba499f21ca9d38538f1665ac7626c057635d"
-  dependencies:
-    cape-lodash "^1.4.0"
-    cape-redux "^1.5.0"
-    lodash "^4.15.0"
-    redux "^3.5.2"
-    reselect "^2.5.3"
-    seamless-immutable "^6.1.1"
-
-redux-history-sync@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/redux-history-sync/-/redux-history-sync-3.0.0.tgz#a0c9b7d7b18e3c1a799e400628adad5ecd512bb6"
-  dependencies:
-    cape-redux "^1.4.2"
-    classnames "^2.2.3"
-    lodash "^4.5.1"
-    redux "^3.2.1"
-
-redux-history-sync@3.0.1:
+redux-history-sync@^3.0.1, redux-history-sync@3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/redux-history-sync/-/redux-history-sync-3.0.1.tgz#297a16eae5779fb4a32c908059193c098bf34619"
   dependencies:
@@ -2532,7 +2512,7 @@ redux-thunk@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.1.0.tgz#c724bfee75dbe352da2e3ba9bc14302badd89a98"
 
-redux@^3.2.1, redux@^3.5.2, redux@^3.6.0:
+redux@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
   dependencies:
@@ -2631,7 +2611,7 @@ require-uncached@^1.0.2:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
-reselect@^2.5.3, reselect@^2.5.4:
+reselect@^2.5.4:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-2.5.4.tgz#b7d23fdf00b83fa7ad0279546f8dbbbd765c7047"
 
