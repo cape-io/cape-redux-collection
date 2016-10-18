@@ -1,9 +1,11 @@
 import test from 'tape'
-import { isString, matches } from 'lodash'
+import { flow, isString, matches, overEvery, property } from 'lodash'
+import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
-import { entityPut } from 'redux-graph'
+import { entityPut, isTriple } from 'redux-graph'
 import { collectionListEntity, configStore } from './mock'
-import { userCollections } from '../src/select'
+import { isListItem } from '../src/helpers'
+// import { userCollections } from '../src/select'
 import {
   addItemToFavs, close, ensureUserHasCollection, isAnon, open, userNeedsCollection,
 } from '../src/actions'
@@ -26,9 +28,44 @@ test('ensureUserHasCollection', (t) => {
   t.equal(res2, undefined, 'undefined when has collection')
   t.end()
 })
+
 test('addItemToFavs', (t) => {
-  addItemToFavs(sailboat)(dispatch, getState)
-  console.log(userCollections(getState()))
+  let listItem = null // { id: 'abc', type: 'ListItem' }
+  const validAction1 = overEvery(
+    flow(property('type'), eq('graph/entity/PUT')),
+    flow(property('payload'), isListItem)
+  )
+  function act1(act) {
+    t.ok(validAction1(act))
+    listItem = act.payload
+  }
+  function act2(act) {
+    t.ok(isTriple(act.payload))
+    t.equal(act.type, 'graph/triple/PUT')
+    t.equal(act.payload.predicate, 'agent')
+    t.equal(act.payload.subject.id, listItem.id)
+    t.equal(act.payload.object.id, 'anonUser')
+  }
+  function act3(act) {
+    t.ok(isTriple(act.payload))
+    t.equal(act.type, 'graph/triple/PUT')
+    t.equal(act.payload.predicate, 'item')
+    t.equal(act.payload.subject.id, listItem.id)
+    t.equal(act.payload.object.id, sailboat.id)
+  }
+  // Attach the ListItem to the CollectionList.
+  function act4(act) {
+    t.ok(isTriple(act.payload))
+    t.equal(act.type, 'graph/triple/PUT')
+    t.equal(act.payload.predicate, 'itemListElement')
+    t.equal(act.payload.subject.type, 'CollectionList')
+    t.equal(act.payload.object.id, listItem.id)
+  }
+  const actions = [ act1, act2, act3, act4 ]
+  function fakeDispatch(action) {
+    actions.shift()(action)
+  }
+  addItemToFavs(sailboat)(fakeDispatch, getState)
   t.end()
 })
 test('isAnon', (t) => {

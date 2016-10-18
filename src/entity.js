@@ -50,7 +50,8 @@ const listItemDefaults = {
 }
 
 // Adding an item to a list requires a new triple. Adding a field value to the collection.
-// @list: The project/collection this item is being added/attached to.
+// @listSelector: The project/collection this item is being added/attached to.
+// @return: function selector builds triple with object entity object.
 export function listItemBuilder(listSelector, selectorObj = {}) {
   if (!isFunction(listSelector)) throw new Error('listSelector must be a function.')
   return structuredSelector({

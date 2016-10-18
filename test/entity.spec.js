@@ -1,5 +1,5 @@
 import test from 'tape'
-import { isDate, matches, property } from 'lodash'
+import { isDate, isFunction, matches, property } from 'lodash'
 import { isTriple } from 'redux-graph'
 import {
   collectionListBuilder, collectionListBuilderDefault, getTitle, listItemBuilder,
@@ -39,13 +39,14 @@ test('listItemBuilder', (t) => {
   const imgSelector = property('graph.entity.pic1')
   const entityFields = { image: imgSelector, item: sailboat }
   const entityBuilder = listItemBuilder(listSelector, entityFields)
+  t.ok(isFunction(entityBuilder))
   const state = store.getState()
   const triple = entityBuilder(state)
   t.ok(isTriple(triple))
   t.equal(triple.object.type, 'ListItem')
   t.equal(triple.object.agent.id, 'anonUser')
   t.equal(triple.object.item, sailboat)
-  // Why isn't this equal?
+  t.equal(triple.object.image, state.graph.entity.pic1)
   t.deepEqual(triple.object.image, image)
   t.equal(triple.predicate, 'itemListElement')
   t.equal(triple.subject, state.graph.entity.foo)
