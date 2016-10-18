@@ -18,12 +18,14 @@ test('userNeedsCollection', (t) => {
   t.equal(userNeedsCollection(null, getState), true)
   t.end()
 })
+let favCollection = null
 // Make sure the user has a collection.
 test('ensureUserHasCollection', (t) => {
   const res = ensureUserHasCollection()(dispatch, getState)
   t.equal(res.type, 'CollectionList', 'type')
   t.true(isString(res.id), 'id')
   t.true(matches(collectionListEntity)(res))
+  favCollection = res
   const res2 = ensureUserHasCollection()(dispatch, getState)
   t.equal(res2, undefined, 'undefined when has collection')
   t.end()
@@ -59,6 +61,7 @@ test('addItemToFavs', (t) => {
     t.equal(act.type, 'graph/triple/PUT')
     t.equal(act.payload.predicate, 'itemListElement')
     t.equal(act.payload.subject.type, 'CollectionList')
+    t.equal(act.payload.subject.id, favCollection.id)
     t.equal(act.payload.object.id, listItem.id)
   }
   const actions = [ act1, act2, act3, act4 ]
