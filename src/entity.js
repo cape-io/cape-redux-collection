@@ -1,4 +1,4 @@
-import { flow } from 'lodash'
+import { flow, isFunction } from 'lodash'
 import { merge } from 'cape-redux'
 import { getProps, select, structuredSelector } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
@@ -52,9 +52,10 @@ const listItemDefaults = {
 // Adding an item to a list requires a new triple. Adding a field value to the collection.
 // @list: The project/collection this item is being added/attached to.
 export function listItemBuilder(listSelector, selectorObj = {}) {
+  if (!isFunction(listSelector)) throw new Error('listSelector must be a function.')
   return structuredSelector({
     // Create the ListItem.
-    object: flow(structuredSelector(merge(listItemDefaults, selectorObj)), collectionItem),
+    object: structuredSelector(collectionItem(merge(listItemDefaults, selectorObj))),
     // The item is attached to the list by adding an itemListElement predicate triple.
     subject: listSelector,
     predicate: 'itemListElement',

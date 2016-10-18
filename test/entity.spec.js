@@ -1,8 +1,11 @@
 import test from 'tape'
 import { isDate, matches, property } from 'lodash'
-import { collectionListBuilder, collectionListBuilderDefault, getTitle } from '../src/entity'
+import { isTriple } from 'redux-graph'
+import {
+  collectionListBuilder, collectionListBuilderDefault, getTitle, listItemBuilder,
+} from '../src/entity'
 
-import { collectionList, configStore, props } from './mock'
+import { collectionList, configStore, image, props, sailboat } from './mock'
 
 const store = configStore()
 
@@ -29,5 +32,22 @@ test('collectionListBuilderDefault', (t) => {
   const collection = collectionListBuilderDefault(store.getState())
   t.ok(matches(collectionList)(collection), 'matches')
   t.ok(isDate(collection.dateCreated), 'isDate')
+  t.end()
+})
+test('listItemBuilder', (t) => {
+  const listSelector = property('graph.entity.foo')
+  const imgSelector = property('graph.entity.pic1')
+  const entityFields = { image: imgSelector, item: sailboat }
+  const entityBuilder = listItemBuilder(listSelector, entityFields)
+  const state = store.getState()
+  const triple = entityBuilder(state)
+  t.ok(isTriple(triple))
+  t.equal(triple.object.type, 'ListItem')
+  t.equal(triple.object.agent.id, 'anonUser')
+  t.equal(triple.object.item, sailboat)
+  // Why isn't this equal?
+  t.deepEqual(triple.object.image, image)
+  t.equal(triple.predicate, 'itemListElement')
+  t.equal(triple.subject, state.graph.entity.foo)
   t.end()
 })

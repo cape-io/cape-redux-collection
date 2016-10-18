@@ -1,6 +1,6 @@
 import { combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
-import graph from 'redux-graph'
+import graph, { entityPut } from 'redux-graph'
 import collection from '../src/'
 
 const reducer = combineReducers({
@@ -15,8 +15,13 @@ const initState = {
     typeIndex: {},
   },
 }
+export const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
+export const image = { id: 'pic1', type: 'Photograph', name: 'Interior' }
 export function configStore() {
-  return createStore(reducer, initState)
+  const store = createStore(reducer, initState)
+  store.dispatch(entityPut(sailboat))
+  store.dispatch(entityPut(image))
+  return store
 }
 
 export const user = {
