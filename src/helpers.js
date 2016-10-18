@@ -1,8 +1,8 @@
 import { key0, val0 } from 'redux-graph'
 import {
-  conforms, get, isDate, isNumber, isString, keyBy, mapValues, orderBy, reduce, set,
+  conforms, get, isDate, isNumber, isString, mapValues, orderBy, reduce, set,
 } from 'lodash'
-import { eq, find } from 'lodash/fp'
+import { eq, find, keyBy } from 'lodash/fp'
 
 import { isValidListItem } from './lang'
 
@@ -22,7 +22,7 @@ export function fixListItems(listItems, items) {
   if (!listItems) return listItems
   return reduce(listItems, fixListItem(items), {})
 }
-export function listItemIndex(listItems) { return keyBy(listItems, 'item.id') }
+export const listItemIndex = keyBy('item.id')
 export function orderListItems(listItems) {
   return orderBy(listItems, [ 'position', 'id' ])
 }

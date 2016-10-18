@@ -2488,7 +2488,18 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-redux-graph@^1.5.1, redux-graph@^1.6.0:
+redux-graph:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/redux-graph/-/redux-graph-1.6.1.tgz#b93e6ee8c3822ec7473e2514791d5248650223a5"
+  dependencies:
+    cape-lodash "^1.4.1"
+    cape-redux "^1.5.0"
+    lodash "^4.16.4"
+    redux "^3.6.0"
+    reselect "^2.5.4"
+    seamless-immutable "^6.3.0"
+
+redux-graph@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/redux-graph/-/redux-graph-1.6.0.tgz#e6c7ba499f21ca9d38538f1665ac7626c057635d"
   dependencies:

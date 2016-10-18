@@ -6,11 +6,12 @@ import { createAction, thunkSelect } from 'cape-redux'
 import { collectionListBuilder, listItemBuilder, endListItem } from './entity'
 import { favsListSelector, itemListCreated, userHasCollections } from './select'
 
+// Create an action that will update a ListItem as confirmed.
 export function confirmFavorite(id) {
   return entityUpdate({ id, actionStatus: 'confirmed', dateUpdated: new Date() })
 }
-export function confirmActive(dispatch, state) {
-  const itemToConfirm = itemListCreated(state)
+export function confirmActive(dispatch, getState) {
+  const itemToConfirm = itemListCreated(getState())
   if (itemToConfirm) dispatch(confirmFavorite(itemToConfirm.id))
 }
 // Create favs collection for user.

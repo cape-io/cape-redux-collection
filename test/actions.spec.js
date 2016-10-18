@@ -1,5 +1,5 @@
 import test from 'tape'
-import { flow, isString, matches, overEvery, property } from 'lodash'
+import { conforms, flow, isDate, isString, matches, overEvery, property } from 'lodash'
 import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
 import { entityPut, isTriple } from 'redux-graph'
@@ -7,7 +7,7 @@ import { collectionListEntity, configStore } from './mock'
 import { isListItem } from '../src/helpers'
 // import { userCollections } from '../src/select'
 import {
-  addItemToFavs, close, ensureUserHasCollection, isAnon, open, userNeedsCollection,
+  addItemToFavs, close, confirmFavorite, ensureUserHasCollection, isAnon, open, userNeedsCollection,
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
@@ -16,6 +16,18 @@ dispatch(entityPut(sailboat))
 
 test('userNeedsCollection', (t) => {
   t.equal(userNeedsCollection(null, getState), true)
+  t.end()
+})
+const validConfirm = conforms({
+  actionStatus: eq('confirmed'),
+  dateUpdated: isDate,
+  id: isString,
+})
+test('confirmFavorite', (t) => {
+  const res = confirmFavorite('foo1')
+  t.equal(res.type, 'graph/entity/UPDATE')
+  t.equal(res.payload.id, 'foo1')
+  t.ok(validConfirm(res.payload))
   t.end()
 })
 let favCollection = null
