@@ -4,15 +4,16 @@ import { isAnonymous } from 'cape-redux-auth'
 import { createAction, thunkSelect } from 'cape-redux'
 
 import { collectionListBuilder, listItemBuilder, endListItem } from './entity'
-import { favsListSelector, itemListCreated, userHasCollections } from './select'
+import { activeListItem, favsListSelector, userHasCollections } from './select'
 
 // Create an action that will update a ListItem as confirmed.
-export function confirmFavorite(id) {
+export function confirmFavorite({ id }) {
   return entityUpdate({ id, actionStatus: 'confirmed', dateUpdated: new Date() })
 }
+// Find open item and close it via confirmFavorite action.
 export function confirmActive(dispatch, getState) {
-  const itemToConfirm = itemListCreated(getState())
-  if (itemToConfirm) dispatch(confirmFavorite(itemToConfirm.id))
+  const itemToConfirm = activeListItem(getState())
+  if (itemToConfirm) dispatch(confirmFavorite(itemToConfirm))
 }
 // Create favs collection for user.
 export const userNeedsCollection = negate(thunkSelect(userHasCollections))
@@ -52,7 +53,7 @@ export function addOrOpen(item) {
 
 // Action to dispatch when a user clicks the (+) favorite button.
 export function editItemCollections(createFavObj, item) {
-  return over(ensureUserHasCollection(createFavObj), addOrOpen(item))
+  return over(confirmActive, ensureUserHasCollection(createFavObj), addOrOpen(item))
 }
 
 export const CLOSE = 'collection/CLOSE'

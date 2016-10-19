@@ -1,6 +1,6 @@
 import test from 'tape'
 import { keys } from 'lodash'
-import { findActionCreated, listItemIndex } from '../src/helpers'
+import { findActionCreated, isCollectionList, listItemIndex, validSortOpts } from '../src/helpers'
 
 test('findActionCreated()', (t) => {
   const vals = [
@@ -20,5 +20,18 @@ test('listItemIndex', (t) => {
   t.equal(res.foo, vals[0])
   t.equal(res.bar, vals[1])
   t.deepEqual(keys(res), [ 'foo', 'bar' ])
+  t.end()
+})
+test('isCollectionList', (t) => {
+  const collection = {
+    dateCreated: new Date(),
+    itemListOrder: 'Ascending',
+    type: 'CollectionList',
+    title: 'Favorites',
+    id: 'mk46xvzp',
+  }
+  t.ok(isCollectionList(collection))
+  collection.itemListOrder = 'Desc'
+  t.false(isCollectionList(collection))
   t.end()
 })

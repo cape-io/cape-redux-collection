@@ -1,11 +1,12 @@
 import { key0, val0 } from 'redux-graph'
 import {
-  conforms, get, isDate, isNumber, isString, mapValues, orderBy, reduce, set,
+  conforms, get, includes, isDate, isNumber, isString, mapValues, orderBy, partial, reduce, set,
 } from 'lodash'
 import { eq, find, keyBy } from 'lodash/fp'
 
 import { isValidListItem } from './lang'
 
+// Returns first found item that is created.
 export const findActionCreated = find({ actionStatus: 'created' })
 
 // Reducer to replace the items with filled versions. Filters out the invalids.
@@ -43,6 +44,14 @@ export function invertLiCollection(res, { collection, ...listItem }) {
 export function invertListItems(lists) {
   return lists ? reduce(lists, invertLiCollection, {}) : null
 }
+export const validSortOpts = partial(includes, [ 'Ascending', 'Descending' ])
+export const isCollectionList = conforms({
+  dateCreated: isDate,
+  id: isString,
+  itemListOrder: validSortOpts,
+  type: eq('CollectionList'),
+  title: isString,
+})
 export const isListItem = conforms({
   actionStatus: eq('created'),
   startTime: isDate,

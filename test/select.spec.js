@@ -1,13 +1,15 @@
 import test from 'tape'
-import { isEmpty, isPlainObject, matches, pickBy } from 'lodash'
+import { isEmpty, isPlainObject, matches, pickBy, size } from 'lodash'
+import { addItemToFavs, confirmActive, ensureUserHasCollection } from '../src/actions'
+import { isCollectionList, isListItem } from '../src/helpers'
 import {
-  collectionListSelector, collections, getItemId, userCollections, userHasCollections,
+  activeListItem, collectionListSelector, collections, getItemId,
+  listItemSelector, userCollections, userHasCollections,
 } from '../src/select'
-import { configStore, props } from './mock'
+import { configStore, props, sailboat } from './mock'
 
-const store = configStore()
-
-const state = store.getState()
+const { dispatch, getState } = configStore()
+const state = getState()
 test('collectionListSelector', (t) => {
   t.deepEqual(
     collectionListSelector(state),
@@ -31,5 +33,27 @@ test('userCollections', (t) => {
 })
 test('userHasCollections', (t) => {
   t.equal(userHasCollections(state), false, 'no collections')
+  t.end()
+})
+test('listItemSelector', (t) => {
+  // When nothing is found.
+  t.equal(listItemSelector(getState()), undefined)
+  const collection = ensureUserHasCollection()(dispatch, getState)
+  t.ok(isCollectionList(collection))
+  const listItemTriple = addItemToFavs(sailboat)(dispatch, getState)
+  t.equal(listItemTriple.subject.id, collection.id, 'collection is subject')
+  const listItem = listItemTriple.object
+  t.ok(isListItem(listItem), 'isListItem')
+  const listItems = listItemSelector(getState())
+  t.equal(size(listItems), 1)
+  t.deepEqual(listItems[listItem.id], listItem)
+  t.end()
+})
+test('activeListItem', (t) => {
+  const listItem = activeListItem(getState())
+  t.ok(isListItem(listItem), 'isListItem')
+  confirmActive(dispatch, getState)
+  const listItem2 = activeListItem(getState())
+  t.equal(listItem2, undefined)
   t.end()
 })

@@ -45,6 +45,9 @@ export function itemsSelectors(selectItems) {
   return { listItems, listItemsSorted, favsItemIndex }
 }
 
+// Gets currently active ListItem.
+export const activeListItem = createSelector(listItemSelector, findActionCreated)
+
 // ITEM LISTS & COLLECTIONS. Uses item prop.
 
 // Select props.item.id from (state, props)
@@ -56,7 +59,9 @@ export const itemListItems = select(itemParents, 'domainIncludes.item')
 export const itemActiveListItems = createSelector(itemListItems, pickBy(isValidListItem))
 // Move domainIncludes.itemListElement to collection.
 export const itemLists = createSelector(itemActiveListItems, setListItemsCollection)
+// Same as activeListItem?
 export const itemListCreated = createSelector(itemLists, findActionCreated)
+
 // Reorder list -> collection to collection -> listItemElement. Returns object or null if no list.
 export const itemCollections = createSelector(itemLists, invertListItems)
 export const itemInCollections = boolSelector(itemCollections)
@@ -73,7 +78,7 @@ export const itemFavCollection = createSelector(itemCollections, find(isFavList)
 // ITEM CONTAINER
 // Used in the ItemFav container.
 export const mapStateToProps = createStructuredSelector({
-  activeListItem: itemListCreated,
+  activeListItem: itemListCreated, // Single listItem entity.
   collections: itemCollections,
   inCollections: itemInCollections,
 })

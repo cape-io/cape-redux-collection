@@ -24,7 +24,7 @@ const validConfirm = conforms({
   id: isString,
 })
 test('confirmFavorite', (t) => {
-  const res = confirmFavorite('foo1')
+  const res = confirmFavorite({ id: 'foo1' })
   t.equal(res.type, 'graph/entity/UPDATE')
   t.equal(res.payload.id, 'foo1')
   t.ok(validConfirm(res.payload))
