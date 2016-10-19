@@ -35,6 +35,7 @@ export const userCollections = createSelector(
 export const userHasCollections = boolSelector(userCollections)
 // Find (first) user favs project from list entities.
 export const favsListSelector = createSelector(userCollections, find(isFavList))
+// ListItems attached to the user favs collection via itemListElement field/triple predicate.
 export const favListElements = select(favsListSelector, 'itemListElement')
 export const userHasFavorites = boolSelector(favListElements)
 

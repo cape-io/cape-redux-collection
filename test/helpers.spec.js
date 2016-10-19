@@ -1,6 +1,6 @@
 import test from 'tape'
 import { keys } from 'lodash'
-import { findActionCreated, isCollectionList, listItemIndex, validSortOpts } from '../src/helpers'
+import { findActionCreated, isCollectionList, listItemIndex } from '../src/helpers'
 
 test('findActionCreated()', (t) => {
   const vals = [

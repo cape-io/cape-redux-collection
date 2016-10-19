@@ -1,9 +1,9 @@
 import test from 'tape'
-import { isEmpty, isPlainObject, matches, pickBy, size } from 'lodash'
+import { find, isEmpty, isPlainObject, matches, pickBy, size } from 'lodash'
 import { addItemToFavs, confirmActive, ensureUserHasCollection } from '../src/actions'
 import { isCollectionList, isListItem } from '../src/helpers'
 import {
-  activeListItem, collectionListSelector, collections, getItemId,
+  activeListItem, collectionListSelector, collections, getItemId, favListElements,
   listItemSelector, userCollections, userHasCollections,
 } from '../src/select'
 import { configStore, props, sailboat } from './mock'
@@ -55,5 +55,14 @@ test('activeListItem', (t) => {
   confirmActive(dispatch, getState)
   const listItem2 = activeListItem(getState())
   t.equal(listItem2, undefined)
+  t.end()
+})
+test('favListElements', (t) => {
+  const favEls = favListElements(getState())
+  t.equal(size(favEls), 1)
+  const listItem = find(favEls)
+  t.ok(isListItem(listItem), 'isListItem')
+  t.ok(isPlainObject(listItem.agent), 'agent')
+  t.ok(isPlainObject(listItem.item), 'item')
   t.end()
 })

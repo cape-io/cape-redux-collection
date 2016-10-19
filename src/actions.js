@@ -7,8 +7,9 @@ import { collectionListBuilder, listItemBuilder, endListItem } from './entity'
 import { activeListItem, favsListSelector, userHasCollections } from './select'
 
 // Create an action that will update a ListItem as confirmed.
-export function confirmFavorite({ id }) {
-  return entityUpdate({ id, actionStatus: 'confirmed', dateUpdated: new Date() })
+export function confirmFavorite({ id, type }) {
+  // Including type for good practice.
+  return entityUpdate({ id, actionStatus: 'confirmed', dateUpdated: new Date(), type })
 }
 // Find open item and close it via confirmFavorite action.
 export function confirmActive(dispatch, getState) {

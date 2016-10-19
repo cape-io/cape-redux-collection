@@ -52,8 +52,9 @@ export const isCollectionList = conforms({
   type: eq('CollectionList'),
   title: isString,
 })
+export const validStatusOpts = partial(includes, [ 'created', 'confirmed' ])
 export const isListItem = conforms({
-  actionStatus: eq('created'),
+  actionStatus: validStatusOpts,
   startTime: isDate,
   type: eq('ListItem'),
   position: isNumber,
