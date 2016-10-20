@@ -1,8 +1,8 @@
 import { key0, val0 } from 'redux-graph'
 import {
-  conforms, get, includes, isDate, isNumber, isString, mapValues, orderBy, partial, reduce, set,
+  conforms, get, includes, isDate, isNumber, isString, mapValues, partial, reduce, set,
 } from 'lodash'
-import { eq, find, keyBy } from 'lodash/fp'
+import { eq, find, keyBy, orderBy } from 'lodash/fp'
 
 import { isValidListItem } from './lang'
 
@@ -14,7 +14,8 @@ export function fixListItem(items) {
   return (res, listItem, key) => {
     if (!isValidListItem(listItem)) return res
     // Use first object key to get filled entity.
-    const item = get(listItem.item, key0(items))
+    const itemId = key0(listItem.item)
+    const item = get(items, itemId, listItem.item[itemId])
     return set(res, key, listItem.set('item', item))
   }
 }
@@ -24,9 +25,8 @@ export function fixListItems(listItems, items) {
   return reduce(listItems, fixListItem(items), {})
 }
 export const listItemIndex = keyBy('item.id')
-export function orderListItems(listItems) {
-  return orderBy(listItems, [ 'position', 'id' ])
-}
+export const orderListItems = orderBy([ 'position', 'id' ], 'asc')
+
 export function getLiCollection(listItem) {
   return val0(listItem.domainIncludes.itemListElement)
 }

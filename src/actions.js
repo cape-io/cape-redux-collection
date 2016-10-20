@@ -28,8 +28,8 @@ export function ensureUserHasCollection(buildCollectionList = {}) {
 }
 
 // We know user has a favs collection. Create new listItem for favs collection.
-export function addItemToFavs(item) {
-  return selectorCreate(listItemBuilder(favsListSelector, { item }))
+export function addItemToFavs(item, position) {
+  return selectorCreate(listItemBuilder(favsListSelector, { item, position: position || 100 }))
 }
 
 export function endFavorite(id) {
@@ -53,6 +53,7 @@ export function addOrOpen(item) {
 }
 
 // Action to dispatch when a user clicks the (+) favorite button.
+// Requires thunk middleware.
 export function editItemCollections(createFavObj, item) {
   return over(confirmActive, ensureUserHasCollection(createFavObj), addOrOpen(item))
 }

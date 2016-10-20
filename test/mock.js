@@ -16,10 +16,12 @@ const initState = {
   },
 }
 export const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
+export const sail2 = { id: 'freedom32', type: 'Sailboat', name: 'Owl' }
 export const image = { id: 'pic1', type: 'Photograph', name: 'Interior' }
 export function configStore() {
   const store = createStore(reducer, initState)
   store.dispatch(entityPut(sailboat))
+  store.dispatch(entityPut(sail2))
   store.dispatch(entityPut(image))
   return store
 }
