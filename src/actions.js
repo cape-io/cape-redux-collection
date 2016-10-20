@@ -28,8 +28,8 @@ export function ensureUserHasCollection(buildCollectionList = {}) {
 }
 
 // We know user has a favs collection. Create new listItem for favs collection.
-export function addItemToFavs(item, position) {
-  return selectorCreate(listItemBuilder(favsListSelector, { item, position: position || 100 }))
+export function addItemToFavs(item, position = 100) {
+  return selectorCreate(listItemBuilder(favsListSelector, { item, position }))
 }
 
 export function endFavorite(id) {
