@@ -1,10 +1,11 @@
-import { cond, negate, noop, over, property, stubTrue } from 'lodash'
+import { cond, find, flow, negate, noop, over, property, size, stubTrue } from 'lodash'
+import { eq } from 'lodash/fp'
 import { selectorCreate, entityUpdate } from 'redux-graph'
 import { isAnonymous } from 'cape-redux-auth'
 import { createAction, thunkSelect } from 'cape-redux'
 
 import { collectionListBuilder, listItemBuilder, endListItem } from './entity'
-import { activeListItem, favsListSelector, userHasCollections } from './select'
+import { activeListItem, favsListSelector, itemLists, userHasCollections } from './select'
 
 // Create an action that will update a ListItem as confirmed.
 export function confirmFavorite({ id, type }) {
@@ -26,14 +27,19 @@ export function ensureUserHasCollection(buildCollectionList = {}) {
     [ userNeedsCollection, selectorCreate(entitySelector) ],
   ])
 }
-
+export function shouldEndItem(item) {
+  return flow(thunkSelect(itemLists, { item }), size, eq(1))
+}
+export const endFavAction = flow(itemLists, find, endListItem, entityUpdate)
+export function endFavorite(item) {
+  return (dispatch, getState) => flow(endFavAction, dispatch)(getState(), { item })
+}
 // We know user has a favs collection. Create new listItem for favs collection.
 export function addItemToFavs(item, position = 100) {
-  return selectorCreate(listItemBuilder(favsListSelector, { item, position }))
-}
-
-export function endFavorite(id) {
-  return entityUpdate(endListItem(id))
+  return cond([
+    [ shouldEndItem(item), endFavorite(item) ],
+    [ stubTrue, selectorCreate(listItemBuilder(favsListSelector, { item, position })) ],
+  ])
 }
 
 // REDUCER ACTIONS

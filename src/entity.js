@@ -62,6 +62,7 @@ export function listItemBuilder(listSelector, selectorObj = {}) {
     predicate: 'itemListElement',
   })
 }
-export function endListItem(id) {
-  return { id, actionStatus: 'ended', endTime: new Date() }
+export function endListItem({ id, type }) {
+  if (type !== liType) throw new Error('Type prop mus match.')
+  return { actionStatus: 'ended', endTime: new Date(), id, type }
 }

@@ -23,6 +23,9 @@ import { collectionType, liType } from './const'
 // Select all CollectionList entities from the database.
 export const collectionListSelector = entityTypeSelector(collectionType)
 export const collections = rebuildEntitiesSelector(collectionListSelector)
+
+// LIST ITEM
+
 // Select all ListItem entities.
 export const listItemSelector = entityTypeSelector(liType)
 

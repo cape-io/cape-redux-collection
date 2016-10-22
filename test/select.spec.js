@@ -24,6 +24,7 @@ test('collections', (t) => {
 
 test('getItemId()', (t) => {
   t.equal(getItemId(state, props), 'bar', 'getItemId')
+  t.equal(getItemId(state, { item: sailboat }), 'saga43')
   t.end()
 })
 test('userCollections', (t) => {

@@ -25,7 +25,7 @@ export function fixListItems(listItems, items) {
   return reduce(listItems, fixListItem(items), {})
 }
 export const listItemIndex = keyBy('item.id')
-export const orderListItems = orderBy([ 'position', 'id' ], 'asc')
+export const orderListItems = orderBy([ 'position', 'item.id' ], 'asc')
 
 export function getLiCollection(listItem) {
   return val0(listItem.domainIncludes.itemListElement)

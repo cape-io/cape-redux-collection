@@ -6,9 +6,10 @@ import { entityPut, isTriple } from 'redux-graph'
 import { collectionListEntity, configStore } from './mock'
 import { liType } from '../src/const'
 import { isListItem } from '../src/helpers'
-// import { userCollections } from '../src/select'
+// import { listItemSelector } from '../src/select'
 import {
-  addItemToFavs, close, confirmFavorite, ensureUserHasCollection, isAnon, open, userNeedsCollection,
+  addItemToFavs, close, confirmFavorite, endFavAction, endFavorite, ensureUserHasCollection, isAnon,
+  open, shouldEndItem, userNeedsCollection,
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
@@ -101,5 +102,29 @@ test('open', (t) => {
 test('close', (t) => {
   const act = close('blah')
   t.deepEqual(act, { type: 'collection/CLOSE' })
+  t.end()
+})
+test('shouldEndItem', (t) => {
+  t.false(shouldEndItem(sailboat)(t.end, getState))
+  addItemToFavs(sailboat)(dispatch, getState)
+  t.true(shouldEndItem(sailboat)(null, getState))
+  t.end()
+})
+function validEndAct(t, act) {
+  t.equal(act.type, 'graph/entity/UPDATE', 'type')
+  t.equal(act.payload.actionStatus, 'ended', 'actionStatus')
+  t.ok(isDate(act.payload.endTime))
+  t.ok(isString(act.payload.id))
+  t.equal(act.payload.type, 'ListItem')
+}
+test('endFavAction', (t) => {
+  const act = endFavAction(getState(), { item: sailboat })
+  validEndAct(t, act)
+  t.end()
+})
+test('endFavorite', (t) => {
+  const act = endFavorite(sailboat)(dispatch, getState)
+  validEndAct(t, act)
+  t.false(shouldEndItem(sailboat)(t.end, getState))
   t.end()
 })
