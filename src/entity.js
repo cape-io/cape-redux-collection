@@ -3,18 +3,18 @@ import { merge } from 'cape-redux'
 import { getProps, select, structuredSelector } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
 
-import { collectionType, favTitle, liType } from './const'
+import { COLLECTION_TYPE, FAV_TITLE, LIST_TYPE } from './const'
 
 export function collectionList(props) {
   return {
     dateCreated: new Date(),
     itemListOrder: 'Ascending',
-    type: collectionType,
+    type: COLLECTION_TYPE,
     ...props,
   }
 }
-// Gep props.title or return favTitle default.
-export const getTitle = select(getProps, 'title', favTitle)
+// Gep props.title or return FAV_TITLE default.
+export const getTitle = select(getProps, 'title', FAV_TITLE)
 export const listCreatorTitle = {
   creator: selectUser, // User that created the thing.
   title: getTitle, // Title for this CollectionList.
@@ -36,7 +36,7 @@ export function collectionItem(props) {
   return {
     actionStatus: 'created',
     startTime: new Date(),
-    type: liType,
+    type: LIST_TYPE,
     position: 100,
     ...props,
   }
@@ -63,6 +63,6 @@ export function listItemBuilder(listSelector, selectorObj = {}) {
   })
 }
 export function endListItem({ id, type }) {
-  if (type !== liType) throw new Error('Type prop mus match.')
+  if (type !== LIST_TYPE) throw new Error('Type prop mus match.')
   return { actionStatus: 'ended', endTime: new Date(), id, type }
 }

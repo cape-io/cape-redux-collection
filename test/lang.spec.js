@@ -1,7 +1,7 @@
 import test from 'tape'
 
 import { isFavList, isValidListItem } from '../src/lang'
-import { favTitle } from '../src/const'
+import { FAV_TITLE } from '../src/const'
 
 test('isValidListItem()', (t) => {
   const val = { actionStatus: 'confirmed' }
@@ -11,7 +11,7 @@ test('isValidListItem()', (t) => {
   t.end()
 })
 test('isFavList', (t) => {
-  t.ok(isFavList({ title: favTitle }), 'favTitle')
+  t.ok(isFavList({ title: FAV_TITLE }), 'FAV_TITLE')
   t.notOk(isFavList({ title: 'boo' }), 'non fav title')
   t.end()
 })

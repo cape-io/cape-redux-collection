@@ -4,7 +4,7 @@ import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
 import { entityPut, isTriple } from 'redux-graph'
 import { collectionListEntity, configStore } from './mock'
-import { liType } from '../src/const'
+import { LIST_TYPE } from '../src/const'
 import { isListItem } from '../src/helpers'
 // import { listItemSelector } from '../src/select'
 import {
@@ -24,10 +24,10 @@ const validConfirm = conforms({
   actionStatus: eq('confirmed'),
   dateUpdated: isDate,
   id: isString,
-  type: eq(liType),
+  type: eq(LIST_TYPE),
 })
 test('confirmFavorite', (t) => {
-  const res = confirmFavorite({ id: 'foo1', type: liType })
+  const res = confirmFavorite({ id: 'foo1', type: LIST_TYPE })
   t.equal(res.type, 'graph/entity/UPDATE')
   t.equal(res.payload.id, 'foo1')
   t.ok(validConfirm(res.payload))

@@ -16,18 +16,18 @@ import {
 } from './helpers'
 import { isFavList, isValidListItem } from './lang'
 import { predicateValueContains } from './util'
-import { collectionType, liType } from './const'
+import { COLLECTION_TYPE, LIST_TYPE } from './const'
 
 // COLLECTIONS
 
 // Select all CollectionList entities from the database.
-export const collectionListSelector = entityTypeSelector(collectionType)
+export const collectionListSelector = entityTypeSelector(COLLECTION_TYPE)
 export const collections = rebuildEntitiesSelector(collectionListSelector)
 
 // LIST ITEM
 
 // Select all ListItem entities.
-export const listItemSelector = entityTypeSelector(liType)
+export const listItemSelector = entityTypeSelector(LIST_TYPE)
 
 // USER COLLECTIONS - No props needed.
 
