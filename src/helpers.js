@@ -4,6 +4,7 @@ import {
 } from 'lodash'
 import { eq, find, keyBy, orderBy } from 'lodash/fp'
 
+import { LIST_TYPE } from './const'
 import { isValidListItem } from './lang'
 
 // Returns first found item that is created.
@@ -56,7 +57,7 @@ export const validStatusOpts = partial(includes, [ 'created', 'confirmed' ])
 export const isListItem = conforms({
   actionStatus: validStatusOpts,
   startTime: isDate,
-  type: eq('ListItem'),
+  type: eq(LIST_TYPE),
   position: isNumber,
   dateCreated: isDate,
   id: isString,

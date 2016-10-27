@@ -5,7 +5,8 @@ import { addItemToFavs, confirmActive, ensureUserHasCollection } from '../src/ac
 import { isCollectionList, isListItem } from '../src/helpers'
 import {
   activeListItem, collectionListSelector, collections, getItemId, favListElements,
-  listItemSelector, userCollections, userHasCollections,
+  getActiveItem, getCollectionState, itemIsActive, listItemSelector,
+  userCollections, userHasCollections,
 } from '../src/select'
 import { configStore, props, sailboat } from './mock'
 
@@ -66,5 +67,20 @@ test('favListElements', (t) => {
   t.ok(isListItem(listItem), 'isListItem')
   t.ok(isPlainObject(listItem.agent), 'agent')
   t.ok(isPlainObject(listItem.item), 'item')
+  t.end()
+})
+test('getCollectionState', (t) => {
+  t.equal(getCollectionState({ collection: 'foo' }), 'foo')
+  const collection = {}
+  t.equal(getCollectionState({ collection }), collection)
+  t.end()
+})
+test('getActiveItem', (t) => {
+  t.equal(getActiveItem({ collection: { item: 'foo' } }), 'foo')
+  t.end()
+})
+test('itemIsActive', (t) => {
+  t.true(itemIsActive({ collection: { item: 'saga43' } }, { item: sailboat }))
+  t.false(itemIsActive({ collection: { item: 'foo' } }, { item: sailboat }))
   t.end()
 })

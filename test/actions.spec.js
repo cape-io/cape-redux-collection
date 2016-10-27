@@ -8,8 +8,8 @@ import { LIST_TYPE } from '../src/const'
 import { isListItem } from '../src/helpers'
 // import { listItemSelector } from '../src/select'
 import {
-  addItemToFavs, close, confirmFavorite, endFavAction, endFavorite, ensureUserHasCollection, isAnon,
-  open, shouldEndItem, userNeedsCollection,
+  addOrOpen, addItemToFavs, close, confirmFavorite, endFavAction, endFavorite,
+  ensureUserHasCollection, isAnon, open, shouldEndItem, userNeedsCollection,
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
@@ -47,7 +47,7 @@ test('ensureUserHasCollection', (t) => {
 })
 
 test('addItemToFavs', (t) => {
-  let listItem = null // { id: 'abc', type: 'ListItem' }
+  let listItem = null
   const validAction1 = overEvery(
     flow(property('type'), eq('graph/entity/PUT')),
     flow(property('payload'), isListItem)
@@ -115,7 +115,7 @@ function validEndAct(t, act) {
   t.equal(act.payload.actionStatus, 'ended', 'actionStatus')
   t.ok(isDate(act.payload.endTime))
   t.ok(isString(act.payload.id))
-  t.equal(act.payload.type, 'ListItem')
+  t.equal(act.payload.type, LIST_TYPE)
 }
 test('endFavAction', (t) => {
   const act = endFavAction(getState(), { item: sailboat })
@@ -126,5 +126,9 @@ test('endFavorite', (t) => {
   const act = endFavorite(sailboat)(dispatch, getState)
   validEndAct(t, act)
   t.false(shouldEndItem(sailboat)(t.end, getState))
+  t.end()
+})
+test('addOrOpen', (t) => {
+  // addOrOpen
   t.end()
 })

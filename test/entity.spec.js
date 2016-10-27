@@ -1,10 +1,11 @@
 import test from 'tape'
 import { isDate, isFunction, matches, property } from 'lodash'
 import { isTriple } from 'redux-graph'
+
+import { LIST_TYPE } from '../src/const'
 import {
   collectionListBuilder, collectionListBuilderDefault, getTitle, listItemBuilder,
 } from '../src/entity'
-
 import { collectionList, configStore, image, props, sailboat } from './mock'
 
 const store = configStore()
@@ -43,7 +44,7 @@ test('listItemBuilder', (t) => {
   const state = store.getState()
   const triple = entityBuilder(state)
   t.ok(isTriple(triple))
-  t.equal(triple.object.type, 'ListItem')
+  t.equal(triple.object.type, LIST_TYPE)
   t.equal(triple.object.agent.id, 'anonUser')
   t.equal(triple.object.item, sailboat)
   t.equal(triple.object.image, state.graph.entity.pic1)

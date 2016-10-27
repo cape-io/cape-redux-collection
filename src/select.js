@@ -2,8 +2,8 @@ import {
   entityDomainIncludes, entityTypeSelector, rebuildEntitiesSelector,
 } from 'redux-graph'
 import { createSelector, createStructuredSelector } from 'reselect'
-import find from 'lodash/fp/find'
-import pickBy from 'lodash/fp/pickBy'
+import { eq, flow, over, property, spread } from 'lodash'
+import { find, pickBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
 
@@ -78,12 +78,15 @@ export const itemFavCollection = createSelector(itemCollections, find(isFavList)
 // export const itemIcon = createSelector(itemCollections, getItemIcon)
 
 // CREATE
-
-
+export const getCollectionState = property('collection')
+export const getActiveItem = select(getCollectionState, 'item')
+export const itemIsActive = flow(over(getActiveItem, getItemId), spread(eq))
 // ITEM CONTAINER
 // Used in the ItemFav container.
 export const mapStateToProps = createStructuredSelector({
   activeListItem: itemListCreated, // Single listItem entity.
   collections: itemCollections,
   inCollections: itemInCollections,
+  itemIsActive,
+  userCollections,
 })
