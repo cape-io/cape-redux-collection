@@ -52,13 +52,13 @@ const listItemDefaults = {
 // Adding an item to a list requires a new triple. Adding a field value to the collection.
 // @listSelector: The project/collection this item is being added/attached to.
 // @return: function selector builds triple with object entity object.
-export function listItemBuilder(listSelector, selectorObj = {}) {
-  if (!isFunction(listSelector)) throw new Error('listSelector must be a function.')
+export function listItemBuilder(listOrSelector, selectorObj = {}) {
+  // if (!isFunction(listOrSelector)) throw new Error('listSelector must be a function.')
   return structuredSelector({
     // Create the ListItem.
     object: structuredSelector(collectionItem(merge(listItemDefaults, selectorObj))),
     // The item is attached to the list by adding an itemListElement predicate triple.
-    subject: listSelector,
+    subject: listOrSelector,
     predicate: 'itemListElement',
   })
 }

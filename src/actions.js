@@ -1,4 +1,4 @@
-import { cond, find, flow, negate, noop, over, property, size, stubTrue } from 'lodash'
+import { cond, constant, find, flow, negate, noop, over, property, size, stubTrue } from 'lodash'
 import { eq } from 'lodash/fp'
 import { selectorCreate, entityUpdate } from 'redux-graph'
 import { isAnonymous } from 'cape-redux-auth'
@@ -41,13 +41,17 @@ export function addItemToFavs(item, position = 100) {
     [ stubTrue, selectorCreate(listItemBuilder(favsListSelector, { item, position })) ],
   ])
 }
-
+// When user is adding to a specific collection.
+export function addItemToCollection(collection, item) {
+  return constant(selectorCreate(listItemBuilder(collection, { item })))
+}
 // REDUCER ACTIONS
 
 export const ITEM = 'collection/ITEM'
 // Send it an item object that has an id property.
 export const open = createAction(ITEM, property('id'))
 export const isAnon = thunkSelect(isAnonymous)
+
 // Create new list item.
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.

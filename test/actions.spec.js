@@ -1,19 +1,19 @@
 import test from 'tape'
-import { conforms, flow, isDate, isString, matches, overEvery, property } from 'lodash'
+import { conforms, flow, isDate, isFunction, isString, matches, overEvery, property } from 'lodash'
 import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
 import { entityPut, isTriple } from 'redux-graph'
-import { collectionListEntity, configStore } from './mock'
+import { collectionListEntity, configStore, sailboat, sail2 } from './mock'
 import { LIST_TYPE } from '../src/const'
 import { isListItem } from '../src/helpers'
 // import { listItemSelector } from '../src/select'
 import {
-  addOrOpen, addItemToFavs, close, confirmFavorite, endFavAction, endFavorite,
+  addOrOpen, addItemToFavs, addItemToCollection, close, confirmFavorite, endFavAction, endFavorite,
   ensureUserHasCollection, isAnon, open, shouldEndItem, userNeedsCollection,
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
-const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
+
 dispatch(entityPut(sailboat))
 
 test('userNeedsCollection', (t) => {
@@ -84,6 +84,18 @@ test('addItemToFavs', (t) => {
     actions.shift()(action)
   }
   addItemToFavs(sailboat)(fakeDispatch, getState)
+  t.end()
+})
+test('addItemToCollection', (t) => {
+  const actThunk = addItemToCollection(favCollection, sail2)
+  t.ok(isFunction(actThunk))
+  const act = actThunk({})
+  t.ok(isFunction(act))
+  const triple = act(dispatch, getState)
+  t.equal(triple.subject, favCollection)
+  t.equal(triple.predicate, 'itemListElement')
+  t.equal(triple.object.type, LIST_TYPE)
+  // console.log(triple)
   t.end()
 })
 test('isAnon', (t) => {
