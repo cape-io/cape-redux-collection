@@ -16,7 +16,7 @@ import {
 } from './helpers'
 import { isFavList, isValidListItem } from './lang'
 import { predicateValueContains } from './util'
-import { COLLECTION_TYPE, LIST_TYPE } from './const'
+import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
 // COLLECTIONS
 
@@ -27,7 +27,7 @@ export const collections = rebuildEntitiesSelector(collectionListSelector)
 // LIST ITEM
 
 // Select all ListItem entities.
-export const listItemSelector = entityTypeSelector(LIST_TYPE)
+export const listItemSelector = entityTypeSelector(LIST_ITEM)
 
 // USER COLLECTIONS - No props needed.
 
@@ -38,9 +38,9 @@ export const userCollections = createSelector(
 export const userHasCollections = boolSelector(userCollections)
 // Find (first) user favs project from list entities.
 export const favsListSelector = createSelector(userCollections, find(isFavList))
-// ListItems attached to the user favs collection via itemListElement field/triple predicate.
+// ListItems attached to the user favs collection via PREDICATE field/triple predicate.
 // Returns object keyed with listItem id.
-export const favListElements = select(favsListSelector, 'itemListElement')
+export const favListElements = select(favsListSelector, PREDICATE)
 export const userHasFavorites = boolSelector(favListElements)
 
 export function itemsSelectors(selectItems) {
@@ -62,7 +62,7 @@ export const itemParents = entityDomainIncludes(getItemId)
 export const itemListItems = select(itemParents, 'domainIncludes.item')
 // Reduce to only valid/active listItemElements
 export const itemActiveListItems = createSelector(itemListItems, pickBy(isValidListItem))
-// Move domainIncludes.itemListElement to collection.
+// Move domainIncludes.PREDICATE to collection.
 export const itemLists = createSelector(itemActiveListItems, setListItemsCollection)
 // Same as activeListItem?
 export const itemListCreated = createSelector(itemLists, findActionCreated)
@@ -74,7 +74,7 @@ export const itemFavCollection = createSelector(itemCollections, find(isFavList)
 // Need to know if we should display a confirm window or a projectEdit window.
 // Find fav or active collection under edit.
 // export const getActiveCollection = simpleSelector(favCollection, firstValArg)
-// export const favId = select('itemListElement.id', favCollection)
+// export const favId = select('PREDICATE.id', favCollection)
 // export const itemIcon = createSelector(itemCollections, getItemIcon)
 
 // CREATE

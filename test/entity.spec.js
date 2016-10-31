@@ -2,7 +2,7 @@ import test from 'tape'
 import { isDate, isFunction, matches, property } from 'lodash'
 import { isTriple } from 'redux-graph'
 
-import { LIST_TYPE } from '../src/const'
+import { LIST_ITEM, PREDICATE } from '../src/const'
 import {
   collectionListBuilder, collectionListBuilderDefault, getTitle, listItemBuilder,
 } from '../src/entity'
@@ -44,12 +44,12 @@ test('listItemBuilder', (t) => {
   const state = store.getState()
   const triple = entityBuilder(state)
   t.ok(isTriple(triple))
-  t.equal(triple.object.type, LIST_TYPE)
+  t.equal(triple.object.type, LIST_ITEM)
   t.equal(triple.object.agent.id, 'anonUser')
   t.equal(triple.object.item, sailboat)
   t.equal(triple.object.image, state.graph.entity.pic1)
   t.deepEqual(triple.object.image, image)
-  t.equal(triple.predicate, 'itemListElement')
+  t.equal(triple.predicate, PREDICATE)
   t.equal(triple.subject, state.graph.entity.foo)
   t.end()
 })

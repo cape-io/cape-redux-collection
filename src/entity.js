@@ -3,7 +3,7 @@ import { merge } from 'cape-redux'
 import { getProps, select, structuredSelector } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
 
-import { COLLECTION_TYPE, FAV_TITLE, LIST_TYPE } from './const'
+import { COLLECTION_TYPE, FAV_TITLE, LIST_ITEM, PREDICATE } from './const'
 
 export function collectionList(props) {
   return {
@@ -36,7 +36,7 @@ export function collectionItem(props) {
   return {
     actionStatus: 'created',
     startTime: new Date(),
-    type: LIST_TYPE,
+    type: LIST_ITEM,
     position: 100,
     ...props,
   }
@@ -59,10 +59,10 @@ export function listItemBuilder(listOrSelector, selectorObj = {}) {
     object: structuredSelector(collectionItem(merge(listItemDefaults, selectorObj))),
     // The item is attached to the list by adding an itemListElement predicate triple.
     subject: listOrSelector,
-    predicate: 'itemListElement',
+    predicate: PREDICATE,
   })
 }
 export function endListItem({ id, type }) {
-  if (type !== LIST_TYPE) throw new Error('Type prop mus match.')
+  if (type !== LIST_ITEM) throw new Error('Type prop mus match.')
   return { actionStatus: 'ended', endTime: new Date(), id, type }
 }

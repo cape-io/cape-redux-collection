@@ -4,7 +4,7 @@ import {
 } from 'lodash'
 import { eq, find, keyBy, orderBy } from 'lodash/fp'
 
-import { LIST_TYPE } from './const'
+import { LIST_ITEM, PREDICATE } from './const'
 import { isValidListItem } from './lang'
 
 // Returns first found item that is created.
@@ -29,17 +29,17 @@ export const listItemIndex = keyBy('item.id')
 export const orderListItems = orderBy([ 'position', 'item.id' ], 'asc')
 
 export function getLiCollection(listItem) {
-  return val0(listItem.domainIncludes.itemListElement)
+  return val0(listItem.domainIncludes[PREDICATE])
 }
 export function setLiCollection(listItem) {
   return listItem.set('collection', getLiCollection(listItem)).without('domainIncludes')
 }
-// Move domainIncludes.itemListElement to collection.
+// Move domainIncludes.PREDICATE to collection.
 export function setListItemsCollection(listItems) {
   return mapValues(listItems, setLiCollection)
 }
 export function invertLiCollection(res, { collection, ...listItem }) {
-  return set(res, collection.id, collection.set('itemListElement', listItem))
+  return set(res, collection.id, collection.set(PREDICATE, listItem))
 }
 // Invert from list -> collection to collection -> list
 export function invertListItems(lists) {
@@ -57,7 +57,7 @@ export const validStatusOpts = partial(includes, [ 'created', 'confirmed' ])
 export const isListItem = conforms({
   actionStatus: validStatusOpts,
   startTime: isDate,
-  type: eq(LIST_TYPE),
+  type: eq(LIST_ITEM),
   position: isNumber,
   dateCreated: isDate,
   id: isString,

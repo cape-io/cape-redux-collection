@@ -4,12 +4,13 @@ import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
 import { entityPut, isTriple } from 'redux-graph'
 import { collectionListEntity, configStore, sailboat, sail2 } from './mock'
-import { LIST_TYPE } from '../src/const'
+import { LIST_ITEM, PREDICATE } from '../src/const'
 import { isListItem } from '../src/helpers'
 // import { listItemSelector } from '../src/select'
 import {
-  addOrOpen, addItemToFavs, addItemToCollection, close, confirmFavorite, endFavAction, endFavorite,
-  ensureUserHasCollection, isAnon, open, shouldEndItem, userNeedsCollection,
+  addOrOpen, addItemToFavs, addItemToCollection, close, CLOSE, confirmFavorite,
+  endFavAction, endFavorite, ensureUserHasCollection, isAnon,
+  open, shouldEndItem, userNeedsCollection,
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
@@ -24,10 +25,10 @@ const validConfirm = conforms({
   actionStatus: eq('confirmed'),
   dateUpdated: isDate,
   id: isString,
-  type: eq(LIST_TYPE),
+  type: eq(LIST_ITEM),
 })
 test('confirmFavorite', (t) => {
-  const res = confirmFavorite({ id: 'foo1', type: LIST_TYPE })
+  const res = confirmFavorite({ id: 'foo1', type: LIST_ITEM })
   t.equal(res.type, 'graph/entity/UPDATE')
   t.equal(res.payload.id, 'foo1')
   t.ok(validConfirm(res.payload))
@@ -74,7 +75,7 @@ test('addItemToFavs', (t) => {
   function act4(act) {
     t.ok(isTriple(act.payload))
     t.equal(act.type, 'graph/triple/PUT')
-    t.equal(act.payload.predicate, 'itemListElement')
+    t.equal(act.payload.predicate, PREDICATE)
     t.equal(act.payload.subject.type, 'CollectionList')
     t.equal(act.payload.subject.id, favCollection.id)
     t.equal(act.payload.object.id, listItem.id)
@@ -91,10 +92,11 @@ test('addItemToCollection', (t) => {
   t.ok(isFunction(actThunk))
   const act = actThunk({})
   t.ok(isFunction(act))
-  const triple = act(dispatch, getState)
+  const [ triple, closeAction ] = act(dispatch, getState)
+  t.equal(closeAction.type, CLOSE)
   t.equal(triple.subject, favCollection)
-  t.equal(triple.predicate, 'itemListElement')
-  t.equal(triple.object.type, LIST_TYPE)
+  t.equal(triple.predicate, PREDICATE)
+  t.equal(triple.object.type, LIST_ITEM)
   // console.log(triple)
   t.end()
 })
@@ -127,7 +129,7 @@ function validEndAct(t, act) {
   t.equal(act.payload.actionStatus, 'ended', 'actionStatus')
   t.ok(isDate(act.payload.endTime))
   t.ok(isString(act.payload.id))
-  t.equal(act.payload.type, LIST_TYPE)
+  t.equal(act.payload.type, LIST_ITEM)
 }
 test('endFavAction', (t) => {
   const act = endFavAction(getState(), { item: sailboat })
