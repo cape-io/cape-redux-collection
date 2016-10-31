@@ -41,10 +41,18 @@ export function addItemToFavs(item, position = 100) {
     [ stubTrue, selectorCreate(listItemBuilder(favsListSelector, { item, position })) ],
   ])
 }
+
+export const CLOSE = 'collection/CLOSE'
+export const close = createAction(CLOSE, noop)
+
 // When user is adding to a specific collection.
 export function addItemToCollection(collection, item) {
-  return constant(selectorCreate(listItemBuilder(collection, { item })))
+  return constant(over(
+    selectorCreate(listItemBuilder(collection, { item })),
+    dispatch => dispatch(close())
+  ))
 }
+
 // REDUCER ACTIONS
 
 export const ITEM = 'collection/ITEM'
@@ -68,7 +76,5 @@ export function editItemCollections(createFavObj, item) {
   return over(confirmActive, ensureUserHasCollection(createFavObj), addOrOpen(item))
 }
 
-export const CLOSE = 'collection/CLOSE'
-export const close = createAction(CLOSE, noop)
 export const COLLECTION = 'collection/COLLECTION'
 export const LISTITEM = 'collection/LISTITEM'
