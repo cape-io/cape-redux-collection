@@ -1,15 +1,17 @@
 import test from 'tape'
-import { conforms, flow, isDate, isFunction, isString, matches, overEvery, property } from 'lodash'
+import {
+  conforms, find, flow, isDate, isFunction, isString, matches, overEvery, property,
+} from 'lodash'
 import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
-import { entityPut, isTriple } from 'redux-graph'
+import { entityPut, isTriple, ENTITY_UPDATE } from 'redux-graph'
 import { collectionListEntity, configStore, sailboat, sail2 } from './mock'
 import { LIST_ITEM, PREDICATE } from '../src/const'
 import { isListItem } from '../src/helpers'
-// import { listItemSelector } from '../src/select'
+import { listItemSelector } from '../src/select'
 import {
   addOrOpen, addItemToFavs, addItemToCollection, close, CLOSE, confirmFavorite,
-  endFavAction, endFavorite, ensureUserHasCollection, isAnon,
+  endAction, endFavAction, endFavorite, ensureUserHasCollection, isAnon,
   open, shouldEndItem, userNeedsCollection,
 } from '../src/actions'
 
@@ -131,6 +133,15 @@ function validEndAct(t, act) {
   t.ok(isString(act.payload.id))
   t.equal(act.payload.type, LIST_ITEM)
 }
+test('endAction', (t) => {
+  const getAct = endAction(find)
+  t.ok(isFunction(getAct))
+  const listItem = listItemSelector(getState())
+  const act = getAct(listItem)
+  t.equal(act.type, ENTITY_UPDATE)
+  t.equal(act.payload.type, LIST_ITEM)
+  t.end()
+})
 test('endFavAction', (t) => {
   const act = endFavAction(getState(), { item: sailboat })
   validEndAct(t, act)
@@ -143,6 +154,7 @@ test('endFavorite', (t) => {
   t.end()
 })
 test('addOrOpen', (t) => {
-  // addOrOpen
+  const act = addOrOpen(sailboat)
+  t.ok(isFunction(act))
   t.end()
 })

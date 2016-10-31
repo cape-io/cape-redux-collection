@@ -1,4 +1,6 @@
-import { cond, constant, find, flow, negate, noop, over, property, size, stubTrue } from 'lodash'
+import {
+  cond, constant, find, flow, negate, noop, over, partial, partialRight, property, size, stubTrue,
+} from 'lodash'
 import { eq } from 'lodash/fp'
 import { selectorCreate, entityUpdate } from 'redux-graph'
 import { isAnonymous } from 'cape-redux-auth'
@@ -30,7 +32,10 @@ export function ensureUserHasCollection(buildCollectionList = {}) {
 export function shouldEndItem(item) {
   return flow(thunkSelect(itemLists, { item }), size, eq(1))
 }
-export const endFavAction = flow(itemLists, find, endListItem, entityUpdate)
+
+export const endAction = partialRight(flow, endListItem, entityUpdate)
+export const bindEndAction = partial(flow, endAction())
+export const endFavAction = endAction(itemLists, find)
 export function endFavorite(item) {
   return (dispatch, getState) => flow(endFavAction, dispatch)(getState(), { item })
 }
