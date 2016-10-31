@@ -30,7 +30,6 @@ export const collectionListBuilderDefault = collectionListBuilder()
 //   creator,
 //   mainEntity, // List of what.
 //   title,
-// export const createCollectionList = merge(collectionList)
 
 export function collectionItem(props) {
   return {

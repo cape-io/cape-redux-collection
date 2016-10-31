@@ -22,11 +22,12 @@ export function confirmActive(dispatch, getState) {
 // Create favs collection for user.
 export const userNeedsCollection = negate(thunkSelect(userHasCollections))
 
+export const createCollectionList = flow(collectionListBuilder, selectorCreate)
+
 // Make sure the user has a favs collection created. Returns created entity or undefined.
 export function ensureUserHasCollection(buildCollectionList = {}) {
-  const entitySelector = collectionListBuilder(buildCollectionList)
   return cond([
-    [ userNeedsCollection, selectorCreate(entitySelector) ],
+    [ userNeedsCollection, createCollectionList(buildCollectionList) ],
   ])
 }
 export function shouldEndItem(item) {
