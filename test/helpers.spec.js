@@ -6,8 +6,9 @@ import { simpleSelector } from 'cape-select'
 import { addItemToFavs, ensureUserHasCollection } from '../src/actions'
 import { favListElements } from '../src/select'
 import {
-  findActionCreated, fixListItems, isCollectionList, listItemIndex, orderListItems,
+  findActionCreated, fixListItems, listItemIndex, orderListItems,
 } from '../src/helpers'
+
 import { configStore, sailboat, sail2 } from './mock'
 
 const { dispatch, getState } = configStore()
@@ -34,19 +35,7 @@ test('listItemIndex', (t) => {
   t.deepEqual(keys(res), [ 'foo', 'bar', 'sailing' ])
   t.end()
 })
-test('isCollectionList', (t) => {
-  const collection = {
-    dateCreated: new Date(),
-    itemListOrder: 'Ascending',
-    type: 'CollectionList',
-    title: 'Favorites',
-    id: 'mk46xvzp',
-  }
-  t.ok(isCollectionList(collection))
-  collection.itemListOrder = 'Desc'
-  t.false(isCollectionList(collection))
-  t.end()
-})
+
 function filler(item) {
   if (item.id === 'saga43') return { ...item, length: 43 }
   if (item.id === 'freedom32') return { ...item, length: 32 }

@@ -2,7 +2,7 @@ import test from 'tape'
 import { find, isEmpty, isPlainObject, matches, pickBy, size } from 'lodash'
 
 import { addItemToFavs, confirmActive, ensureUserHasCollection } from '../src/actions'
-import { isCollectionList, isListItem } from '../src/helpers'
+import { isCollectionList, isListItem } from '../src/lang'
 import {
   activeListItem, collectionListSelector, collections, getItemId, favListElements,
   getActiveItem, getCollectionState, itemIsActive, listItemSelector,

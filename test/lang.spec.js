@@ -1,8 +1,21 @@
 import test from 'tape'
 
-import { isFavList, isValidListItem } from '../src/lang'
+import { isCollectionList, isFavList, isValidListItem } from '../src/lang'
 import { FAV_TITLE } from '../src/const'
 
+test('isCollectionList', (t) => {
+  const collection = {
+    dateCreated: new Date(),
+    itemListOrder: 'Ascending',
+    type: 'CollectionList',
+    title: 'Favorites',
+    id: 'mk46xvzp',
+  }
+  t.ok(isCollectionList(collection))
+  collection.itemListOrder = 'Desc'
+  t.false(isCollectionList(collection))
+  t.end()
+})
 test('isValidListItem()', (t) => {
   const val = { actionStatus: 'confirmed' }
   t.ok(isValidListItem(val), 'valid')

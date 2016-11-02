@@ -45,20 +45,3 @@ export function invertLiCollection(res, { collection, ...listItem }) {
 export function invertListItems(lists) {
   return lists ? reduce(lists, invertLiCollection, {}) : null
 }
-export const validSortOpts = partial(includes, [ 'Ascending', 'Descending' ])
-export const isCollectionList = conforms({
-  dateCreated: isDate,
-  id: isString,
-  itemListOrder: validSortOpts,
-  type: eq('CollectionList'),
-  title: isString,
-})
-export const validStatusOpts = partial(includes, [ 'created', 'confirmed' ])
-export const isListItem = conforms({
-  actionStatus: validStatusOpts,
-  startTime: isDate,
-  type: eq(LIST_ITEM),
-  position: isNumber,
-  dateCreated: isDate,
-  id: isString,
-})
