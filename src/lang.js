@@ -1,8 +1,8 @@
-import { entityHasType } from 'redux-graph'
+// import { entityHasType } from 'redux-graph'
 import {
-  conforms, eq, includes, isDate, isNumber, isString, matchesProperty, negate, partial,
+  conforms, includes, isDate, isNumber, isString, matchesProperty, negate, partial,
 } from 'lodash'
-
+import { eq } from 'lodash/fp'
 import { COLLECTION_TYPE, FAV_TITLE, LIST_ITEM } from './const'
 
 export const validSortOpts = partial(includes, [ 'Ascending', 'Descending' ])

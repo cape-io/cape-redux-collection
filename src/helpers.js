@@ -1,10 +1,8 @@
 import { key0, val0 } from 'redux-graph'
-import {
-  conforms, get, includes, isDate, isNumber, isString, mapValues, partial, reduce, set,
-} from 'lodash'
-import { eq, find, keyBy, orderBy } from 'lodash/fp'
+import { get, mapValues, reduce, set } from 'lodash'
+import { find, keyBy, orderBy } from 'lodash/fp'
 
-import { LIST_ITEM, PREDICATE } from './const'
+import { PREDICATE } from './const'
 import { isValidListItem } from './lang'
 
 // Returns first found item that is created.

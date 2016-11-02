@@ -1,17 +1,17 @@
 import test from 'tape'
 import {
-  conforms, find, flow, isDate, isFunction, isString, matches, overEvery, property,
+  conforms, find, flow, isDate, isFunction, isString, overEvery, property,
 } from 'lodash'
 import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
 import { entityPut, isTriple, ENTITY_UPDATE } from 'redux-graph'
-import { collectionListEntity, configStore, sailboat, sail2 } from './mock'
+import { configStore, sailboat, sail2 } from './mock'
 import { LIST_ITEM, PREDICATE } from '../src/const'
-import { isListItem } from '../src/helpers'
+import { isCollectionList, isListItem } from '../src/lang'
 import { listItemSelector } from '../src/select'
 import {
   addOrOpen, addItemToFavs, addItemToCollection, close, CLOSE, confirmFavorite,
-  endAction, endFavAction, endFavorite, ensureUserHasCollection, isAnon,
+  createCollectionList, endAction, endFavAction, endFavorite, ensureUserHasCollection, isAnon,
   open, shouldEndItem, userNeedsCollection,
 } from '../src/actions'
 
@@ -42,13 +42,20 @@ test('ensureUserHasCollection', (t) => {
   const res = ensureUserHasCollection()(dispatch, getState)
   t.equal(res.type, 'CollectionList', 'type')
   t.true(isString(res.id), 'id')
-  t.true(matches(collectionListEntity)(res))
+  t.equal(res.title, 'Favorites', 'title')
+  t.true(isCollectionList(res))
   favCollection = res
   const res2 = ensureUserHasCollection()(dispatch, getState)
   t.equal(res2, undefined, 'undefined when has collection')
   t.end()
 })
-
+test('createCollectionList', (t) => {
+  const res = createCollectionList({})(dispatch, getState)
+  t.equal(res.type, 'CollectionList', 'type')
+  t.true(isString(res.id), 'id')
+  t.true(isCollectionList(res))
+  t.end()
+})
 test('addItemToFavs', (t) => {
   let listItem = null
   const validAction1 = overEvery(
