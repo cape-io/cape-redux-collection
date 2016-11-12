@@ -1,86 +1,86 @@
 import {
-  cond, constant, find, flow, negate, noop, over, partial, partialRight, property, size, stubTrue,
+  constant, flow, noop, now, nthArg, over, spread,
 } from 'lodash'
-import { eq } from 'lodash/fp'
-import { selectorCreate, entityUpdate } from 'redux-graph'
+import { pick } from 'lodash/fp'
+import { createObj } from 'cape-lodash'
+import { createAction, selectorAction, thunkAction } from 'cape-redux'
 import { isAnonymous } from 'cape-redux-auth'
-import { createAction, thunkSelect } from 'cape-redux'
 
-import { collectionListBuilder, listItemBuilder, endListItem } from './entity'
-import { activeListItem, favsListSelector, itemLists, userHasCollections } from './select'
-
-// Create an action that will update a ListItem as confirmed.
-export function confirmFavorite({ id, type }) {
-  // Including type for good practice.
-  return entityUpdate({ id, actionStatus: 'confirmed', dateUpdated: new Date(), type })
-}
-// Find open item and close it via confirmFavorite action.
-export function confirmActive(dispatch, getState) {
-  const itemToConfirm = activeListItem(getState())
-  if (itemToConfirm) dispatch(confirmFavorite(itemToConfirm))
-}
-// Create favs collection for user.
-export const userNeedsCollection = negate(thunkSelect(userHasCollections))
-
-export const createCollectionList = flow(collectionListBuilder, selectorCreate)
-
-// Make sure the user has a favs collection created. Returns created entity or undefined.
-export function ensureUserHasCollection(buildCollectionList = {}) {
-  return cond([
-    [ userNeedsCollection, createCollectionList(buildCollectionList) ],
-  ])
-}
-export function shouldEndItem(item) {
-  return flow(thunkSelect(itemLists, { item }), size, eq(1))
-}
-
-export const endAction = partialRight(flow, endListItem, entityUpdate)
-export const bindEndAction = partial(flow, endAction())
-export const endFavAction = endAction(itemLists, find)
-export function endFavorite(item) {
-  return (dispatch, getState) => flow(endFavAction, dispatch)(getState(), { item })
-}
-// We know user has a favs collection. Create new listItem for favs collection.
-export function addItemToFavs(item, position = 100) {
-  return cond([
-    [ shouldEndItem(item), endFavorite(item) ],
-    [ stubTrue, selectorCreate(listItemBuilder(favsListSelector, { item, position })) ],
-  ])
-}
+import { collectionListBuilder, listItemBuilder } from './entity'
+import {
+  activeListItem, favsListSelector, itemFavItem, userNeedsCollection,
+} from './select'
+import { CONFIRMED, ENDED, LIST_ITEM } from './const'
 
 export const CLOSE = 'collection/CLOSE'
+// Close edit dialog.
 export const close = createAction(CLOSE, noop)
 
-// When user is adding to a specific collection.
-export function addItemToCollection(collection, item) {
-  return constant(over(
-    selectorCreate(listItemBuilder(collection, { item })),
-    dispatch => dispatch(close())
-  ))
+export function requireIdType(props, listItem = null, doPick = true) {
+  if (!props.id) throw new Error('Must have id prop.')
+  if (!props.type) throw new Error('Must have a type prop.')
+  if (listItem && props.type !== listItem) throw new Error('Wrong entity type.')
+  return doPick ? pick('id', 'type') : null
 }
+const meta = flow(createObj('action'), constant)
+export const UPDATE_ITEM = 'collection/UPDATE_ITEM'
+// Create an action that will update a ListItem as confirmed.
+export function confirmItemPayload(props) {
+  requireIdType(props, LIST_ITEM)
+  return { ...props, actionStatus: CONFIRMED, dateUpdated: now() }
+}
+export const confirmItem = createAction(UPDATE_ITEM, confirmItemPayload, meta('CONFIRM_ITEM'))
 
-// REDUCER ACTIONS
+export const CREATE_LIST = 'collection/CREATE_LIST'
+export const createList = selectorAction(CREATE_LIST, collectionListBuilder)
 
-export const ITEM = 'collection/ITEM'
-// Send it an item object that has an id property.
-export const open = createAction(ITEM, property('id'))
-export const isAnon = thunkSelect(isAnonymous)
+export const CREATE_ITEM = 'collection/CREATE_ITEM'
+// When user is adding to a specific collection. Create new ListItem entity.
+export const createItem = selectorAction(CREATE_ITEM, listItemBuilder)
 
-// Create new list item.
+export function endItemPayload(props) {
+  requireIdType(props, LIST_ITEM)
+  return { ...props, actionStatus: ENDED, endTime: now() }
+}
+export const endItem = createAction(UPDATE_ITEM, endItemPayload, meta('END_ITEM'))
+
+// Find created/open item and close it via confirmFavorite action.
+export const confirmActivePayload = flow(activeListItem, requireIdType, confirmItemPayload)
+export const confirmActive = createAction(UPDATE_ITEM, confirmActivePayload, meta('CONFIRM_ACTIVE'))
+
+export const OPEN = 'collection/OPEN'
+// Open edit dialog. Send it an item object that has an id property.
+export const open = createAction(OPEN, requireIdType)
+
+// TOGGLE
+function actionPrepActions([ activeLI, needsList, listProps ]) {
+  const actions = []
+  if (activeLI) actions.push(confirmActive())
+  // Make sure the user has a favs collection created. Returns created entity or undefined.
+  if (needsList) actions.push(createList(listProps))
+  return actions
+}
+const actionPrep = flow(over(activeListItem, userNeedsCollection, nthArg(1)), actionPrepActions)
+
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
-export function addOrOpen(item) {
-  return cond([
-    [ isAnon, addItemToFavs(item) ],
-    [ stubTrue, dispatch => dispatch(open(item)) ],
-  ])
+function addOrOpenAction([ isAnon, favItem, item ]) {
+  if (isAnon) {
+    // We know user has a favs collection. Create new listItem or remove from favs collection.
+    return favItem ? endItem(favItem) : createItem({ item, mainEntity: favsListSelector })
+  }
+  return open(item)
 }
+const addOrOpen = flow(over(
+  isAnonymous,
+  flow(over(nthArg(0), flow(nthArg(2), createObj('item')), spread(itemFavItem))), // itemInFavs
+  flow(nthArg(2), requireIdType), // Get item.
+), addOrOpenAction)
 
-// Action to dispatch when a user clicks the (+) favorite button.
-// Requires thunk middleware.
-export function editItemCollections(createFavObj, item) {
-  return over(confirmActive, ensureUserHasCollection(createFavObj), addOrOpen(item))
-}
-
-export const COLLECTION = 'collection/COLLECTION'
-export const LISTITEM = 'collection/LISTITEM'
+// Decides what to do when a user clicks the (+) favorite button on item that can be in list.
+// toggle(listProps, item) - state is added as first arg by thunkAction()
+export const toggle = thunkAction(
+  actionPrep,
+  addOrOpen,
+  (actions, toggleAction) => actions.concat(toggleAction),
+)

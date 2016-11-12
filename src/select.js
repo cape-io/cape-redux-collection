@@ -1,8 +1,8 @@
+import { eq, flow, negate, over, property, spread } from 'lodash'
 import {
   entityDomainIncludes, entityTypeSelector, rebuildEntitiesSelector,
 } from 'redux-graph'
 import { createSelector, createStructuredSelector } from 'reselect'
-import { eq, flow, over, property, spread } from 'lodash'
 import { find, pickBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
@@ -36,8 +36,11 @@ export const userCollections = createSelector(
   collections, selectUser, predicateValueContains('creator')
 )
 export const userHasCollections = boolSelector(userCollections)
+export const userNeedsCollection = negate(userHasCollections)
 // Find (first) user favs project from list entities.
 export const favsListSelector = createSelector(userCollections, find(isFavList))
+// CollectionList id of user favs.
+export const favListId = select(favsListSelector, 'id')
 // ListItems attached to the user favs collection via PREDICATE field/triple predicate.
 // Returns object keyed with listItem id.
 export const favListElements = select(favsListSelector, PREDICATE)
@@ -70,7 +73,9 @@ export const itemListCreated = createSelector(itemLists, findActionCreated)
 // Reorder list -> collection to collection -> listItemElement. Returns object or null if no list.
 export const itemCollections = createSelector(itemLists, invertListItems)
 export const itemInCollections = boolSelector(itemCollections)
+// Is the item in a favs list?
 export const itemFavCollection = createSelector(itemCollections, find(isFavList))
+export const itemFavItem = () => null
 // Need to know if we should display a confirm window or a projectEdit window.
 // Find fav or active collection under edit.
 // export const getActiveCollection = simpleSelector(favCollection, firstValArg)

@@ -1,67 +1,76 @@
-import { flow, isFunction } from 'lodash'
-import { merge } from 'cape-redux'
-import { getProps, select, structuredSelector } from 'cape-select'
+import { flow, get, now, partial } from 'lodash'
+import { structuredSelector } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
 
-import { COLLECTION_TYPE, FAV_TITLE, LIST_ITEM, PREDICATE } from './const'
+import {
+  ASC, COLLECTION_TYPE, CREATED, FAV_TITLE, LIST_ITEM, PREDICATE,
+} from './const'
 
-export function collectionList(props) {
+export const entitySchema = {
+  [COLLECTION_TYPE]: {
+    additionalType: true,
+    dateCreated: true,
+    itemListOrder: { default: ASC },
+    numberOfItems: { calc: true },
+    title: { default: FAV_TITLE },
+    _refs: {
+      agent: true,
+      creator: true,
+      editor: true,
+      [PREDICATE]: { multi: true },
+      mainEntity: true,
+    },
+  },
+  [LIST_ITEM]: {
+    actionStatus: { default: CREATED },
+    dateCreated: true,
+    description: true,
+    position: { default: 100 },
+    title: true,
+    _refs: {
+      creator: true,
+      editor: true,
+      item: true,
+      mainEntity: true,
+    },
+  },
+}
+export function getDefault(type, field) {
+  return get(entitySchema, [ type, field, 'default' ], null)
+}
+export const getListDef = partial(getDefault, COLLECTION_TYPE)
+export const getItemDef = partial(getDefault, LIST_ITEM)
+
+// Merge in default Collection fields.
+export function collectionList(props = {}) {
   return {
-    dateCreated: new Date(),
-    itemListOrder: 'Ascending',
+    creator: selectUser, // User that created the thing.
+    editor: selectUser, // User that edits/owns has permission the thing.
+    dateCreated: now(),
+    itemListOrder: getListDef('itemListOrder'),
+    title: getListDef('title'), // Title for this CollectionList.
     type: COLLECTION_TYPE,
     ...props,
   }
 }
-// Gep props.title or return FAV_TITLE default.
-export const getTitle = select(getProps, 'title', FAV_TITLE)
-export const listCreatorTitle = {
-  creator: selectUser, // User that created the thing.
-  title: getTitle, // Title for this CollectionList.
-}
-// Create a new Favs list for the user. Returns selector.
-export function collectionListBuilder(selectorObj = {}) {
-  return flow(structuredSelector(merge(listCreatorTitle, selectorObj)), collectionList)
-}
+// Creates a structuredSelector that will create a new list.
+export const collectionListBuilder = flow(collectionList, structuredSelector)
+// Default structuredSelector to build list.
 export const collectionListBuilderDefault = collectionListBuilder()
 
-// Describe the list.
-//   agent,
-//   creator,
-//   mainEntity, // List of what.
-//   title,
-
 export function collectionItem(props) {
+  if (!props.item) throw new Error('Creating a new collectionItem requires an `item`.')
+  if (!props.mainEntity) throw new Error('`mainEntity` required to define item collection.')
   return {
-    actionStatus: 'created',
-    startTime: new Date(),
+    actionStatus: getItemDef('actionStatus'),
+    creator: selectUser, // User that created the thing.
+    editor: selectUser, // User that edits/owns has permission the thing.
+    startTime: now(),
     type: LIST_ITEM,
-    position: 100,
+    position: getItemDef('position'),
     ...props,
   }
 }
 
-// agent,
-// item, // Thing that the user is adding to the collection.
-// position,
-const listItemDefaults = {
-  agent: selectUser,
-}
-
-// Adding an item to a list requires a new triple. Adding a field value to the collection.
-// @listSelector: The project/collection this item is being added/attached to.
-// @return: function selector builds triple with object entity object.
-export function listItemBuilder(listOrSelector, selectorObj = {}) {
-  // if (!isFunction(listOrSelector)) throw new Error('listSelector must be a function.')
-  return structuredSelector({
-    // Create the ListItem.
-    object: structuredSelector(collectionItem(merge(listItemDefaults, selectorObj))),
-    // The item is attached to the list by adding an itemListElement predicate triple.
-    subject: listOrSelector,
-    predicate: PREDICATE,
-  })
-}
-export function endListItem({ id, type }) {
-  if (type !== LIST_ITEM) throw new Error('Type prop mus match.')
-  return { actionStatus: 'ended', endTime: new Date(), id, type }
-}
+// Creates a structuredSelector that will create a new list.
+export const listItemBuilder = flow(collectionItem, structuredSelector)
