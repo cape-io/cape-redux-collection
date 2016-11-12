@@ -3,9 +3,11 @@ import {
   conforms, includes, isDate, isNumber, isString, matchesProperty, negate, partial,
 } from 'lodash'
 import { eq } from 'lodash/fp'
-import { COLLECTION_TYPE, FAV_TITLE, LIST_ITEM } from './const'
+import {
+  ASC, COLLECTION_TYPE, CONFIRMED, CREATED, DESC, ENDED, FAV_TITLE, LIST_ITEM,
+} from './const'
 
-export const validSortOpts = partial(includes, [ 'Ascending', 'Descending' ])
+export const validSortOpts = partial(includes, [ ASC, DESC ])
 export const isCollectionList = conforms({
   dateCreated: isDate,
   id: isString,
@@ -13,7 +15,7 @@ export const isCollectionList = conforms({
   type: eq(COLLECTION_TYPE),
   title: isString,
 })
-export const validStatusOpts = partial(includes, [ 'created', 'confirmed' ])
+export const validStatusOpts = partial(includes, [ CREATED, CONFIRMED ])
 export const isListItem = conforms({
   actionStatus: validStatusOpts,
   startTime: isDate,
@@ -22,7 +24,7 @@ export const isListItem = conforms({
   dateCreated: isDate,
   id: isString,
 })
-export const isActionEnded = matchesProperty('actionStatus', 'ended')
+export const isActionEnded = matchesProperty('actionStatus', ENDED)
 // Valid unless ended/removed.
 export const isValidListItem = negate(isActionEnded)
 

@@ -2,11 +2,11 @@ import { key0, val0 } from 'redux-graph'
 import { get, mapValues, reduce, set } from 'lodash'
 import { find, keyBy, orderBy } from 'lodash/fp'
 
-import { PREDICATE } from './const'
+import { CREATED, PREDICATE } from './const'
 import { isValidListItem } from './lang'
 
 // Returns first found item that is created.
-export const findActionCreated = find({ actionStatus: 'created' })
+export const findActionCreated = find({ actionStatus: CREATED })
 
 // Reducer to replace the items with filled versions. Filters out the invalids.
 export function fixListItem(items) {

@@ -8,7 +8,7 @@ import { favListElements } from '../src/select'
 import {
   findActionCreated, fixListItems, listItemIndex, orderListItems,
 } from '../src/helpers'
-
+import { CREATED } from '../src/const'
 import { configStore, sailboat, sail2 } from './mock'
 
 const { dispatch, getState } = configStore()
@@ -16,14 +16,14 @@ const { dispatch, getState } = configStore()
 test('findActionCreated()', (t) => {
   const vals = [
     { id: 'foo' },
-    { id: 'bar', actionStatus: 'created' },
+    { id: 'bar', actionStatus: CREATED },
   ]
   const found = findActionCreated(vals)
   t.equal(found, vals[1])
   t.end()
 })
 const vals = [
-  { position: 2, id: 'mk46', item: { id: 'foo' }, actionStatus: 'created' },
+  { position: 2, id: 'mk46', item: { id: 'foo' }, actionStatus: CREATED },
   { position: 1, id: 'xvz', item: { id: 'bar' } },
   { position: 2, id: 'zp', item: { id: 'sailing' } },
 ]

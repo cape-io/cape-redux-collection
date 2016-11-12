@@ -1,7 +1,7 @@
 import test from 'tape'
 
 import { isCollectionList, isFavList, isValidListItem } from '../src/lang'
-import { FAV_TITLE } from '../src/const'
+import { ENDED, FAV_TITLE } from '../src/const'
 
 test('isCollectionList', (t) => {
   const collection = {
@@ -19,7 +19,7 @@ test('isCollectionList', (t) => {
 test('isValidListItem()', (t) => {
   const val = { actionStatus: 'confirmed' }
   t.ok(isValidListItem(val), 'valid')
-  const inval = { actionStatus: 'ended' }
+  const inval = { actionStatus: ENDED }
   t.notOk(isValidListItem(inval), 'invalid')
   t.end()
 })

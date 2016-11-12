@@ -6,7 +6,7 @@ import { eq } from 'lodash/fp'
 import { login, logout } from 'cape-redux-auth'
 import { entityPut, isTriple, ENTITY_UPDATE } from 'redux-graph'
 import { configStore, sailboat, sail2 } from './mock'
-import { LIST_ITEM, PREDICATE } from '../src/const'
+import { ENDED, LIST_ITEM, PREDICATE } from '../src/const'
 import { isCollectionList, isListItem } from '../src/lang'
 import { listItemSelector } from '../src/select'
 import {
@@ -135,7 +135,7 @@ test('shouldEndItem', (t) => {
 })
 function validEndAct(t, act) {
   t.equal(act.type, 'graph/entity/UPDATE', 'type')
-  t.equal(act.payload.actionStatus, 'ended', 'actionStatus')
+  t.equal(act.payload.actionStatus, ENDED, 'actionStatus')
   t.ok(isDate(act.payload.endTime))
   t.ok(isString(act.payload.id))
   t.equal(act.payload.type, LIST_ITEM)
