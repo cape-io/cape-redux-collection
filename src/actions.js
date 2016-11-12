@@ -22,8 +22,10 @@ export function requireIdType(props, listItem = null, doPick = true) {
   if (listItem && props.type !== listItem) throw new Error('Wrong entity type.')
   return doPick ? pick('id', 'type') : null
 }
+
 const meta = flow(createObj('action'), constant)
 export const UPDATE_ITEM = 'collection/UPDATE_ITEM'
+
 // Create an action that will update a ListItem as confirmed.
 export function confirmItemPayload(props) {
   requireIdType(props, LIST_ITEM)
@@ -31,12 +33,12 @@ export function confirmItemPayload(props) {
 }
 export const confirmItem = createAction(UPDATE_ITEM, confirmItemPayload, meta('CONFIRM_ITEM'))
 
-export const CREATE_LIST = 'collection/CREATE_LIST'
-export const createList = selectorAction(CREATE_LIST, collectionListBuilder)
-
 export const CREATE_ITEM = 'collection/CREATE_ITEM'
 // When user is adding to a specific collection. Create new ListItem entity.
 export const createItem = selectorAction(CREATE_ITEM, listItemBuilder)
+
+export const CREATE_LIST = 'collection/CREATE_LIST'
+export const createList = selectorAction(CREATE_LIST, collectionListBuilder)
 
 export function endItemPayload(props) {
   requireIdType(props, LIST_ITEM)

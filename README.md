@@ -38,6 +38,11 @@ Used to describe what item, its position, description, title, date added, status
 ## Actions
 
 - `close` - Close dialog box for specific item.
+- `confirmItem` - Set ListItem status to confirmed.
+- `confirmActive` - Gets active ListItem and sends it to `confirmItem`.
+- `createItem({ item, mainEntity })` - Create a new ListItem.
+- `createList` - Create a new CollectionList.
+- `endItem(listItem)` - Used to remove an ListItem from a list.
 - `ensureUserHasCollection` - Give a user a default "favs" list if they don't have one.
 - `open` - Specific to an item. App should show dialog box.
-- `toggle` - Add or remove from favs list.
+- `toggle` - Add or remove from favs list or open dialog.
