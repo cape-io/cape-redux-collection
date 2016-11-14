@@ -20,6 +20,9 @@ export function payloadSelectorAction(type, payloadSelector) {
     payload: payloadSelector(...args),
   })
 }
+export function thunkify(actionSelector) {
+  return (dispatch, getState) => dispatch(actionSelector(getState()))
+}
 
 export const CLOSE = 'collection/CLOSE'
 // Close edit dialog.
@@ -35,11 +38,13 @@ export const confirmItem = createAction(UPDATE_ITEM, confirmItemPayload, meta('C
 
 export const CREATE_ITEM = 'collection/CREATE_ITEM'
 // When user is adding to a specific collection. Create new ListItem entity.
-export const createItem = selectorAction(CREATE_ITEM, listItemBuilder)
+export const createItem = payloadSelectorAction(CREATE_ITEM, listItemBuilder)
+export const createItemThunk = flow(createItem, thunkify)
 
 // Calling with no args will create a Favs list. Returns thunk because we need a getState().
 export const CREATE_LIST = 'collection/CREATE_LIST'
 export const createList = payloadSelectorAction(CREATE_LIST, collectionListBuilder)
+export const createListThunk = flow(createList, thunkify)
 
 export function endItemPayload(props) {
   requireIdType(props, LIST_ITEM)

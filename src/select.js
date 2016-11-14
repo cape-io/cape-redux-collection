@@ -3,7 +3,7 @@ import { createSelector, createStructuredSelector } from 'reselect'
 import { find, pickBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
-
+import { entityTypeSelector } from '@kaicurry/redux-graph'
 // import { getDataFeed, getWebApp } from '../select'
 // import { itemsFilled } from '../select/items'
 
@@ -24,7 +24,9 @@ import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 // LIST ITEM
 
 // Select all ListItem entities.
-// export const listItemSelector = entityTypeSelector(LIST_ITEM)
+export const listItemSelector = entityTypeSelector(LIST_ITEM)
+// Gets currently active ListItem.
+export const activeListItem = createSelector(listItemSelector, findActionCreated)
 
 // USER COLLECTIONS - No props needed.
 
@@ -49,9 +51,6 @@ import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
   // const favsItemIndex = createSelector(listItems, listItemIndex)
   // return { listItems, listItemsSorted, favsItemIndex }
 // }
-
-// Gets currently active ListItem.
-export const activeListItem = constant(null) // createSelector(listItemSelector, findActionCreated)
 
 // ITEM LISTS & COLLECTIONS. Uses item prop.
 

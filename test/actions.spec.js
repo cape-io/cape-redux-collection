@@ -4,8 +4,7 @@ import {
 } from 'lodash'
 // import { eq } from 'lodash/fp'
 // import { login, logout } from 'cape-redux-auth'
-import { entityPut } from 'redux-graph'
-import { configStore, list, sailboat, TIME } from './mock'
+import { configStore, list, TIME } from './mock'
 // import { ENDED, LIST_ITEM, PREDICATE } from '../src/const'
 // import { isCollectionList, isListItem } from '../src/lang'
 // import { listItemSelector } from '../src/select'
@@ -15,8 +14,6 @@ import {
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
-
-dispatch(entityPut(sailboat))
 
 test('createList', (t) => {
   // t.plan(2)

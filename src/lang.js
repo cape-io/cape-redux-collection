@@ -1,6 +1,6 @@
 // import { entityHasType } from 'redux-graph'
 import {
-  conforms, includes, isDate, isNumber, isString, matchesProperty, negate, partial,
+  conforms, includes, isNumber, isString, matchesProperty, negate, partial,
 } from 'lodash'
 import { eq } from 'lodash/fp'
 import {
@@ -9,7 +9,7 @@ import {
 
 export const validSortOpts = partial(includes, [ ASC, DESC ])
 export const isCollectionList = conforms({
-  dateCreated: isDate,
+  dateCreated: isNumber,
   id: isString,
   itemListOrder: validSortOpts,
   type: eq(COLLECTION_TYPE),
@@ -18,10 +18,10 @@ export const isCollectionList = conforms({
 export const validStatusOpts = partial(includes, [ CREATED, CONFIRMED ])
 export const isListItem = conforms({
   actionStatus: validStatusOpts,
-  startTime: isDate,
+  startTime: isNumber,
   type: eq(LIST_ITEM),
   position: isNumber,
-  dateCreated: isDate,
+  dateCreated: isNumber,
   id: isString,
 })
 export const isActionEnded = matchesProperty('actionStatus', ENDED)
