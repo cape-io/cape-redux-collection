@@ -1,11 +1,11 @@
 import test from 'tape'
-
+import { now } from 'lodash'
 import { isCollectionList, isFavList, isValidListItem } from '../src/lang'
 import { ENDED, FAV_TITLE } from '../src/const'
 
 test('isCollectionList', (t) => {
   const collection = {
-    dateCreated: new Date(),
+    dateCreated: now(),
     itemListOrder: 'Ascending',
     type: 'CollectionList',
     title: 'Favorites',
