@@ -26,7 +26,6 @@
     "cape-redux-auth": "^2.0.3",
     "cape-select": "2.3.0",
     "lodash": "^4.16.6",
-    "redux-graph": "^1.6.2",
     "redux-history-sync": "3.0.1",
     "reselect": "^2.5.4"
   },
@@ -44,7 +43,6 @@
     "eslint-plugin-import": "^2.1.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
-    "seamless-immutable": "^6.3.0",
     "tape": "^4.6.2",
     "upgrade": "^1.1.0",
     "yarn": "^0.15.1"

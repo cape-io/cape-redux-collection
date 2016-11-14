@@ -5,32 +5,39 @@ import {
 // import { eq } from 'lodash/fp'
 // import { login, logout } from 'cape-redux-auth'
 import { entityPut } from 'redux-graph'
-import { configStore, sailboat } from './mock'
+import { configStore, list, sailboat, TIME } from './mock'
 // import { ENDED, LIST_ITEM, PREDICATE } from '../src/const'
 // import { isCollectionList, isListItem } from '../src/lang'
 // import { listItemSelector } from '../src/select'
 import {
-  close, CLOSE, createList, CREATE_LIST, open, OPEN, toggle, toggleActionPrep,
+  close, CLOSE, createList, CREATE_LIST, confirmItem, open, OPEN,
+  toggle, toggleActionPrep, UPDATE_ITEM,
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
 
 dispatch(entityPut(sailboat))
 
-const item = { type: 'Foo', id: 'a1bc', blah: true }
 test('createList', (t) => {
   // t.plan(2)
-  const thunk = createList()
-  t.ok(isFunction(thunk), 'isFunction')
-  // Should be a thunk action.
-  // function disp(act) {
-  //   console.log('act', act)
-  //   t.equal(act.type, CREATE_LIST)
-  // }
-  // const res = thunk(disp, getState)
-  // console.log('res', res)
+  const actionSelector = createList()
+  t.ok(isFunction(actionSelector), 'isFunction')
+  const action = actionSelector(getState())
+  t.equal(action.type, CREATE_LIST)
+  t.equal(action.payload.type, 'CollectionList')
   t.end()
 })
+test('confirmItem', (t) => {
+  const action = confirmItem(list)
+  t.equal(action.type, UPDATE_ITEM)
+  t.equal(action.meta.action, 'CONFIRM_ITEM')
+  t.equal(action.payload.id, list.id)
+  t.equal(action.payload.type, list.type)
+  t.ok(action.payload.dateUpdated > TIME)
+  t.false(action.payload.extra)
+  t.end()
+})
+const item = { type: 'Foo', id: 'a1bc', blah: true }
 test('open', (t) => {
   const act = open(item)
   t.deepEqual(act, { type: OPEN, payload: { type: 'Foo', id: 'a1bc' } })

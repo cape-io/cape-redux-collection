@@ -1,31 +1,31 @@
 import test from 'tape'
-import { isNumber, isMatch, property } from 'lodash'
+import { isMatch } from 'lodash'
 import { entitySelector } from '@kaicurry/redux-graph'
 
 // import { LIST_ITEM, PREDICATE } from '../src/const'
 import {
   collectionListBuilder,
 } from '../src/entity'
-import { collectionList, configStore } from './mock'
+import { TIME, collectionList, configStore } from './mock'
 
 const { getState } = configStore()
 
-const TIME = 1479141039389
-
 test('collectionListBuilder', (t) => {
-  const collection = collectionListBuilder()(getState())
+  const state = getState()
+  const collection = collectionListBuilder()(state)
   t.ok(isMatch(collection, collectionList), 'matches mock collectionList')
   // only other field is dateCreated.
   t.ok(collection.dateCreated > TIME, 'isDate')
 
-  const collection2 = collectionListBuilder({ foo: 'bar' })(getState())
+  const collection2 = collectionListBuilder({ foo: 'bar' })(state)
   t.ok(isMatch(collection2, collectionList), 'matches mock collectionList')
   t.ok(collection.dateCreated > TIME, 'isDate')
   t.equal(collection2.foo, 'bar', 'foo field set')
 
   const foo = entitySelector({ type: 'Sailboat', id: 'saga43' })
-  const collection3 = collectionListBuilder({ foo })(getState())
+  const collection3 = collectionListBuilder({ foo })(state)
   t.equal(collection3.foo, foo(getState()), 'foo entity')
+  t.equal(collection3.foo.id, 'saga43', 'correct id')
   t.end()
 })
 // test('collectionListBuilderDefault', (t) => {

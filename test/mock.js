@@ -2,15 +2,15 @@ import { applyMiddleware, combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
 import graph, { entityPutAll } from '@kaicurry/redux-graph'
 import thunk from 'redux-thunk'
-import collection from '../src/'
+import collection, { LIST_ITEM } from '../src/'
 
 const reducer = combineReducers({
   auth,
   collection,
   graph,
 })
-
-export const list = { id: 'foolist', type: 'CollectionList' }
+export const TIME = 1479141039389
+export const list = { id: 'foolist', type: LIST_ITEM, extra: 'field' }
 export const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
 export const sail2 = { id: 'freedom32', type: 'Sailboat', name: 'Owl' }
 export const image = { id: 'pic1', type: 'Photograph', name: 'Interior' }
