@@ -9,7 +9,7 @@ import { configStore, listItem, TIME, sailboat } from './mock'
 // import { isCollectionList, isListItem } from '../src/lang'
 // import { listItemSelector } from '../src/select'
 import {
-  close, CLOSE, createItem, createList, createListThunk, CREATE_LIST, confirmItem,
+  close, CLOSE, createItem, CREATE_ITEM, createList, createListThunk, CREATE_LIST, confirmItem,
   open, OPEN, toggle, toggleActionPrep, UPDATE_ITEM,
 } from '../src/actions'
 
@@ -38,7 +38,10 @@ test('createListThunk', (t) => {
 test('createItem', (t) => {
   const mainEntity = dispatch(createListThunk()).payload
   const action = createItem({ item: sailboat, mainEntity })(getState())
-  console.log(action)
+  t.equal(action.payload.mainEntity, mainEntity)
+  t.equal(action.payload.item, sailboat)
+  t.equal(action.type, CREATE_ITEM)
+  // console.log(action)
   t.end()
 })
 
