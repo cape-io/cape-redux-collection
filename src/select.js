@@ -18,7 +18,7 @@ import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 // COLLECTIONS
 
 // Select all CollectionList entities from the database.
-// export const collectionListSelector = entityTypeSelector(COLLECTION_TYPE)
+export const collectionListSelector = entityTypeSelector(COLLECTION_TYPE)
 // export const collections = rebuildEntitiesSelector(collectionListSelector)
 
 // LIST ITEM

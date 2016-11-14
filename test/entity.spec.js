@@ -1,12 +1,12 @@
 import test from 'tape'
-import { isMatch } from 'lodash'
+import { isMatch, property } from 'lodash'
 import { entitySelector } from '@kaicurry/redux-graph'
 
 // import { LIST_ITEM, PREDICATE } from '../src/const'
 import {
-  collectionListBuilder,
-} from '../src/entity'
-import { TIME, collectionList, configStore } from './mock'
+  collectionListBuilder, listItemBuilder,
+} from '../src'
+import { TIME, collectionList, configStore, sailboat } from './mock'
 
 const { getState } = configStore()
 
@@ -34,21 +34,21 @@ test('collectionListBuilder', (t) => {
 //   t.ok(isDate(collection.dateCreated), 'isDate')
 //   t.end()
 // })
-// test('listItemBuilder', (t) => {
-//   const listSelector = property('graph.entity.foo')
-//   const imgSelector = property('graph.entity.pic1')
-//   const entityFields = { image: imgSelector, item: sailboat }
-//   const entityBuilder = listItemBuilder(listSelector, entityFields)
-//   t.ok(isFunction(entityBuilder))
-//   const state = store.getState()
-//   const triple = entityBuilder(state)
-//   t.ok(isTriple(triple))
-//   t.equal(triple.object.type, LIST_ITEM)
-//   t.equal(triple.object.agent.id, 'anonUser')
-//   t.equal(triple.object.item, sailboat)
-//   t.equal(triple.object.image, state.graph.entity.pic1)
-//   t.deepEqual(triple.object.image, image)
-//   t.equal(triple.predicate, PREDICATE)
-//   t.equal(triple.subject, state.graph.entity.foo)
-//   t.end()
-// })
+test('listItemBuilder', (t) => {
+  const listSelector = property('graph.foo')
+  const imgSelector = property('graph.pic1')
+  // const entityFields = { image: imgSelector, item: sailboat }
+  // const entityBuilder = listItemBuilder(listSelector, entityFields)
+  // t.ok(isFunction(entityBuilder))
+  // const state = store.getState()
+  // const triple = entityBuilder(state)
+  // t.ok(isTriple(triple))
+  // t.equal(triple.object.type, LIST_ITEM)
+  // t.equal(triple.object.agent.id, 'anonUser')
+  // t.equal(triple.object.item, sailboat)
+  // t.equal(triple.object.image, state.graph.entity.pic1)
+  // t.deepEqual(triple.object.image, image)
+  // t.equal(triple.predicate, PREDICATE)
+  // t.equal(triple.subject, state.graph.entity.foo)
+  t.end()
+})

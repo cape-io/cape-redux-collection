@@ -1,7 +1,10 @@
 import test from 'tape'
 import { find, isEmpty, isPlainObject, matches, pickBy, size } from 'lodash'
 
-import { activeListItem, confirmActive, LIST_ITEM, isListItem } from '../src'
+import {
+  activeListItem, collectionListSelector, confirmActive, COLLECTION_TYPE,
+  LIST_ITEM, isListItem,
+} from '../src'
 
 import {
   listItemSelector,
@@ -10,6 +13,11 @@ import { configStore, props, sailboat } from './mock'
 
 const { dispatch, getState } = configStore()
 const state = getState()
+
+test('collectionListSelector', (t) => {
+  t.equal(collectionListSelector(state), state.graph[COLLECTION_TYPE])
+  t.end()
+})
 test('listItemSelector', (t) => {
   t.equal(listItemSelector(state), state.graph[LIST_ITEM])
   t.end()
@@ -23,12 +31,6 @@ test('activeListItem', (t) => {
   t.end()
 })
 
-// test('collectionListSelector', (t) => {
-//   t.deepEqual(
-//     collectionListSelector(state),
-//     pickBy(state.graph.entity, matches({ type: 'CollectionList' })))
-//   t.end()
-// })
 // test('collections', (t) => {
 //   t.deepEqual(collections(state), { foo: { id: 'foo', type: 'CollectionList' } })
 //   t.end()

@@ -4,7 +4,7 @@ import {
 } from 'lodash'
 // import { eq } from 'lodash/fp'
 // import { login, logout } from 'cape-redux-auth'
-import { configStore, list, TIME } from './mock'
+import { configStore, listItem, TIME } from './mock'
 // import { ENDED, LIST_ITEM, PREDICATE } from '../src/const'
 // import { isCollectionList, isListItem } from '../src/lang'
 // import { listItemSelector } from '../src/select'
@@ -25,11 +25,11 @@ test('createList', (t) => {
   t.end()
 })
 test('confirmItem', (t) => {
-  const action = confirmItem(list)
+  const action = confirmItem(listItem)
   t.equal(action.type, UPDATE_ITEM)
   t.equal(action.meta.action, 'CONFIRM_ITEM')
-  t.equal(action.payload.id, list.id)
-  t.equal(action.payload.type, list.type)
+  t.equal(action.payload.id, listItem.id)
+  t.equal(action.payload.type, listItem.type)
   t.ok(action.payload.dateUpdated > TIME)
   t.false(action.payload.extra)
   t.end()

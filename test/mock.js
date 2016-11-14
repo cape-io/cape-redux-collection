@@ -2,7 +2,7 @@ import { applyMiddleware, combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
 import graph, { entityPutAll } from '@kaicurry/redux-graph'
 import thunk from 'redux-thunk'
-import collection, { LIST_ITEM } from '../src/'
+import collection, { COLLECTION_TYPE, LIST_ITEM, entityMiddleware } from '../src/'
 
 const reducer = combineReducers({
   auth,
@@ -10,13 +10,14 @@ const reducer = combineReducers({
   graph,
 })
 export const TIME = 1479141039389
-export const list = { id: 'foolist', type: LIST_ITEM, extra: 'field' }
+export const list = { id: 'foolist', type: COLLECTION_TYPE, extra: 'field' }
+export const listItem = { id: 'z1listItem', type: LIST_ITEM }
 export const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
 export const sail2 = { id: 'freedom32', type: 'Sailboat', name: 'Owl' }
 export const image = { id: 'pic1', type: 'Photograph', name: 'Interior' }
 export function configStore() {
-  const store = createStore(reducer, applyMiddleware(thunk))
-  store.dispatch(entityPutAll([ list, sailboat, sail2, image ]))
+  const store = createStore(reducer, applyMiddleware(thunk, entityMiddleware))
+  store.dispatch(entityPutAll([ list, listItem, sailboat, sail2, image ]))
   return store
 }
 
