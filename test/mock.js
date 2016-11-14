@@ -1,6 +1,7 @@
-import { combineReducers, createStore } from 'redux'
+import { applyMiddleware, combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
-import graph, { entityPut } from 'redux-graph'
+import graph, { entityPutAll } from 'redux-graph'
+import thunk from 'redux-thunk'
 import collection from '../src/'
 
 const reducer = combineReducers({
@@ -8,21 +9,14 @@ const reducer = combineReducers({
   collection,
   graph,
 })
-const initState = {
-  graph: {
-    entity: { foo: { id: 'foo', type: 'CollectionList' } },
-    triple: { spo: {}, sop: {}, osp: {}, ops: {}, pos: {}, pso: {} },
-    typeIndex: {},
-  },
-}
+
+export const list = { id: 'foolist', type: 'CollectionList' }
 export const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
 export const sail2 = { id: 'freedom32', type: 'Sailboat', name: 'Owl' }
 export const image = { id: 'pic1', type: 'Photograph', name: 'Interior' }
 export function configStore() {
-  const store = createStore(reducer, initState)
-  store.dispatch(entityPut(sailboat))
-  store.dispatch(entityPut(sail2))
-  store.dispatch(entityPut(image))
+  const store = createStore(reducer, applyMiddleware(thunk))
+  store.dispatch(entityPutAll([ list, sailboat, sail2, image ]))
   return store
 }
 

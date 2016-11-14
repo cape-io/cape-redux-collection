@@ -20,9 +20,10 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@kaicurry/redux-graph": "^2.0.0",
     "cape-lodash": "^1.5.0",
     "cape-redux": "2.1.0",
-    "cape-redux-auth": "^1.2.2",
+    "cape-redux-auth": "^2.0.3",
     "cape-select": "2.3.0",
     "lodash": "^4.16.6",
     "redux-graph": "^1.6.2",

@@ -5,7 +5,7 @@ import { pick } from 'lodash/fp'
 import { createObj } from 'cape-lodash'
 import { createAction, selectorAction, thunkAction } from 'cape-redux'
 import { isAnonymous } from 'cape-redux-auth'
-
+import { requireIdType } from '@kaicurry/redux-graph'
 import { collectionListBuilder, listItemBuilder } from './entity'
 import {
   activeListItem, favsListSelector, itemFavItem, userNeedsCollection,
@@ -15,13 +15,6 @@ import { CONFIRMED, ENDED, LIST_ITEM } from './const'
 export const CLOSE = 'collection/CLOSE'
 // Close edit dialog.
 export const close = createAction(CLOSE, noop)
-
-export function requireIdType(props, listItem = null, doPick = true) {
-  if (!props.id) throw new Error('Must have id prop.')
-  if (!props.type) throw new Error('Must have a type prop.')
-  if (listItem && props.type !== listItem) throw new Error('Wrong entity type.')
-  return doPick ? pick('id', 'type') : null
-}
 
 const meta = flow(createObj('action'), constant)
 export const UPDATE_ITEM = 'collection/UPDATE_ITEM'
