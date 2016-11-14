@@ -1,6 +1,6 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
-import graph, { entityPutAll } from 'redux-graph'
+import graph, { entityPutAll } from '@kaicurry/redux-graph'
 import thunk from 'redux-thunk'
 import collection from '../src/'
 
@@ -26,11 +26,7 @@ export const user = {
   name: 'foo',
   gender: 'bar',
 }
-export const user2 = {
-  type: 'Person',
-  id: 'auth',
-  name: 'Auth User',
-}
+export const user2 = { id: 'anonUser', type: 'Person', name: 'Anonymous' }
 
 export const props = {
   item: { id: 'bar' },
@@ -62,9 +58,11 @@ export const collections = {
     },
   },
 }
+// This is what we are looking for from collectionListBuilder.
 export const collectionList = {
   itemListOrder: 'Ascending',
   type: 'CollectionList',
-  creator: { id: 'anonUser', type: 'Person', name: 'Anonymous' },
+  creator: user2,
+  editor: user2,
   title: 'Favorites',
 }

@@ -1,5 +1,5 @@
 import {
-  constant, flow, noop, now, nthArg, over, spread,
+  constant, flow, noop, now, nthArg, over, partial, spread,
 } from 'lodash'
 import { pick } from 'lodash/fp'
 import { createObj } from 'cape-lodash'
@@ -31,7 +31,8 @@ export const CREATE_ITEM = 'collection/CREATE_ITEM'
 export const createItem = selectorAction(CREATE_ITEM, listItemBuilder)
 
 export const CREATE_LIST = 'collection/CREATE_LIST'
-export const createList = selectorAction(CREATE_LIST, collectionListBuilder)
+// Calling with no args will create a Favs list. Returns thunk because we need a getState().
+export const createList = flow(collectionListBuilder, partial(selectorAction, CREATE_LIST))
 
 export function endItemPayload(props) {
   requireIdType(props, LIST_ITEM)
@@ -55,7 +56,9 @@ function actionPrepActions([ activeLI, needsList, listProps ]) {
   if (needsList) actions.push(createList(listProps))
   return actions
 }
-const actionPrep = flow(over(activeListItem, userNeedsCollection, nthArg(1)), actionPrepActions)
+export const toggleActionPrep = flow(
+  over(activeListItem, userNeedsCollection, nthArg(1)), actionPrepActions
+)
 
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
@@ -75,7 +78,7 @@ const addOrOpen = flow(over(
 // Decides what to do when a user clicks the (+) favorite button on item that can be in list.
 // toggle(listProps, item) - state is added as first arg by thunkAction()
 export const toggle = thunkAction(
-  actionPrep,
+  toggleActionPrep,
   addOrOpen,
   (actions, toggleAction) => actions.concat(toggleAction),
 )

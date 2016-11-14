@@ -1,29 +1,33 @@
 import test from 'tape'
-import { isDate, isFunction, matches, property } from 'lodash'
-import { isTriple } from 'redux-graph'
+import { isNumber, isMatch, property } from 'lodash'
+import { entitySelector } from '@kaicurry/redux-graph'
 
-import { LIST_ITEM, PREDICATE } from '../src/const'
+// import { LIST_ITEM, PREDICATE } from '../src/const'
 import {
-  collectionListBuilder, collectionListBuilderDefault, listItemBuilder,
+  collectionListBuilder,
 } from '../src/entity'
-import { collectionList, configStore, image, sailboat } from './mock'
+import { collectionList, configStore } from './mock'
 
-const store = configStore()
+const { getState } = configStore()
 
-// test('collectionListBuilder', (t) => {
-//   const collection = collectionListBuilder()(store.getState())
-//   t.ok(matches(collectionList)(collection), 'matches')
-//   t.ok(isDate(collection.dateCreated), 'isDate')
-//   const collection2 = collectionListBuilder({ foo: 'bar' })(store.getState())
-//   t.ok(matches(collectionList)(collection2))
-//   t.ok(isDate(collection2.dateCreated), 'isDate')
-//   t.equal(collection2.foo, 'bar', 'foo')
-//   const foo = property('graph.entity.foo')
-//   const objSelector = { foo }
-//   const collection3 = collectionListBuilder(objSelector)(store.getState())
-//   t.equal(collection3.foo, foo(store.getState()), 'foo entity')
-//   t.end()
-// })
+const TIME = 1479141039389
+
+test('collectionListBuilder', (t) => {
+  const collection = collectionListBuilder()(getState())
+  t.ok(isMatch(collection, collectionList), 'matches mock collectionList')
+  // only other field is dateCreated.
+  t.ok(collection.dateCreated > TIME, 'isDate')
+
+  const collection2 = collectionListBuilder({ foo: 'bar' })(getState())
+  t.ok(isMatch(collection2, collectionList), 'matches mock collectionList')
+  t.ok(collection.dateCreated > TIME, 'isDate')
+  t.equal(collection2.foo, 'bar', 'foo field set')
+
+  const foo = entitySelector({ type: 'Sailboat', id: 'saga43' })
+  const collection3 = collectionListBuilder({ foo })(getState())
+  t.equal(collection3.foo, foo(getState()), 'foo entity')
+  t.end()
+})
 // test('collectionListBuilderDefault', (t) => {
 //   const collection = collectionListBuilderDefault(store.getState())
 //   t.ok(matches(collectionList)(collection), 'matches')

@@ -49,8 +49,8 @@ export function collectionList(props = {}) {
     dateCreated: now(),
     itemListOrder: getListDef('itemListOrder'),
     title: getListDef('title'), // Title for this CollectionList.
-    type: COLLECTION_TYPE,
     ...props,
+    type: COLLECTION_TYPE,
   }
 }
 // Creates a structuredSelector that will create a new list.
