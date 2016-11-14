@@ -4,13 +4,13 @@ import {
 } from 'lodash'
 // import { eq } from 'lodash/fp'
 // import { login, logout } from 'cape-redux-auth'
-import { configStore, listItem, TIME } from './mock'
+import { configStore, listItem, TIME, sailboat } from './mock'
 // import { ENDED, LIST_ITEM, PREDICATE } from '../src/const'
 // import { isCollectionList, isListItem } from '../src/lang'
 // import { listItemSelector } from '../src/select'
 import {
-  close, CLOSE, createList, CREATE_LIST, confirmItem, open, OPEN,
-  toggle, toggleActionPrep, UPDATE_ITEM,
+  close, CLOSE, createItem, createList, createListThunk, CREATE_LIST, confirmItem,
+  open, OPEN, toggle, toggleActionPrep, UPDATE_ITEM,
 } from '../src/actions'
 
 const { dispatch, getState } = configStore()
@@ -24,6 +24,24 @@ test('createList', (t) => {
   t.equal(action.payload.type, 'CollectionList')
   t.end()
 })
+test('createListThunk', (t) => {
+  function disp(act) {
+    t.equal(act.type, CREATE_LIST)
+    t.equal(act.payload.type, 'CollectionList')
+    return act
+  }
+  const action = createListThunk()(disp, getState)
+  t.equal(action.type, CREATE_LIST)
+  t.equal(action.payload.type, 'CollectionList')
+  t.end()
+})
+test('createItem', (t) => {
+  const mainEntity = dispatch(createListThunk()).payload
+  const action = createItem({ item: sailboat, mainEntity })(getState())
+  console.log(action)
+  t.end()
+})
+
 test('confirmItem', (t) => {
   const action = confirmItem(listItem)
   t.equal(action.type, UPDATE_ITEM)

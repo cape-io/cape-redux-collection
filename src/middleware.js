@@ -10,9 +10,8 @@ export const dispatcher = {
 
 export function entityMiddleware() {
   return next => (action) => {
-    if (!action.type) return next(action)
     if (isFunction(dispatcher[action.type])) {
-      return dispatcher[action.type](action.payload)
+      return next(dispatcher[action.type](action.payload))
     }
     return next(action)
   }
