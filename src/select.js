@@ -3,16 +3,14 @@ import { createSelector, createStructuredSelector } from 'reselect'
 import { find, pickBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
-import { entityTypeSelector } from '@kaicurry/redux-graph'
+import { entityTypeSelector, predicateFilter } from '@kaicurry/redux-graph'
 // import { getDataFeed, getWebApp } from '../select'
 // import { itemsFilled } from '../select/items'
 
 import {
-  findActionCreated, fixListItems, listItemIndex, orderListItems, invertListItems,
-  setListItemsCollection,
+  findActionCreated,
 } from './helpers'
-import { isFavList, isValidListItem } from './lang'
-import { predicateValueContains } from './util'
+// import { isFavList, isValidListItem } from './lang'
 import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
 // COLLECTIONS
@@ -31,9 +29,9 @@ export const activeListItem = createSelector(listItemSelector, findActionCreated
 // USER COLLECTIONS - No props needed.
 
 // Find user collections. Returns empty object when nothing found.
-// export const userCollections = createSelector(
-//   collections, selectUser, predicateValueContains('creator')
-// )
+export const userCollections = createSelector(
+  selectUser, collectionListSelector, predicateFilter('creator')
+)
 // export const userHasCollections = boolSelector(userCollections)
 // export const userNeedsCollection = negate(userHasCollections)
 // Find (first) user favs project from list entities.

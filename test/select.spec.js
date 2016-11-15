@@ -1,9 +1,10 @@
 import test from 'tape'
-import { find, isEmpty, isPlainObject, matches, pickBy, size } from 'lodash'
+import { every, size } from 'lodash'
 
 import {
   activeListItem, collectionListSelector, confirmActive, COLLECTION_TYPE,
-  LIST_ITEM, isListItem,
+  createListThunk, isCollectionList,
+  LIST_ITEM, isListItem, userCollections,
 } from '../src'
 
 import {
@@ -22,12 +23,22 @@ test('listItemSelector', (t) => {
   t.equal(listItemSelector(state), state.graph[LIST_ITEM])
   t.end()
 })
+test('userCollections', (t) => {
+  createListThunk()(dispatch, getState)
+  t.equal(size(userCollections(getState())), 1)
+  createListThunk()(dispatch, getState)
+  const mine = userCollections(getState())
+  t.equal(size(mine), 2)
+  t.ok(every(mine, isCollectionList))
+  t.end()
+})
 test('activeListItem', (t) => {
-  const listItem = activeListItem(getState())
-  // t.ok(isListItem(listItem), 'isListItem')
-  // confirmActive(dispatch, getState)
   const listItem2 = activeListItem(getState())
   t.equal(listItem2, undefined)
+  // dispatch(createListThunk())
+  // const listItem = activeListItem(getState())
+  // t.ok(isListItem(listItem), 'isListItem')
+  // confirmActive(dispatch, getState)
   t.end()
 })
 
