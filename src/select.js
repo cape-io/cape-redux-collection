@@ -32,8 +32,8 @@ export const activeListItem = createSelector(listItemSelector, findActionCreated
 export const userCollections = createSelector(
   selectUser, collectionListSelector, predicateFilter('creator')
 )
-// export const userHasCollections = boolSelector(userCollections)
-// export const userNeedsCollection = negate(userHasCollections)
+export const userHasCollections = boolSelector(userCollections)
+export const userNeedsCollection = negate(userHasCollections)
 // Find (first) user favs project from list entities.
 // export const favsListSelector = createSelector(userCollections, find(isFavList))
 // CollectionList id of user favs.

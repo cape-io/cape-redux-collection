@@ -72,6 +72,7 @@ test('confirmActive', (t) => {
   const action = confirmActive(getState())
   t.equal(action.type, UPDATE_ITEM)
   t.equal(action.meta.action, 'CONFIRM_ACTIVE')
+  t.equal(action.payload.actionStatus, CONFIRMED)
   t.end()
 })
 test('confirmActiveThunk', (t) => {
@@ -79,7 +80,8 @@ test('confirmActiveThunk', (t) => {
   t.ok(isFunction(thunk))
   const action = thunk(dispatch, getState)
   t.ok(action.type)
-  t.ok(action.payload)
+  t.ok(action.payload, 'has payload')
+  t.equal(action.payload.actionStatus, CONFIRMED)
   t.end()
 })
 const item = { type: 'Foo', id: 'a1bc', blah: true }
@@ -94,8 +96,8 @@ test('close', (t) => {
   t.end()
 })
 test('toggleActionPrep', (t) => {
-  // const res = toggleActionPrep(item)
-  // console.log(res)
+  const res = toggleActionPrep(getState())
+  console.log(res)
   t.end()
 })
 test('toggle', (t) => {

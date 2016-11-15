@@ -1,10 +1,10 @@
 import test from 'tape'
-import { every, find, size } from 'lodash'
+import { every, find, isEmpty, isObject, overEvery, size } from 'lodash'
 
 import {
   activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
   createListThunk, isCollectionList, createItemThunk,
-  LIST_ITEM, isListItem, userCollections,
+  LIST_ITEM, isListItem, userCollections, userHasCollections,
 } from '../src'
 
 import {
@@ -23,8 +23,14 @@ test('listItemSelector', (t) => {
   t.equal(listItemSelector(state), state.graph[LIST_ITEM])
   t.end()
 })
-test('userCollections', (t) => {
+test('userHasCollections', (t) => {
+  t.true(overEvery(isObject, isEmpty)(userCollections(getState())), 'isEmpty')
+  t.equal(userHasCollections(state), false, 'no collections')
   createListThunk()(dispatch, getState)
+  t.equal(userHasCollections(state), false, 'no collections')
+  t.end()
+})
+test('userCollections', (t) => {
   t.equal(size(userCollections(getState())), 1)
   createListThunk()(dispatch, getState)
   const mine = userCollections(getState())
@@ -32,6 +38,11 @@ test('userCollections', (t) => {
   t.ok(every(mine, isCollectionList))
   t.end()
 })
+// test('userCollections', (t) => {
+//   const res = userCollections(state)
+//   t.true(isPlainObject(res), 'no collections by default')
+//   t.end()
+// })
 test('activeListItem', (t) => {
   const listItem0 = activeListItem(getState())
   t.equal(listItem0, undefined)
@@ -54,16 +65,6 @@ test('activeListItem', (t) => {
 // test('getItemId()', (t) => {
 //   t.equal(getItemId(state, props), 'bar', 'getItemId')
 //   t.equal(getItemId(state, { item: sailboat }), 'saga43')
-//   t.end()
-// })
-// test('userCollections', (t) => {
-//   const res = userCollections(state)
-//   t.true(isEmpty(res), 'isEmpty')
-//   t.true(isPlainObject(res), 'no collections by default')
-//   t.end()
-// })
-// test('userHasCollections', (t) => {
-//   t.equal(userHasCollections(state), false, 'no collections')
 //   t.end()
 // })
 //

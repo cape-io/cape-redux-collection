@@ -66,16 +66,13 @@ export const OPEN = 'collection/OPEN'
 export const open = createAction(OPEN, requireIdType)
 
 // TOGGLE
-function actionPrepActions([ activeLI, needsList, listProps ]) {
+export function toggleActionPrep(state) {
   const actions = []
-  if (activeLI) actions.push(confirmActive())
+  if (activeListItem(state)) actions.push(confirmActive(state))
   // Make sure the user has a favs collection created. Returns created entity or undefined.
-  if (needsList) actions.push(createList(listProps))
+  if (userNeedsCollection(state)) actions.push(createList()(state))
   return actions
 }
-export const toggleActionPrep = flow(
-  over(activeListItem, userNeedsCollection, nthArg(1)), actionPrepActions
-)
 
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
