@@ -1,7 +1,7 @@
 import {
-  constant, flow, noop, now, nthArg, over, partial, spread,
+  constant, flow, isUndefined, noop, now, nthArg, over, spread,
 } from 'lodash'
-import { pick } from 'lodash/fp'
+import { omitBy } from 'lodash/fp'
 import { createObj } from 'cape-lodash'
 import { createAction, selectorAction, thunkAction } from 'cape-redux'
 import { structuredSelector } from 'cape-select'
@@ -15,10 +15,10 @@ import { CONFIRMED, ENDED, LIST_ITEM } from './const'
 
 const meta = flow(createObj('action'), constant)
 export function payloadSelectorAction(type, payloadSelector) {
-  return (...args) => structuredSelector({
+  return (...args) => flow(structuredSelector({
     type,
     payload: payloadSelector(...args),
-  })
+  }), omitBy(isUndefined))
 }
 export function thunkify(actionSelector) {
   return (dispatch, getState) => dispatch(actionSelector(getState()))
@@ -53,8 +53,13 @@ export function endItemPayload(props) {
 export const endItem = createAction(UPDATE_ITEM, endItemPayload, meta('END_ITEM'))
 
 // Find created/open item and close it via confirmFavorite action.
-export const confirmActivePayload = flow(activeListItem, requireIdType, confirmItemPayload)
-export const confirmActive = createAction(UPDATE_ITEM, confirmActivePayload, meta('CONFIRM_ACTIVE'))
+export const confirmActivePayload = flow(activeListItem, confirmItemPayload)
+export const confirmActive = structuredSelector({
+  type: UPDATE_ITEM,
+  payload: confirmActivePayload,
+  meta: { action: 'CONFIRM_ACTIVE' },
+})
+export const confirmActiveThunk = constant(thunkify(confirmActive))
 
 export const OPEN = 'collection/OPEN'
 // Open edit dialog. Send it an item object that has an id property.

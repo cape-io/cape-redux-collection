@@ -1,6 +1,6 @@
 import test from 'tape'
 import {
-  isFunction,
+  find, isFunction, isNumber,
 } from 'lodash'
 // import { eq } from 'lodash/fp'
 // import { login, logout } from 'cape-redux-auth'
@@ -10,8 +10,10 @@ import { configStore, listItem, TIME, sailboat } from './mock'
 // import { listItemSelector } from '../src/select'
 import {
   close, CLOSE, createItem, CREATE_ITEM, createList, createListThunk, CREATE_LIST, confirmItem,
+  confirmActivePayload, userCollections, createItemThunk, LIST_ITEM, CONFIRMED, confirmActive,
+  confirmActiveThunk,
   open, OPEN, toggle, toggleActionPrep, UPDATE_ITEM,
-} from '../src/actions'
+} from '../src'
 
 const { dispatch, getState } = configStore()
 
@@ -53,6 +55,31 @@ test('confirmItem', (t) => {
   t.equal(action.payload.type, listItem.type)
   t.ok(action.payload.dateUpdated > TIME)
   t.false(action.payload.extra)
+  t.end()
+})
+test('confirmActivePayload', (t) => {
+  createListThunk()(dispatch, getState)
+  const mainEntity = find(userCollections(getState()))
+  const item = createItemThunk({ mainEntity, item: sailboat })(dispatch, getState).payload
+  const payload = confirmActivePayload(getState())
+  t.equal(payload.id, item.id)
+  t.equal(payload.type, LIST_ITEM)
+  t.equal(payload.actionStatus, CONFIRMED)
+  t.ok(isNumber(payload.dateUpdated))
+  t.end()
+})
+test('confirmActive', (t) => {
+  const action = confirmActive(getState())
+  t.equal(action.type, UPDATE_ITEM)
+  t.equal(action.meta.action, 'CONFIRM_ACTIVE')
+  t.end()
+})
+test('confirmActiveThunk', (t) => {
+  const thunk = confirmActiveThunk()
+  t.ok(isFunction(thunk))
+  const action = thunk(dispatch, getState)
+  t.ok(action.type)
+  t.ok(action.payload)
   t.end()
 })
 const item = { type: 'Foo', id: 'a1bc', blah: true }

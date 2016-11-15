@@ -1,9 +1,9 @@
 import test from 'tape'
-import { every, size } from 'lodash'
+import { every, find, size } from 'lodash'
 
 import {
-  activeListItem, collectionListSelector, confirmActive, COLLECTION_TYPE,
-  createListThunk, isCollectionList,
+  activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
+  createListThunk, isCollectionList, createItemThunk,
   LIST_ITEM, isListItem, userCollections,
 } from '../src'
 
@@ -33,12 +33,16 @@ test('userCollections', (t) => {
   t.end()
 })
 test('activeListItem', (t) => {
-  const listItem2 = activeListItem(getState())
-  t.equal(listItem2, undefined)
-  // dispatch(createListThunk())
-  // const listItem = activeListItem(getState())
-  // t.ok(isListItem(listItem), 'isListItem')
-  // confirmActive(dispatch, getState)
+  const listItem0 = activeListItem(getState())
+  t.equal(listItem0, undefined)
+  const mainEntity = find(userCollections(getState()))
+  const listItem1 = createItemThunk({ mainEntity, item: sailboat })(dispatch, getState).payload
+  t.ok(isListItem(listItem1), 'isListItem')
+  const listItem3 = activeListItem(getState())
+  t.ok(isListItem(listItem3), 'isListItem')
+  t.deepEqual(listItem1, listItem3)
+  confirmActiveThunk()(dispatch, getState)
+  t.equal(activeListItem(getState()), undefined)
   t.end()
 })
 
