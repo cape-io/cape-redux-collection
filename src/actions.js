@@ -73,7 +73,9 @@ export function toggleActionPrep(state) {
   if (userNeedsCollection(state)) actions.push(createList()(state))
   return actions
 }
-
+export function toggleActionAnon(state, item) {
+  // Is the item in the favs collection?
+}
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
 function addOrOpenAction([ isAnon, favItem, item ]) {

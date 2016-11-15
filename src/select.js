@@ -10,7 +10,7 @@ import { entityTypeSelector, predicateFilter } from '@kaicurry/redux-graph'
 import {
   findActionCreated,
 } from './helpers'
-// import { isFavList, isValidListItem } from './lang'
+import { isFavList } from './lang'
 import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
 // COLLECTIONS
@@ -35,7 +35,7 @@ export const userCollections = createSelector(
 export const userHasCollections = boolSelector(userCollections)
 export const userNeedsCollection = negate(userHasCollections)
 // Find (first) user favs project from list entities.
-// export const favsListSelector = createSelector(userCollections, find(isFavList))
+export const favsListSelector = createSelector(userCollections, find(isFavList))
 // CollectionList id of user favs.
 // export const favListId = select(favsListSelector, 'id')
 // ListItems attached to the user favs collection via PREDICATE field/triple predicate.
