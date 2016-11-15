@@ -23,7 +23,7 @@
     "@kaicurry/redux-graph": "2.1.0",
     "cape-lodash": "^1.5.0",
     "cape-redux": "2.2.0",
-    "cape-redux-auth": "^2.1.0",
+    "cape-redux-auth": "2.1.0",
     "cape-select": "2.3.0",
     "lodash": "^4.16.6",
     "redux-history-sync": "3.0.1",

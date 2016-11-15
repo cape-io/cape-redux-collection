@@ -21,12 +21,7 @@ export function configStore() {
   return store
 }
 
-export const user = {
-  type: 'Person',
-  id: 'anon',
-  name: 'foo',
-  gender: 'bar',
-}
+export const user = { type: 'Person', id: 'anon', name: 'foo', gender: 'bar' }
 export const user2 = { id: 'anonUser', type: 'Person', name: 'Anonymous' }
 
 export const props = {

@@ -1,19 +1,19 @@
 import test from 'tape'
 import {
-  find, isFunction, isNumber,
+  find, isArray, isFunction, isNumber,
 } from 'lodash'
 // import { eq } from 'lodash/fp'
-// import { login, logout } from 'cape-redux-auth'
-import { configStore, listItem, TIME, sailboat } from './mock'
+import { userNew } from 'cape-redux-auth'
 // import { ENDED, LIST_ITEM, PREDICATE } from '../src/const'
 // import { isCollectionList, isListItem } from '../src/lang'
 // import { listItemSelector } from '../src/select'
 import {
   close, CLOSE, createItem, CREATE_ITEM, createList, createListThunk, CREATE_LIST, confirmItem,
   confirmActivePayload, userCollections, createItemThunk, LIST_ITEM, CONFIRMED, confirmActive,
-  confirmActiveThunk,
+  confirmActiveThunk, activeListItem, userNeedsCollection, COLLECTION_TYPE,
   open, OPEN, toggle, toggleActionPrep, UPDATE_ITEM,
 } from '../src'
+import { configStore, listItem, TIME, sailboat, user } from './mock'
 
 const { dispatch, getState } = configStore()
 
@@ -96,8 +96,36 @@ test('close', (t) => {
   t.end()
 })
 test('toggleActionPrep', (t) => {
-  const res = toggleActionPrep(getState())
-  console.log(res)
+  const ste1 = getState()
+  // User has collection and no items need confirming.
+  t.false(activeListItem(ste1))
+  t.false(userNeedsCollection(ste1))
+  const res = toggleActionPrep(ste1)
+  t.ok(isArray(res), 'isArray')
+  t.equal(res.length, 0, 'len')
+  // Switch users.
+  dispatch(userNew(user))
+  const ste2 = getState()
+  t.false(activeListItem(ste2), 'no active item')
+  t.true(userNeedsCollection(ste2), 'new user needs new list')
+  const act1 = toggleActionPrep(ste2)
+  t.equal(act1.length, 1, 'act1 length')
+  t.equal(act1[0].type, CREATE_LIST, 'CREATE_LIST')
+  t.equal(act1[0].payload.editor, user, 'editor')
+  t.equal(act1[0].payload.title, 'Favorites', 'new list favs title')
+  // Create list and item.
+  const mainEntity = dispatch(act1[0]).payload
+  t.equal(mainEntity.type, COLLECTION_TYPE, 'collection type')
+  createItemThunk({ mainEntity, item: sailboat })(dispatch, getState)
+  const ste3 = getState()
+  t.true(activeListItem(ste3), 'now there is active list item.')
+  t.false(userNeedsCollection(ste3), 'user has collection')
+  // Now check for activeListItem
+  const act2 = toggleActionPrep(ste3)
+  t.equal(act2.length, 1, 'action length')
+  t.equal(act2[0].type, UPDATE_ITEM, 'UPDATE_ITEM')
+  t.equal(act2[0].payload.type, LIST_ITEM, 'payload LIST_ITEM')
+  t.equal(act2[0].meta.action, 'CONFIRM_ACTIVE', 'meta.action')
   t.end()
 })
 test('toggle', (t) => {
