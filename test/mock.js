@@ -15,9 +15,10 @@ export const listItem = { id: 'z1listItem', type: LIST_ITEM }
 export const sailboat = { id: 'saga43', type: 'Sailboat', name: 'Free Spirit' }
 export const sail2 = { id: 'freedom32', type: 'Sailboat', name: 'Owl' }
 export const image = { id: 'pic1', type: 'Photograph', name: 'Interior' }
+export const kai = { id: 'kai7', type: 'Person', name: 'Kai' }
 export function configStore() {
   const store = createStore(reducer, applyMiddleware(thunk, entityMiddleware))
-  store.dispatch(entityPutAll([ list, listItem, sailboat, sail2, image ]))
+  store.dispatch(entityPutAll([ list, listItem, sailboat, sail2, image, kai ]))
   return store
 }
 

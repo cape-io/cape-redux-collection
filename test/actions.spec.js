@@ -3,17 +3,19 @@ import {
   find, isArray, isFunction, isNumber,
 } from 'lodash'
 // import { eq } from 'lodash/fp'
-import { userNew } from 'cape-redux-auth'
-// import { ENDED, LIST_ITEM, PREDICATE } from '../src/const'
+import { login, logout, userNew } from 'cape-redux-auth'
+import { COLLECTION_TYPE, CONFIRMED, ENDED, LIST_ITEM } from '../src/const'
+import { CLOSE, CREATE_ITEM, CREATE_LIST, OPEN, UPDATE_ITEM } from '../src/actions'
 // import { isCollectionList, isListItem } from '../src/lang'
 // import { listItemSelector } from '../src/select'
 import {
-  close, CLOSE, createItem, CREATE_ITEM, createList, createListThunk, CREATE_LIST, confirmItem,
-  confirmActivePayload, userCollections, createItemThunk, LIST_ITEM, CONFIRMED, confirmActive,
-  confirmActiveThunk, activeListItem, userNeedsCollection, COLLECTION_TYPE,
-  open, OPEN, toggle, toggleActionPrep, UPDATE_ITEM,
+  close, createItem, createList, createListThunk, confirmItem,
+  confirmActivePayload, userCollections, createItemThunk, confirmActive,
+  endItem, findItemInFavs,
+  confirmActiveThunk, activeListItem, userNeedsCollection,
+  open, toggle, toggleActionPrep, toggleActionAnon, addOrOpen,
 } from '../src'
-import { configStore, listItem, TIME, sailboat, user } from './mock'
+import { configStore, listItem, TIME, kai, sailboat, user } from './mock'
 
 const { dispatch, getState } = configStore()
 
@@ -55,6 +57,13 @@ test('confirmItem', (t) => {
   t.equal(action.payload.type, listItem.type)
   t.ok(action.payload.dateUpdated > TIME)
   t.false(action.payload.extra)
+  t.end()
+})
+test('endItem', (t) => {
+  const action = endItem(listItem)
+  t.equal(action.type, UPDATE_ITEM)
+  t.equal(action.payload.actionStatus, ENDED)
+  t.equal(action.meta.action, 'END_ITEM')
   t.end()
 })
 test('confirmActivePayload', (t) => {
@@ -128,6 +137,52 @@ test('toggleActionPrep', (t) => {
   t.equal(act2[0].meta.action, 'CONFIRM_ACTIVE', 'meta.action')
   t.end()
 })
+test('toggleActionAnon', (t) => {
+  const list = findItemInFavs(getState(), sailboat)
+  t.equal(list.type, LIST_ITEM, 'list found')
+  const act1 = toggleActionAnon(getState(), sailboat)
+  t.equal(act1.type, UPDATE_ITEM)
+  t.equal(act1.payload.actionStatus, ENDED)
+  t.equal(act1.meta.action, 'END_ITEM')
+  dispatch(act1)
+  t.equal(findItemInFavs(getState(), sailboat))
+  const act2 = toggleActionAnon(getState(), sailboat)
+  t.equal(act2.type, CREATE_ITEM)
+  t.equal(act2.payload.mainEntity.type, 'CollectionList')
+  t.equal(act2.payload.item, sailboat)
+  t.end()
+})
+test('addOrOpen', (t) => {
+  const act1 = addOrOpen(getState(), sailboat)
+  t.equal(act1.type, CREATE_ITEM)
+  t.equal(act1.payload.mainEntity.type, 'CollectionList')
+  t.equal(act1.payload.item, sailboat)
+  dispatch(login(user))
+  const act2 = addOrOpen(getState(), sailboat)
+  t.equal(act2.type, OPEN)
+  t.equal(act2.payload.id, sailboat.id)
+  t.end()
+})
 test('toggle', (t) => {
+  const thunk = toggle(sailboat)
+  t.plan(6)
+  t.ok(isFunction(thunk))
+  const disp1 = (act) => {
+    t.equal(act.type, OPEN)
+    t.equal(act.payload.id, sailboat.id)
+  }
+  thunk(disp1, getState)
+  dispatch(logout())
+  const disp2 = (act) => {
+    t.equal(act.meta.action, 'END_ITEM')
+  }
+  thunk(disp2, getState)
+  dispatch(userNew(kai))
+  const checks = [
+    (act) => { t.equal(act.type, CREATE_LIST) },
+    (act) => { t.equal(act.type, CREATE_ITEM) },
+  ]
+  const disp3 = act => checks.shift()(act)
+  thunk(disp3, getState)
   t.end()
 })

@@ -77,12 +77,12 @@ export function toggleActionPrep(state) {
 export function toggleActionAnon(state, item) {
   // Is the item in the favs collection?\
   const list = findItemInFavs(state, item)
-  if (list) endItem(list)
-  return createItem({ item, mainEntity: favsListSelector })
+  if (list) return endItem(list)
+  return createItem({ item, mainEntity: favsListSelector })(state)
 }
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
-function addOrOpen(state, item) {
+export function addOrOpen(state, item) {
   // We know user has a favs collection. Create new listItem or remove from favs collection.
   if (isAnonymous(state)) return toggleActionAnon(state, item)
   return open(item)
