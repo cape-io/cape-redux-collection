@@ -1,5 +1,5 @@
 import {
-  constant, flow, isUndefined, noop, now, nthArg, over,
+  constant, flow, isUndefined, noop, now,
 } from 'lodash'
 import { omitBy } from 'lodash/fp'
 import { createObj } from 'cape-lodash'
@@ -9,7 +9,7 @@ import { isAnonymous } from 'cape-redux-auth'
 import { requireIdType } from '@kaicurry/redux-graph'
 import { collectionListBuilder, listItemBuilder } from './entity'
 import {
-  activeListItem, favsListSelector, userNeedsCollection,
+  activeListItem, favsListSelector, findItemInFavs, userNeedsCollection,
 } from './select'
 import { CONFIRMED, ENDED, LIST_ITEM } from './const'
 
@@ -73,29 +73,23 @@ export function toggleActionPrep(state) {
   if (userNeedsCollection(state)) actions.push(createList()(state))
   return actions
 }
+// If in favs remove it. Otherwise add it.
 export function toggleActionAnon(state, item) {
-  // Is the item in the favs collection?
-  // if (itemInFavs())
+  // Is the item in the favs collection?\
+  const list = findItemInFavs(state, item)
+  if (list) endItem(list)
+  return createItem({ item, mainEntity: favsListSelector })
 }
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
-function addOrOpenAction([ isAnon, favItem, item ]) {
-  if (isAnon) {
-    // We know user has a favs collection. Create new listItem or remove from favs collection.
-    return favItem ? endItem(favItem) : createItem({ item, mainEntity: favsListSelector })
-  }
+function addOrOpen(state, item) {
+  // We know user has a favs collection. Create new listItem or remove from favs collection.
+  if (isAnonymous(state)) return toggleActionAnon(state, item)
   return open(item)
 }
-const addOrOpen = flow(over(
-  isAnonymous,
-  // flow(over(nthArg(0), flow(nthArg(2), createObj('item')), spread(itemFavItem))), // itemInFavs
-  flow(nthArg(2), requireIdType), // Get item.
-), addOrOpenAction)
 
 // Decides what to do when a user clicks the (+) favorite button on item that can be in list.
 // toggle(listProps, item) - state is added as first arg by thunkAction()
-export const toggle = thunkAction(
-  toggleActionPrep,
-  addOrOpen,
-  (actions, toggleAction) => actions.concat(toggleAction),
+export const toggle = thunkAction(toggleActionPrep, addOrOpen,
+  (actions, toggleAction) => actions.concat(toggleAction)
 )

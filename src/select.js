@@ -1,6 +1,6 @@
 import { eq, flow, negate, nthArg, over, pick, property, spread } from 'lodash'
 import { createSelector, createStructuredSelector } from 'reselect'
-import { find, keyBy, map } from 'lodash/fp'
+import { find, map, omitBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
 import { allChildrenSelector, entityTypeSelector, predicateFilter } from '@kaicurry/redux-graph'
@@ -10,7 +10,7 @@ import { allChildrenSelector, entityTypeSelector, predicateFilter } from '@kaicu
 import {
   findActionCreated,
 } from './helpers'
-import { isFavList } from './lang'
+import { isActionEnded, isFavList } from './lang'
 import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
 // COLLECTIONS
@@ -25,7 +25,7 @@ export const collectionListSelector = entityTypeSelector(COLLECTION_TYPE)
 export const listItemSelector = entityTypeSelector(LIST_ITEM)
 // Gets currently active ListItem.
 export const activeListItem = createSelector(listItemSelector, findActionCreated)
-
+export const createdActions = flow(property(PREDICATE), omitBy(isActionEnded))
 // USER COLLECTIONS - No props needed.
 
 // Find user collections. Returns empty object when nothing found.
@@ -41,7 +41,7 @@ export const favsListSelector = createSelector(userCollections, find(isFavList))
 // ListItems attached to the user favs collection via PREDICATE field/triple predicate.
 // Returns object keyed with listItem id.
 export const favListFull = allChildrenSelector(favsListSelector)
-export const favListElements = select(favListFull, PREDICATE)
+export const favListElements = createSelector(favListFull, createdActions)
 export const favItems = createSelector(favListElements, map('item'))
 export function findItemInListItems(items, item) {
   return find({ item: pick(item, 'id', 'type') })(items)

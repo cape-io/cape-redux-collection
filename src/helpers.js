@@ -1,4 +1,4 @@
-import { key0, val0 } from 'redux-graph'
+import { key0, val0 } from '@kaicurry/redux-graph'
 import { get, mapValues, reduce, set } from 'lodash'
 import { find, keyBy, orderBy } from 'lodash/fp'
 
