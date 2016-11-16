@@ -4,6 +4,7 @@ import { every, find, isEmpty, isObject, overEvery, size } from 'lodash'
 import {
   activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
   createListThunk, isCollectionList, createItemThunk,
+  favsListSelector, favListFull,
   LIST_ITEM, isListItem, userCollections, userHasCollections,
 } from '../src'
 
@@ -56,7 +57,11 @@ test('activeListItem', (t) => {
   t.equal(activeListItem(getState()), undefined)
   t.end()
 })
-
+test('favListFull', (t) => {
+  const res = favListFull(getState())
+  console.log(res)
+  t.end()
+})
 // test('collections', (t) => {
 //   t.deepEqual(collections(state), { foo: { id: 'foo', type: 'CollectionList' } })
 //   t.end()

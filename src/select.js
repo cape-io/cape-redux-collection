@@ -3,7 +3,7 @@ import { createSelector, createStructuredSelector } from 'reselect'
 import { find, pickBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
-import { entityTypeSelector, predicateFilter } from '@kaicurry/redux-graph'
+import { allChildrenSelector, entityTypeSelector, predicateFilter } from '@kaicurry/redux-graph'
 // import { getDataFeed, getWebApp } from '../select'
 // import { itemsFilled } from '../select/items'
 
@@ -40,7 +40,8 @@ export const favsListSelector = createSelector(userCollections, find(isFavList))
 // export const favListId = select(favsListSelector, 'id')
 // ListItems attached to the user favs collection via PREDICATE field/triple predicate.
 // Returns object keyed with listItem id.
-// export const favListElements = select(favsListSelector, PREDICATE)
+export const favListFull = allChildrenSelector(favsListSelector)
+export const favListElements = select(favsListSelector, PREDICATE)
 // export const userHasFavorites = boolSelector(favListElements)
 
 // export function itemsSelectors(selectItems) {
