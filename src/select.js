@@ -1,6 +1,6 @@
-import { constant, eq, flow, negate, over, property, spread } from 'lodash'
+import { eq, flow, negate, nthArg, over, pick, property, spread } from 'lodash'
 import { createSelector, createStructuredSelector } from 'reselect'
-import { find, pickBy } from 'lodash/fp'
+import { find, keyBy, map } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
 import { allChildrenSelector, entityTypeSelector, predicateFilter } from '@kaicurry/redux-graph'
@@ -41,9 +41,13 @@ export const favsListSelector = createSelector(userCollections, find(isFavList))
 // ListItems attached to the user favs collection via PREDICATE field/triple predicate.
 // Returns object keyed with listItem id.
 export const favListFull = allChildrenSelector(favsListSelector)
-export const favListElements = select(favsListSelector, PREDICATE)
+export const favListElements = select(favListFull, PREDICATE)
+export const favItems = createSelector(favListElements, map('item'))
+export function findItemInListItems(items, item) {
+  return find({ item: pick(item, 'id', 'type') })(items)
+}
 // export const userHasFavorites = boolSelector(favListElements)
-
+export const findItemInFavs = createSelector(favListElements, nthArg(1), findItemInListItems)
 // export function itemsSelectors(selectItems) {
   // const listItems = createSelector(favListElements, selectItems, fixListItems)
   // const listItemsSorted = createSelector(listItems, orderListItems)
@@ -70,7 +74,7 @@ export const getItemId = select(getProps, 'item.id')
 // export const itemInCollections = boolSelector(itemCollections)
 // Is the item in a favs list?
 // export const itemFavCollection = createSelector(itemCollections, find(isFavList))
-export const itemFavItem = constant(null)
+
 // Need to know if we should display a confirm window or a projectEdit window.
 // Find fav or active collection under edit.
 // export const getActiveCollection = simpleSelector(favCollection, firstValArg)

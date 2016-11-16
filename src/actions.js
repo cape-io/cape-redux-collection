@@ -1,15 +1,15 @@
 import {
-  constant, flow, isUndefined, noop, now, nthArg, over, spread,
+  constant, flow, isUndefined, noop, now, nthArg, over,
 } from 'lodash'
 import { omitBy } from 'lodash/fp'
 import { createObj } from 'cape-lodash'
-import { createAction, selectorAction, thunkAction } from 'cape-redux'
+import { createAction, thunkAction } from 'cape-redux'
 import { structuredSelector } from 'cape-select'
 import { isAnonymous } from 'cape-redux-auth'
 import { requireIdType } from '@kaicurry/redux-graph'
 import { collectionListBuilder, listItemBuilder } from './entity'
 import {
-  activeListItem, favsListSelector, itemFavItem, userNeedsCollection,
+  activeListItem, favsListSelector, userNeedsCollection,
 } from './select'
 import { CONFIRMED, ENDED, LIST_ITEM } from './const'
 
@@ -75,6 +75,7 @@ export function toggleActionPrep(state) {
 }
 export function toggleActionAnon(state, item) {
   // Is the item in the favs collection?
+  // if (itemInFavs())
 }
 // Anon user. Create new collection & listItem.
 // Need to decide if we add to favs or display option to create project.
@@ -87,7 +88,7 @@ function addOrOpenAction([ isAnon, favItem, item ]) {
 }
 const addOrOpen = flow(over(
   isAnonymous,
-  flow(over(nthArg(0), flow(nthArg(2), createObj('item')), spread(itemFavItem))), // itemInFavs
+  // flow(over(nthArg(0), flow(nthArg(2), createObj('item')), spread(itemFavItem))), // itemInFavs
   flow(nthArg(2), requireIdType), // Get item.
 ), addOrOpenAction)
 
