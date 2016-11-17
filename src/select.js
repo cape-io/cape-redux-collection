@@ -46,7 +46,7 @@ export const favItems = createSelector(favListElements, map('item'))
 export function findItemInListItems(items, item) {
   return find({ item: pick(item, 'id', 'type') })(items)
 }
-// export const userHasFavorites = boolSelector(favListElements)
+export const userHasFavorites = boolSelector(favListElements)
 export const findItemInFavs = createSelector(favListElements, nthArg(1), findItemInListItems)
 // export function itemsSelectors(selectItems) {
   // const listItems = createSelector(favListElements, selectItems, fixListItems)
