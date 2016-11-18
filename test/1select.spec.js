@@ -1,6 +1,6 @@
 import test from 'tape'
 import {
-  each, every, find, get, isArray, isEmpty, isEqual, isObject, keys, overEvery, size,
+  each, every, find, get, isArray, isEmpty, isObject, keys, overEvery, size,
 } from 'lodash'
 import { getRef, getRefs, selectGraph } from '@kaicurry/redux-graph'
 import {
@@ -155,16 +155,15 @@ test('itemCollectionsHash', (t) => {
   t.end()
 })
 test('userCollectionsItem', (t) => {
-  // t.plan(2)
+  t.plan(3)
   const res = userCollectionsItem(getState(), { item: sailboat })
   t.equal(size(res), 2)
-  // each(res, (collection) => {
-  //   console.log(collection)
-  //   t.equal(
-  //     collection.itemInCollection,
-  //     isEqual(get(getRefs(collection, 'itemListElement'), 'id'), sailboat.id)
-  //   )
-  // })
+  each(res, (collection) => {
+    t.equal(
+      collection.itemListId,
+      get(getRefs(collection, 'itemListElement'), `ListItem_${collection.itemListId}.id`, null)
+    )
+  })
   t.end()
 })
 // test('collections', (t) => {

@@ -46,9 +46,8 @@ export const CREATE_LIST = 'collection/CREATE_LIST'
 export const createList = payloadSelectorAction(CREATE_LIST, collectionListBuilder)
 export const createListThunk = flow(createList, thunkify)
 
-export function endItemPayload(props) {
-  requireIdType(props, LIST_ITEM)
-  return { ...props, actionStatus: ENDED, endTime: now() }
+export function endItemPayload({ id }) {
+  return { actionStatus: ENDED, endTime: now(), id, type: LIST_ITEM }
 }
 export const endItem = createAction(UPDATE_ITEM, endItemPayload, meta('END_ITEM'))
 

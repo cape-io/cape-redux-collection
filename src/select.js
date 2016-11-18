@@ -53,7 +53,7 @@ export const userCollectionsItem = createSelector(
   userCollections, itemCollectionsHash,
   (collections, itemHash) =>
     mapValues(collections, (collection, id) =>
-      set('itemInCollection', collection, has(itemHash, id))
+      set('itemListId', collection, (has(itemHash, id) && itemHash[id].id) || null)
     )
 )
 // export const userCollectionsItem = over(userCollections, itemCollectionsHash)
