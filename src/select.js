@@ -1,10 +1,11 @@
 import {
-  flow, isMatch, isObject, negate, nthArg, over,
-  overEvery, pick, property, spread,
+  curry, flow, has, isMatch, isObject, mapValues, negate, nthArg, over,
+  overEvery, pick, property, rearg, spread,
 } from 'lodash'
 import { find, groupBy, keyBy, map, omitBy, pickBy } from 'lodash/fp'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { boolSelector, getProps, getSelect, select, simpleSelector } from 'cape-select'
+import { set } from 'cape-redux'
 import { selectUser } from 'cape-redux-auth'
 import {
   allChildrenSelector, entityTypeSelector, getKey, getRef, predicateFilter,
@@ -15,9 +16,10 @@ import {
 import {
   findActionCreated,
 } from './helpers'
-import { isActionEnded, isFavList, isValidListItem } from './lang'
+import { getItemRef, isActionEnded, isFavList, isValidListItem } from './lang'
 import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
+export const fpGetRef = curry(rearg(getRef, [ 1, 0 ]), 2)
 export const getPropsItem = select(getProps, 'item')
 export const propsItemKey = simpleSelector(getPropsItem, getKey)
 // COLLECTIONS
@@ -35,17 +37,26 @@ export const activeListItem = createSelector(listItemSelector, findActionCreated
 export const activeListItems = createSelector(listItemSelector, pickBy(isValidListItem))
 export const listItemsByItem = createSelector(
   activeListItems,
-  groupBy(listItem => getKey(getRef(listItem, 'item')))
+  groupBy(listItem => getKey(getItemRef(listItem)))
 )
 export const itemCollections = getSelect(listItemsByItem, propsItemKey)
-export const getListCollection = listItem => find(listItem.rangeIncludes[PREDICATE]).id
-export const itemCollectionsHash = createSelector(itemCollections, keyBy(getListCollection))
-// USER COLLECTIONS - No props needed.
+export const getListCollectionId = flow(fpGetRef('mainEntity'), property('id'))
+export const itemCollectionsHash = createSelector(itemCollections, keyBy(getListCollectionId))
 
+// USER COLLECTIONS - No props needed.
 // Find user collections. Returns empty object when nothing found.
 export const userCollections = createSelector(
   selectUser, collectionListSelector, predicateFilter('creator')
 )
+// Add field to collections if the item is in it.
+export const userCollectionsItem = createSelector(
+  userCollections, itemCollectionsHash,
+  (collections, itemHash) =>
+    mapValues(collections, (collection, id) =>
+      set('itemInCollection', collection, has(itemHash, id))
+    )
+)
+// export const userCollectionsItem = over(userCollections, itemCollectionsHash)
 export const userHasCollections = boolSelector(userCollections)
 export const userNeedsCollection = negate(userHasCollections)
 // Find (first) user favs project from list entities.

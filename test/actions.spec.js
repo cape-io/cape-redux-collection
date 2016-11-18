@@ -56,7 +56,7 @@ test('confirmItem', (t) => {
   t.equal(action.meta.action, 'CONFIRM_ITEM')
   t.equal(action.payload.id, listItem.id)
   t.equal(action.payload.type, listItem.type)
-  t.ok(action.payload.dateUpdated > TIME)
+  t.ok(action.payload.dateModified > TIME)
   t.false(action.payload.extra)
   t.end()
 })
@@ -76,7 +76,7 @@ test('confirmActivePayload', (t) => {
   t.equal(payload.id, item.id)
   t.equal(payload.type, LIST_ITEM)
   t.equal(payload.actionStatus, CONFIRMED)
-  t.ok(isNumber(payload.dateUpdated))
+  t.ok(isNumber(payload.dateModified))
   t.end()
 })
 test('confirmActive', (t) => {

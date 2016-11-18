@@ -32,7 +32,7 @@ export const UPDATE_ITEM = 'collection/UPDATE_ITEM'
 
 // Create an action that will update a ListItem as confirmed.
 export function confirmItemPayload(props) {
-  return { ...requireIdType(props, LIST_ITEM), actionStatus: CONFIRMED, dateUpdated: now() }
+  return { ...requireIdType(props, LIST_ITEM), actionStatus: CONFIRMED, dateModified: now() }
 }
 export const confirmItem = createAction(UPDATE_ITEM, confirmItemPayload, meta('CONFIRM_ITEM'))
 

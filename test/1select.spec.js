@@ -1,18 +1,21 @@
 import test from 'tape'
-import { every, find, isEmpty, isObject, overEvery, size } from 'lodash'
-import { selectGraph } from '@kaicurry/redux-graph'
+import {
+  each, every, find, get, isArray, isEmpty, isEqual, isObject, keys, overEvery, size,
+} from 'lodash'
+import { getRef, getRefs, selectGraph } from '@kaicurry/redux-graph'
 import {
   activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
   createListThunk, isCollectionList, createItemThunk,
   favListFull, favListElements, findItemInListItems, findItemInFavs,
   LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
-  getActiveItem, itemCollectionsHash, activeListItems, listItemsByItem,
+  getActiveItem, itemCollectionsHash, activeListItems, listItemsByItem, propsItemKey,
+  getListCollectionId, userCollectionsItem,
 } from '../src'
 
 import {
   listItemSelector,
 } from '../src/select'
-import { configStore, sailboat } from './mock'
+import { configStore, list, sailboat, user } from './mock'
 
 const { dispatch, getState } = configStore()
 const state = getState()
@@ -107,19 +110,61 @@ test('itemIsActive', (t) => {
 })
 test('activeListItems', (t) => {
   const res = activeListItems(getState())
-  console.log(res)
   t.equal(size(res), 1)
   t.equal(find(res).type, LIST_ITEM)
   t.end()
 })
 test('listItemsByItem', (t) => {
-  // const res = listItemsByItem(getState())
-  // console.log(res)
+  const res = listItemsByItem(getState())
+  t.true(res && isArray(res.Sailboat_saga43))
+  t.equal(res.Sailboat_saga43[0].type, LIST_ITEM)
+  t.end()
+})
+test('propsItemKey', (t) => {
+  t.equal(propsItemKey({}, { item: sailboat }), 'Sailboat_saga43')
+  t.end()
+})
+test('getListCollectionId', (t) => {
+  const listItem = {
+    type: 'ListItem',
+    rangeIncludes: {},
+    _ref: {
+      creator: user,
+      editor: user,
+      mainEntity: list,
+      item: sailboat,
+    },
+    _refs: {},
+    actionStatus: 'Confirmed',
+    startTime: 1479448467397,
+    position: 100,
+    dateCreated: 1479448467398,
+    id: 'ng7qgpdj',
+    dateModified: 1479448467406,
+  }
+  const res = getListCollectionId(listItem)
+  t.equal(res, list.id)
   t.end()
 })
 test('itemCollectionsHash', (t) => {
-  // const res = itemCollectionsHash(getState(), sailboat)
-  // console.log(res)
+  const res = itemCollectionsHash(getState(), { item: sailboat })
+  const firstKey = keys(res)[0]
+  t.equal(res[firstKey].type, LIST_ITEM)
+  t.equal(getRef(res[firstKey], 'mainEntity').id, firstKey)
+  t.equal(getRef(res[firstKey], 'item').id, sailboat.id)
+  t.end()
+})
+test('userCollectionsItem', (t) => {
+  // t.plan(2)
+  const res = userCollectionsItem(getState(), { item: sailboat })
+  t.equal(size(res), 2)
+  // each(res, (collection) => {
+  //   console.log(collection)
+  //   t.equal(
+  //     collection.itemInCollection,
+  //     isEqual(get(getRefs(collection, 'itemListElement'), 'id'), sailboat.id)
+  //   )
+  // })
   t.end()
 })
 // test('collections', (t) => {
