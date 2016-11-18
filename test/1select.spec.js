@@ -87,15 +87,15 @@ test('findItemInListItems', (t) => {
   t.end()
 })
 test('findItemInFavs', (t) => {
-  const res = findItemInFavs(getState(), sailboat)
+  const res = findItemInFavs(getState(), { item: sailboat })
   t.equal(res.item.id, sailboat.id)
-  const res2 = findItemInFavs(getState(), image)
+  const res2 = findItemInFavs(getState(), { item: image })
   t.equal(res2)
   t.end()
 })
 test('itemInFavs', (t) => {
-  t.true(itemInFavs(getState(), sailboat))
-  t.false(itemInFavs(getState(), image))
+  t.true(itemInFavs(getState(), { item: sailboat }))
+  t.false(itemInFavs(getState(), { item: image }))
   t.end()
 })
 test('getActiveItem', (t) => {
