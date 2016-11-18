@@ -1,7 +1,7 @@
 // import { entityHasType } from 'redux-graph'
 import {
   ary, conforms, includes, isNumber, isString, matchesProperty,
-  negate, overSome, partial, partialRight,
+  negate, overEvery, partial, partialRight,
 } from 'lodash'
 import { eq } from 'lodash/fp'
 import { getRef } from '@kaicurry/redux-graph'
@@ -26,13 +26,14 @@ export const isListItem = conforms({
   dateCreated: isNumber,
   id: isString,
 })
-export const noItemRef = negate(ary(partialRight(getRef, 'item'), 1))
-export const isActionEnded = overSome(
-  matchesProperty('actionStatus', ENDED),
-  noItemRef
-)
-// Valid unless ended/removed.
-export const isValidListItem = negate(isActionEnded)
 
+export const isActionEnded = matchesProperty('actionStatus', ENDED)
+
+export const getItemRef = ary(partialRight(getRef, 'item'), 1)
+// Valid unless ended/removed.
+export const isValidListItem = overEvery(
+  negate(isActionEnded),
+  getItemRef
+)
 // Is the CollectionList the default favorite one?
 export const isFavList = matchesProperty('title', FAV_TITLE)

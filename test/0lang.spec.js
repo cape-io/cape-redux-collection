@@ -1,21 +1,23 @@
 import test from 'tape'
 import { now } from 'lodash'
 import { REF } from '@kaicurry/redux-graph'
-import { isActionEnded, isCollectionList, isFavList, noItemRef, isValidListItem } from '../src/lang'
+import {
+  isActionEnded, isCollectionList, isFavList, getItemRef, isValidListItem,
+} from '../src/lang'
 import { CONFIRMED, ENDED, FAV_TITLE } from '../src/const'
 import { sailboat } from './mock'
 
-test('noItemRef', (t) => {
-  t.true(noItemRef({}))
-  t.true(noItemRef({ [REF]: {} }))
-  t.true(noItemRef({ [REF]: { foo: {} } }))
-  t.false(noItemRef({ [REF]: { item: {} } }))
+test('getItemRef', (t) => {
+  t.false(getItemRef({}))
+  t.false(getItemRef({ [REF]: {} }))
+  t.false(getItemRef({ [REF]: { foo: {} } }))
+  t.true(getItemRef({ [REF]: { item: {} } }))
+  t.equal(getItemRef({ [REF]: { item: sailboat } }), sailboat)
   t.end()
 })
 test('isActionEnded', (t) => {
-  t.true(isActionEnded({ actionStatus: ENDED, [REF]: { item: sailboat } }))
-  t.false(isActionEnded({ actionStatus: CONFIRMED, [REF]: { item: sailboat } }))
-  t.true(isActionEnded({ actionStatus: CONFIRMED, [REF]: {} }))
+  t.true(isActionEnded({ actionStatus: ENDED }))
+  t.false(isActionEnded({ actionStatus: CONFIRMED }))
   t.end()
 })
 test('isCollectionList', (t) => {

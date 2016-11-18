@@ -1,20 +1,25 @@
 import {
-  flow, isMatch, isObject, negate, nthArg, over, overEvery, pick, property, spread,
+  flow, isMatch, isObject, negate, nthArg, over,
+  overEvery, pick, property, spread,
 } from 'lodash'
+import { find, groupBy, keyBy, map, omitBy, pickBy } from 'lodash/fp'
 import { createSelector, createStructuredSelector } from 'reselect'
-import { find, map, omitBy } from 'lodash/fp'
-import { boolSelector, getProps, select } from 'cape-select'
+import { boolSelector, getProps, getSelect, select, simpleSelector } from 'cape-select'
 import { selectUser } from 'cape-redux-auth'
-import { allChildrenSelector, entityTypeSelector, predicateFilter } from '@kaicurry/redux-graph'
+import {
+  allChildrenSelector, entityTypeSelector, getKey, getRef, predicateFilter,
+} from '@kaicurry/redux-graph'
 // import { getDataFeed, getWebApp } from '../select'
 // import { itemsFilled } from '../select/items'
 
 import {
   findActionCreated,
 } from './helpers'
-import { isActionEnded, isFavList } from './lang'
+import { isActionEnded, isFavList, isValidListItem } from './lang'
 import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
+export const getPropsItem = select(getProps, 'item')
+export const propsItemKey = simpleSelector(getPropsItem, getKey)
 // COLLECTIONS
 
 // Select all CollectionList entities from the database.
@@ -27,7 +32,14 @@ export const collectionListSelector = entityTypeSelector(COLLECTION_TYPE)
 export const listItemSelector = entityTypeSelector(LIST_ITEM)
 // Gets currently active ListItem.
 export const activeListItem = createSelector(listItemSelector, findActionCreated)
-export const createdActions = flow(property(PREDICATE), omitBy(isActionEnded))
+export const activeListItems = createSelector(listItemSelector, pickBy(isValidListItem))
+export const listItemsByItem = createSelector(
+  activeListItems,
+  groupBy(listItem => getKey(getRef(listItem, 'item')))
+)
+export const itemCollections = getSelect(listItemsByItem, propsItemKey)
+export const getListCollection = listItem => find(listItem.rangeIncludes[PREDICATE]).id
+export const itemCollectionsHash = createSelector(itemCollections, keyBy(getListCollection))
 // USER COLLECTIONS - No props needed.
 
 // Find user collections. Returns empty object when nothing found.
@@ -43,6 +55,7 @@ export const favsListSelector = createSelector(userCollections, find(isFavList))
 // ListItems attached to the user favs collection via PREDICATE field/triple predicate.
 // Returns object keyed with listItem id.
 export const favListFull = allChildrenSelector(favsListSelector)
+export const createdActions = flow(property(PREDICATE), omitBy(isActionEnded))
 export const favListElements = createSelector(favListFull, createdActions)
 export const favItems = createSelector(favListElements, map('item'))
 export function findItemInListItems(items, item) {
@@ -70,7 +83,6 @@ export const findItemInFavs = createSelector(favListElements, nthArg(1), findIte
 // export const itemListCreated = createSelector(itemLists, findActionCreated)
 
 // Reorder list -> collection to collection -> listItemElement. Returns object or null if no list.
-// export const itemCollections = createSelector(itemLists, invertListItems)
 // export const itemInCollections = boolSelector(itemCollections)
 // Is the item in a favs list?
 // export const itemFavCollection = createSelector(itemCollections, find(isFavList))
@@ -81,21 +93,18 @@ export const findItemInFavs = createSelector(favListElements, nthArg(1), findIte
 // export const favId = select('PREDICATE.id', favCollection)
 // export const itemIcon = createSelector(itemCollections, getItemIcon)
 
-// CREATE
-
-export const getItem = select(getProps, 'item')
 export const getCollectionState = property('collection')
 export const getActiveItem = select(getCollectionState, 'item')
 export const itemIsActive = overEvery(
   flow(getActiveItem, isObject),
-  flow(over(getItem, getActiveItem), spread(isMatch)),
+  flow(over(getPropsItem, getActiveItem), spread(isMatch)),
 )
-
+// export const itemListItems
 // ITEM CONTAINER
 // Used in the ItemFav container.
 export const mapStateToProps = createStructuredSelector({
   // activeListItem: itemListCreated, // Single listItem entity.
-  // collections: itemCollections,
+  collections: userCollections,
   // inCollections: itemInCollections,
   itemIsActive,
   userCollections,

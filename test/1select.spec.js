@@ -6,7 +6,7 @@ import {
   createListThunk, isCollectionList, createItemThunk,
   favListFull, favListElements, findItemInListItems, findItemInFavs,
   LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
-  getActiveItem,
+  getActiveItem, itemCollectionsHash, activeListItems, listItemsByItem,
 } from '../src'
 
 import {
@@ -103,6 +103,23 @@ test('itemIsActive', (t) => {
   const ste2 = { collection: { item: { id: 'foo1', type: 'Sailboat' } } }
   t.false(itemIsActive(ste2, { item: sailboat }))
   t.false(itemIsActive(ste2, null), 'null ste2')
+  t.end()
+})
+test('activeListItems', (t) => {
+  const res = activeListItems(getState())
+  console.log(res)
+  t.equal(size(res), 1)
+  t.equal(find(res).type, LIST_ITEM)
+  t.end()
+})
+test('listItemsByItem', (t) => {
+  // const res = listItemsByItem(getState())
+  // console.log(res)
+  t.end()
+})
+test('itemCollectionsHash', (t) => {
+  // const res = itemCollectionsHash(getState(), sailboat)
+  // console.log(res)
   t.end()
 })
 // test('collections', (t) => {
