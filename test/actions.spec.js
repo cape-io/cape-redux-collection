@@ -145,6 +145,7 @@ test('toggleActionAnon', (t) => {
   const act1 = toggleActionAnon(getState(), sailboat)
   t.equal(act1.type, UPDATE_ITEM)
   t.equal(act1.payload.actionStatus, ENDED)
+  t.ok(isNumber(act1.payload.endTime))
   t.equal(act1.meta.action, 'END_ITEM')
   dispatch(act1)
   t.equal(findItemInFavs(getState(), sailboat))

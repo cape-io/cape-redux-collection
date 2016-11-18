@@ -9,7 +9,7 @@ import {
   favListFull, favListElements, findItemInListItems, findItemInFavs,
   LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
   getActiveItem, itemCollectionsHash, activeListItems, listItemsByItem, propsItemKey,
-  getListCollectionId, userCollectionsItem,
+  getListCollectionId, userCollectionsItem, favsListSelector,
 } from '../src'
 
 import {
@@ -166,11 +166,12 @@ test('userCollectionsItem', (t) => {
   })
   t.end()
 })
-// test('collections', (t) => {
-//   t.deepEqual(collections(state), { foo: { id: 'foo', type: 'CollectionList' } })
-//   t.end()
-// })
-//
+test('favsListSelector', (t) => {
+  const res = favsListSelector(getState())
+  t.equal(res.type, COLLECTION_TYPE)
+  t.end()
+})
+
 // test('getItemId()', (t) => {
 //   t.equal(getItemId(state, props), 'bar', 'getItemId')
 //   t.equal(getItemId(state, { item: sailboat }), 'saga43')
