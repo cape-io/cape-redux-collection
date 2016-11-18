@@ -98,6 +98,8 @@ test('itemIsActive', (t) => {
   const ste = { collection: { item: { id: 'saga43', type: 'Sailboat' } } }
   t.true(itemIsActive(ste, { item: sailboat }))
   t.false(itemIsActive(ste, null), 'null')
+  const ste1 = { collection: { item: null } }
+  t.false(itemIsActive(ste1, { item: sailboat }))
   const ste2 = { collection: { item: { id: 'foo1', type: 'Sailboat' } } }
   t.false(itemIsActive(ste2, { item: sailboat }))
   t.false(itemIsActive(ste2, null), 'null ste2')

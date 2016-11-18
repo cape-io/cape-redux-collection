@@ -1,4 +1,6 @@
-import { flow, isMatch, negate, nthArg, over, pick, property, spread } from 'lodash'
+import {
+  flow, isMatch, isObject, negate, nthArg, over, overEvery, pick, property, spread,
+} from 'lodash'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { find, map, omitBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
@@ -84,7 +86,10 @@ export const findItemInFavs = createSelector(favListElements, nthArg(1), findIte
 export const getItem = select(getProps, 'item')
 export const getCollectionState = property('collection')
 export const getActiveItem = select(getCollectionState, 'item')
-export const itemIsActive = flow(over(getItem, getActiveItem), spread(isMatch))
+export const itemIsActive = overEvery(
+  flow(getActiveItem, isObject),
+  flow(over(getItem, getActiveItem), spread(isMatch)),
+)
 
 // ITEM CONTAINER
 // Used in the ItemFav container.
