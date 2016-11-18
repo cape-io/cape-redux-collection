@@ -1,8 +1,10 @@
 // import { entityHasType } from 'redux-graph'
 import {
-  conforms, includes, isNumber, isString, matchesProperty, negate, partial,
+  ary, conforms, includes, isNumber, isString, matchesProperty,
+  negate, overSome, partial, partialRight,
 } from 'lodash'
 import { eq } from 'lodash/fp'
+import { getRef } from '@kaicurry/redux-graph'
 import {
   ASC, COLLECTION_TYPE, CONFIRMED, CREATED, DESC, ENDED, FAV_TITLE, LIST_ITEM,
 } from './const'
@@ -24,7 +26,11 @@ export const isListItem = conforms({
   dateCreated: isNumber,
   id: isString,
 })
-export const isActionEnded = matchesProperty('actionStatus', ENDED)
+export const noItemRef = negate(ary(partialRight(getRef, 'item'), 1))
+export const isActionEnded = overSome(
+  matchesProperty('actionStatus', ENDED),
+  noItemRef
+)
 // Valid unless ended/removed.
 export const isValidListItem = negate(isActionEnded)
 
