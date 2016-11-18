@@ -74,6 +74,7 @@ export function findItemInListItems(items, item) {
 }
 export const userHasFavorites = boolSelector(favListElements)
 export const findItemInFavs = createSelector(favListElements, nthArg(1), findItemInListItems)
+export const itemInFavs = boolSelector(findItemInFavs)
 // export function itemsSelectors(selectItems) {
   // const listItems = createSelector(favListElements, selectItems, fixListItems)
   // const listItemsSorted = createSelector(listItems, orderListItems)

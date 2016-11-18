@@ -6,7 +6,7 @@ import { getRef, getRefs, selectGraph } from '@kaicurry/redux-graph'
 import {
   activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
   createListThunk, isCollectionList, createItemThunk,
-  favListFull, favListElements, findItemInListItems, findItemInFavs,
+  favListFull, favListElements, findItemInListItems, findItemInFavs, itemInFavs,
   LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
   getActiveItem, itemCollectionsHash, activeListItems, listItemsByItem, propsItemKey,
   getListCollectionId, userCollectionsItem, favsListSelector,
@@ -15,7 +15,7 @@ import {
 import {
   listItemSelector,
 } from '../src/select'
-import { configStore, list, sailboat, user } from './mock'
+import { configStore, image, list, sailboat, user } from './mock'
 
 const { dispatch, getState } = configStore()
 const state = getState()
@@ -89,6 +89,13 @@ test('findItemInListItems', (t) => {
 test('findItemInFavs', (t) => {
   const res = findItemInFavs(getState(), sailboat)
   t.equal(res.item.id, sailboat.id)
+  const res2 = findItemInFavs(getState(), image)
+  t.equal(res2)
+  t.end()
+})
+test('itemInFavs', (t) => {
+  t.true(itemInFavs(getState(), sailboat))
+  t.false(itemInFavs(getState(), image))
   t.end()
 })
 test('getActiveItem', (t) => {
