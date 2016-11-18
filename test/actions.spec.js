@@ -11,7 +11,7 @@ import { CLOSE, CREATE_ITEM, CREATE_LIST, OPEN, UPDATE_ITEM } from '../src/actio
 import {
   close, createItem, createList, createListThunk, confirmItem,
   confirmActivePayload, userCollections, createItemThunk, confirmActive,
-  endItem, findItemInFavs,
+  endItem, findItemInFavs, favsListSelector,
   confirmActiveThunk, activeListItem, userNeedsCollection,
   open, toggle, toggleActionPrep, toggleActionAnon, addOrOpen,
 } from '../src'
@@ -46,7 +46,8 @@ test('createItem', (t) => {
   t.equal(action.payload.mainEntity, mainEntity)
   t.equal(action.payload.item, sailboat)
   t.equal(action.type, CREATE_ITEM)
-  // console.log(action)
+  const action2 = createItem({ item: sailboat, mainEntity: favsListSelector })(getState())
+  t.equal(action2.payload.mainEntity.type, COLLECTION_TYPE)
   t.end()
 })
 
@@ -148,14 +149,14 @@ test('toggleActionAnon', (t) => {
   t.equal(findItemInFavs(getState(), sailboat))
   const act2 = toggleActionAnon(getState(), sailboat)
   t.equal(act2.type, CREATE_ITEM)
-  t.equal(act2.payload.mainEntity.type, 'CollectionList')
+  t.equal(act2.payload.mainEntity.type, COLLECTION_TYPE)
   t.equal(act2.payload.item, sailboat)
   t.end()
 })
 test('addOrOpen', (t) => {
   const act1 = addOrOpen(getState(), sailboat)
   t.equal(act1.type, CREATE_ITEM)
-  t.equal(act1.payload.mainEntity.type, 'CollectionList')
+  t.equal(act1.payload.mainEntity.type, COLLECTION_TYPE)
   t.equal(act1.payload.item, sailboat)
   dispatch(login(user))
   const act2 = addOrOpen(getState(), sailboat)
@@ -165,7 +166,7 @@ test('addOrOpen', (t) => {
 })
 test('toggle', (t) => {
   const thunk = toggle(sailboat)
-  t.plan(6)
+  t.plan(7)
   t.ok(isFunction(thunk))
   const disp1 = (act) => {
     t.equal(act.type, OPEN)
@@ -179,8 +180,15 @@ test('toggle', (t) => {
   thunk(disp2, getState)
   dispatch(userNew(kai))
   const checks = [
-    (act) => { t.equal(act.type, CREATE_LIST) },
-    (act) => { t.equal(act.type, CREATE_ITEM) },
+    (act) => {
+      t.equal(act.type, CREATE_LIST)
+      dispatch(act)
+    },
+    (act) => {
+      t.equal(act.type, CREATE_ITEM)
+      // console.log(act.payload.mainEntity)
+      t.equal(act.payload.mainEntity.type, 'CollectionList')
+    },
   ]
   const disp3 = act => checks.shift()(act)
   thunk(disp3, getState)

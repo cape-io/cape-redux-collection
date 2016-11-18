@@ -3,7 +3,7 @@ import {
 } from 'lodash'
 import { omitBy } from 'lodash/fp'
 import { createObj } from 'cape-lodash'
-import { createAction, thunkAction } from 'cape-redux'
+import { createAction } from 'cape-redux'
 import { structuredSelector } from 'cape-select'
 import { isAnonymous } from 'cape-redux-auth'
 import { requireIdType } from '@kaicurry/redux-graph'
@@ -92,6 +92,7 @@ export function toggle(item) {
   return (dispatch, getState) => {
     const prepAction = toggleActionPrep(getState())
     if (prepAction) dispatch(prepAction)
-    return dispatch(addOrOpen(getState(), item))
+    const addOpenItem = addOrOpen(getState(), item)
+    return dispatch(addOpenItem)
   }
 }
