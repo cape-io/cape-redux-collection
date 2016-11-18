@@ -66,11 +66,10 @@ export const open = createAction(OPEN, requireIdType)
 
 // TOGGLE
 export function toggleActionPrep(state) {
-  const actions = []
-  if (activeListItem(state)) actions.push(confirmActive(state))
   // Make sure the user has a favs collection created. Returns created entity or undefined.
-  if (userNeedsCollection(state)) actions.push(createList()(state))
-  return actions
+  if (userNeedsCollection(state)) return createList()(state)
+  if (activeListItem(state)) return confirmActive(state)
+  return null
 }
 // If in favs remove it. Otherwise add it.
 export function toggleActionAnon(state, item) {
@@ -89,6 +88,10 @@ export function addOrOpen(state, item) {
 
 // Decides what to do when a user clicks the (+) favorite button on item that can be in list.
 // toggle(listProps, item) - state is added as first arg by thunkAction()
-export const toggle = thunkAction(toggleActionPrep, addOrOpen,
-  (actions, toggleAction) => actions.concat(toggleAction)
-)
+export function toggle(item) {
+  return (dispatch, getState) => {
+    const prepAction = toggleActionPrep(getState())
+    if (prepAction) dispatch(prepAction)
+    return dispatch(addOrOpen(getState(), item))
+  }
+}

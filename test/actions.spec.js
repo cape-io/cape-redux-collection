@@ -112,20 +112,18 @@ test('toggleActionPrep', (t) => {
   t.false(activeListItem(ste1))
   t.false(userNeedsCollection(ste1))
   const res = toggleActionPrep(ste1)
-  t.ok(isArray(res), 'isArray')
-  t.equal(res.length, 0, 'len')
+  t.equal(res, null, 'len')
   // Switch users.
   dispatch(userNew(user))
   const ste2 = getState()
   t.false(activeListItem(ste2), 'no active item')
   t.true(userNeedsCollection(ste2), 'new user needs new list')
   const act1 = toggleActionPrep(ste2)
-  t.equal(act1.length, 1, 'act1 length')
-  t.equal(act1[0].type, CREATE_LIST, 'CREATE_LIST')
-  t.equal(act1[0].payload.editor, user, 'editor')
-  t.equal(act1[0].payload.title, 'Favorites', 'new list favs title')
+  t.equal(act1.type, CREATE_LIST, 'CREATE_LIST')
+  t.equal(act1.payload.editor, user, 'editor')
+  t.equal(act1.payload.title, 'Favorites', 'new list favs title')
   // Create list and item.
-  const mainEntity = dispatch(act1[0]).payload
+  const mainEntity = dispatch(act1).payload
   t.equal(mainEntity.type, COLLECTION_TYPE, 'collection type')
   createItemThunk({ mainEntity, item: sailboat })(dispatch, getState)
   const ste3 = getState()
@@ -133,10 +131,9 @@ test('toggleActionPrep', (t) => {
   t.false(userNeedsCollection(ste3), 'user has collection')
   // Now check for activeListItem
   const act2 = toggleActionPrep(ste3)
-  t.equal(act2.length, 1, 'action length')
-  t.equal(act2[0].type, UPDATE_ITEM, 'UPDATE_ITEM')
-  t.equal(act2[0].payload.type, LIST_ITEM, 'payload LIST_ITEM')
-  t.equal(act2[0].meta.action, 'CONFIRM_ACTIVE', 'meta.action')
+  t.equal(act2.type, UPDATE_ITEM, 'UPDATE_ITEM')
+  t.equal(act2.payload.type, LIST_ITEM, 'payload LIST_ITEM')
+  t.equal(act2.meta.action, 'CONFIRM_ACTIVE', 'meta.action')
   t.end()
 })
 test('toggleActionAnon', (t) => {
