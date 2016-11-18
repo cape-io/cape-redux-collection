@@ -1,13 +1,13 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
-import graph, { entityPutAll } from '@kaicurry/redux-graph'
+import graph, { entityPutAll, GRAPH_KEY } from '@kaicurry/redux-graph'
 import thunk from 'redux-thunk'
 import collection, { COLLECTION_TYPE, LIST_ITEM, entityMiddleware } from '../src/'
 
 const reducer = combineReducers({
   auth,
   collection,
-  graph,
+  [GRAPH_KEY]: graph,
 })
 export const TIME = 1479141039389
 export const list = { id: 'foolist', type: COLLECTION_TYPE, extra: 'field' }

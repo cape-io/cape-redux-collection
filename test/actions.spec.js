@@ -29,6 +29,7 @@ test('createList', (t) => {
   t.end()
 })
 test('createListThunk', (t) => {
+  t.plan(4)
   function disp(act) {
     t.equal(act.type, CREATE_LIST)
     t.equal(act.payload.type, 'CollectionList')
@@ -69,6 +70,7 @@ test('endItem', (t) => {
 test('confirmActivePayload', (t) => {
   createListThunk()(dispatch, getState)
   const mainEntity = find(userCollections(getState()))
+  t.equal(mainEntity.type, COLLECTION_TYPE)
   const item = createItemThunk({ mainEntity, item: sailboat })(dispatch, getState).payload
   const payload = confirmActivePayload(getState())
   t.equal(payload.id, item.id)

@@ -1,27 +1,27 @@
 import test from 'tape'
 import { every, find, isEmpty, isObject, overEvery, size } from 'lodash'
-
+import { selectGraph } from '@kaicurry/redux-graph'
 import {
   activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
   createListThunk, isCollectionList, createItemThunk,
   favListFull, favListElements, findItemInListItems, findItemInFavs,
-  LIST_ITEM, isListItem, userCollections, userHasCollections,
+  LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
 } from '../src'
 
 import {
   listItemSelector,
 } from '../src/select'
-import { configStore, props, sailboat } from './mock'
+import { configStore, sailboat } from './mock'
 
 const { dispatch, getState } = configStore()
 const state = getState()
 
 test('collectionListSelector', (t) => {
-  t.equal(collectionListSelector(state), state.graph[COLLECTION_TYPE])
+  t.equal(collectionListSelector(state), selectGraph(state)[COLLECTION_TYPE])
   t.end()
 })
 test('listItemSelector', (t) => {
-  t.equal(listItemSelector(state), state.graph[LIST_ITEM])
+  t.equal(listItemSelector(state), selectGraph(state)[LIST_ITEM])
   t.end()
 })
 test('userHasCollections', (t) => {
@@ -87,6 +87,13 @@ test('findItemInFavs', (t) => {
   t.equal(res.item.id, sailboat.id)
   t.end()
 })
+test('itemIsActive', (t) => {
+  const ste = { collection: { item: { id: 'saga43', type: 'Sailboat' } } }
+  t.true(itemIsActive(ste, { item: sailboat }))
+  const ste2 = { collection: { item: { id: 'foo1', type: 'Sailboat' } } }
+  t.false(itemIsActive(ste2, { item: sailboat }))
+  t.end()
+})
 // test('collections', (t) => {
 //   t.deepEqual(collections(state), { foo: { id: 'foo', type: 'CollectionList' } })
 //   t.end()
@@ -108,10 +115,5 @@ test('findItemInFavs', (t) => {
 // })
 // test('getActiveItem', (t) => {
 //   t.equal(getActiveItem({ collection: { item: 'foo' } }), 'foo')
-//   t.end()
-// })
-// test('itemIsActive', (t) => {
-//   t.true(itemIsActive({ collection: { item: 'saga43' } }, { item: sailboat }))
-//   t.false(itemIsActive({ collection: { item: 'foo' } }, { item: sailboat }))
 //   t.end()
 // })

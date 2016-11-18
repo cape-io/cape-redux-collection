@@ -1,4 +1,4 @@
-import { eq, flow, negate, nthArg, over, pick, property, spread } from 'lodash'
+import { flow, isMatch, negate, nthArg, over, pick, property, spread } from 'lodash'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { find, map, omitBy } from 'lodash/fp'
 import { boolSelector, getProps, select } from 'cape-select'
@@ -58,7 +58,7 @@ export const findItemInFavs = createSelector(favListElements, nthArg(1), findIte
 // ITEM LISTS & COLLECTIONS. Uses item prop.
 
 // Select props.item.id from (state, props)
-export const getItemId = select(getProps, 'item.id')
+export const getItemId = select(getProps, 'item')
 // Need to ListItems this textile shows up on.
 // export const itemParents = entityDomainIncludes(getItemId)
 // export const itemListItems = select(itemParents, 'domainIncludes.item')
@@ -84,7 +84,7 @@ export const getItemId = select(getProps, 'item.id')
 // CREATE
 export const getCollectionState = property('collection')
 export const getActiveItem = select(getCollectionState, 'item')
-export const itemIsActive = flow(over(getActiveItem, getItemId), spread(eq))
+export const itemIsActive = flow(over(getItemId, getActiveItem), spread(isMatch))
 // ITEM CONTAINER
 // Used in the ItemFav container.
 export const mapStateToProps = createStructuredSelector({
@@ -92,5 +92,5 @@ export const mapStateToProps = createStructuredSelector({
   // collections: itemCollections,
   // inCollections: itemInCollections,
   itemIsActive,
-  // userCollections,
+  userCollections,
 })
