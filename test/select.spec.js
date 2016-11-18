@@ -6,6 +6,7 @@ import {
   createListThunk, isCollectionList, createItemThunk,
   favListFull, favListElements, findItemInListItems, findItemInFavs,
   LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
+  getActiveItem,
 } from '../src'
 
 import {
@@ -87,11 +88,19 @@ test('findItemInFavs', (t) => {
   t.equal(res.item.id, sailboat.id)
   t.end()
 })
+test('getActiveItem', (t) => {
+  t.equal(getActiveItem({ collection: { item: 'foo' } }), 'foo')
+  const ste = { collection: { item: { id: 'saga43', type: 'Sailboat' } } }
+  t.deepEqual(getActiveItem(ste), { id: 'saga43', type: 'Sailboat' })
+  t.end()
+})
 test('itemIsActive', (t) => {
   const ste = { collection: { item: { id: 'saga43', type: 'Sailboat' } } }
   t.true(itemIsActive(ste, { item: sailboat }))
+  t.false(itemIsActive(ste, null), 'null')
   const ste2 = { collection: { item: { id: 'foo1', type: 'Sailboat' } } }
   t.false(itemIsActive(ste2, { item: sailboat }))
+  t.false(itemIsActive(ste2, null), 'null ste2')
   t.end()
 })
 // test('collections', (t) => {
@@ -111,9 +120,5 @@ test('itemIsActive', (t) => {
 //   t.equal(getCollectionState({ collection: 'foo' }), 'foo')
 //   const collection = {}
 //   t.equal(getCollectionState({ collection }), collection)
-//   t.end()
-// })
-// test('getActiveItem', (t) => {
-//   t.equal(getActiveItem({ collection: { item: 'foo' } }), 'foo')
 //   t.end()
 // })

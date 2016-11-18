@@ -57,8 +57,6 @@ export const findItemInFavs = createSelector(favListElements, nthArg(1), findIte
 
 // ITEM LISTS & COLLECTIONS. Uses item prop.
 
-// Select props.item.id from (state, props)
-export const getItemId = select(getProps, 'item')
 // Need to ListItems this textile shows up on.
 // export const itemParents = entityDomainIncludes(getItemId)
 // export const itemListItems = select(itemParents, 'domainIncludes.item')
@@ -82,9 +80,12 @@ export const getItemId = select(getProps, 'item')
 // export const itemIcon = createSelector(itemCollections, getItemIcon)
 
 // CREATE
+
+export const getItem = select(getProps, 'item')
 export const getCollectionState = property('collection')
 export const getActiveItem = select(getCollectionState, 'item')
-export const itemIsActive = flow(over(getItemId, getActiveItem), spread(isMatch))
+export const itemIsActive = flow(over(getItem, getActiveItem), spread(isMatch))
+
 // ITEM CONTAINER
 // Used in the ItemFav container.
 export const mapStateToProps = createStructuredSelector({
