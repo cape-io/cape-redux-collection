@@ -1,6 +1,6 @@
 import {
-  curry, flow, has, isMatch, isObject, mapValues, negate, nthArg, over,
-  overEvery, pick, property, rearg, spread,
+  curry, flow, has, mapValues, negate, over,
+  pick, property, rearg, spread,
 } from 'lodash'
 import { find, groupBy, keyBy, map, omitBy, pickBy } from 'lodash/fp'
 import { createSelector, createStructuredSelector } from 'reselect'
@@ -8,14 +8,12 @@ import { boolSelector, getProps, getSelect, select, simpleSelector } from 'cape-
 import { set } from 'cape-redux'
 import { selectUser } from 'cape-redux-auth'
 import {
-  allChildrenSelector, entityTypeSelector, getKey, getRef, predicateFilter,
+  allChildrenSelector, entityMatch, entityTypeSelector, getKey, getRef, predicateFilter,
 } from '@kaicurry/redux-graph'
 // import { getDataFeed, getWebApp } from '../select'
 // import { itemsFilled } from '../select/items'
 
-import {
-  findActionCreated,
-} from './helpers'
+import { findActionCreated } from './helpers'
 import { getItemRef, isActionEnded, isFavList, isValidListItem } from './lang'
 import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
@@ -34,6 +32,8 @@ export const collectionListSelector = entityTypeSelector(COLLECTION_TYPE)
 export const listItemSelector = entityTypeSelector(LIST_ITEM)
 // Gets currently active ListItem.
 export const activeListItem = createSelector(listItemSelector, findActionCreated)
+export const activeListItemFull = allChildrenSelector(activeListItem)
+
 export const activeListItems = createSelector(listItemSelector, pickBy(isValidListItem))
 export const listItemsByItem = createSelector(
   activeListItems,
@@ -91,8 +91,6 @@ export const itemInFavs = boolSelector(findItemInFavs)
 // export const itemActiveListItems = createSelector(itemListItems, pickBy(isValidListItem))
 // Move domainIncludes.PREDICATE to collection.
 // export const itemLists = createSelector(itemActiveListItems, setListItemsCollection)
-// Same as activeListItem?
-// export const itemListCreated = createSelector(itemLists, findActionCreated)
 
 // Reorder list -> collection to collection -> listItemElement. Returns object or null if no list.
 // export const itemInCollections = boolSelector(itemCollections)
@@ -107,15 +105,20 @@ export const itemInFavs = boolSelector(findItemInFavs)
 
 export const getCollectionState = property('collection')
 export const getActiveItem = select(getCollectionState, 'item')
-export const itemIsActive = overEvery(
-  flow(getActiveItem, isObject),
-  flow(over(getPropsItem, getActiveItem), spread(isMatch)),
-)
+// Is the component item the same as the one used in the most recent `open` action?
+export const itemIsActive = flow(over(getPropsItem, getActiveItem), spread(entityMatch))
+// Is the component item the same as the one used to create the most recent ListItem?
+export const itemActiveListItem = (state, { item }) => {
+  const createdListItem = activeListItemFull(state)
+  // console.log(item, activeListItem)
+  if (entityMatch(item, createdListItem.item)) return createdListItem
+  return null
+}
 // export const itemListItems
 // ITEM CONTAINER
 // Used in the ItemFav container.
 export const mapStateToProps = createStructuredSelector({
-  // activeListItem: itemListCreated, // Single listItem entity.
+  itemActiveListItem, // Single listItem entity.
   collections: userCollections,
   // inCollections: itemInCollections,
   itemIsActive,

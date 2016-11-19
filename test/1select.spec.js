@@ -7,6 +7,7 @@ import {
   activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
   createListThunk, isCollectionList, createItemThunk,
   favListFull, favListElements, findItemInListItems, findItemInFavs, itemInFavs,
+  itemActiveListItem,
   LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
   getActiveItem, itemCollectionsHash, activeListItems, listItemsByItem, propsItemKey,
   getListCollectionId, userCollectionsItem, favsListSelector,
@@ -26,6 +27,7 @@ test('collectionListSelector', (t) => {
 })
 test('listItemSelector', (t) => {
   t.equal(listItemSelector(state), selectGraph(state)[LIST_ITEM])
+  t.equal(listItemSelector({}), null)
   t.end()
 })
 test('userHasCollections', (t) => {
@@ -49,6 +51,7 @@ test('userCollections', (t) => {
 //   t.end()
 // })
 test('activeListItem', (t) => {
+  t.equal(activeListItem({}))
   const listItem0 = activeListItem(getState())
   t.equal(listItem0, undefined)
   const mainEntity = find(userCollections(getState()))
@@ -178,7 +181,17 @@ test('favsListSelector', (t) => {
   t.equal(res.type, COLLECTION_TYPE)
   t.end()
 })
-
+test('itemActiveListItem', (t) => {
+  const res = itemActiveListItem(getState(), { item: sailboat })
+  t.equal(res, null)
+  const mainEntity = find(userCollections(getState()))
+  const listItem1 = createItemThunk({ mainEntity, item: sailboat })(dispatch, getState).payload
+  const res2 = itemActiveListItem(getState(), { item: sailboat })
+  t.equal(res2.id, listItem1.id, 'listItem id')
+  t.equal(res2.item.id, sailboat.id, 'item id')
+  t.equal(itemActiveListItem(getState(), { item: image }), null)
+  t.end()
+})
 // test('getItemId()', (t) => {
 //   t.equal(getItemId(state, props), 'bar', 'getItemId')
 //   t.equal(getItemId(state, { item: sailboat }), 'saga43')
