@@ -74,7 +74,7 @@ export function toggleActionPrep(state) {
 // If in favs remove it. Otherwise add it.
 export function toggleActionAnon(state, item) {
   // Is the item in the favs collection?\
-  const list = findItemInFavs(state, item)
+  const list = findItemInFavs(state, { item })
   if (list) return endItem(list)
   return createItem({ item, mainEntity: favsListSelector })(state)
 }

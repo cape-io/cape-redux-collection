@@ -73,7 +73,9 @@ export function findItemInListItems(items, item) {
   return find({ item: pick(item, 'id', 'type') })(items)
 }
 export const userHasFavorites = boolSelector(favListElements)
+// Items is expected to come props style findItemInFavs(state, { item })
 export const findItemInFavs = createSelector(favListElements, getPropsItem, findItemInListItems)
+// Used by React selector where item is in props arg.
 export const itemInFavs = boolSelector(findItemInFavs)
 // export function itemsSelectors(selectItems) {
   // const listItems = createSelector(favListElements, selectItems, fixListItems)

@@ -15,7 +15,7 @@ import {
   confirmActiveThunk, activeListItem, userNeedsCollection,
   open, toggle, toggleActionPrep, toggleActionAnon, addOrOpen,
 } from '../src'
-import { configStore, listItem, TIME, kai, sailboat, user } from './mock'
+import { configStore, image, listItem, TIME, kai, sailboat, user } from './mock'
 
 const { dispatch, getState } = configStore()
 
@@ -166,7 +166,7 @@ test('addOrOpen', (t) => {
 })
 test('toggle', (t) => {
   const thunk = toggle(sailboat)
-  t.plan(7)
+  t.plan(11)
   t.ok(isFunction(thunk))
   const disp1 = (act) => {
     t.equal(act.type, OPEN)
@@ -192,5 +192,19 @@ test('toggle', (t) => {
   ]
   const disp3 = act => checks.shift()(act)
   thunk(disp3, getState)
+  thunk(dispatch, getState)
+  const thunk2 = toggle(image)
+  const check2 = [
+    (act) => {
+      t.equal(act.type, UPDATE_ITEM, 'update item')
+      t.equal(act.meta.action, 'CONFIRM_ACTIVE', 'from confirm active action.')
+    },
+    (act) => {
+      t.equal(act.type, CREATE_ITEM)
+      t.equal(act.payload.mainEntity.type, 'CollectionList')
+    },
+  ]
+  const disp4 = act => check2.shift()(act)
+  thunk2(disp4, getState)
   t.end()
 })
