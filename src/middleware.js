@@ -1,4 +1,4 @@
-import { isFunction } from 'lodash'
+import { isFunction, omit } from 'lodash'
 import { entityPut, entityUpdate, triplePut } from '@kaicurry/redux-graph'
 import { CREATE_LIST, CREATE_ITEM, UPDATE_ITEM } from './actions'
 import { PREDICATE } from './const'
@@ -15,7 +15,7 @@ export function entityMiddleware() {
       return next(dispatcher[action.type](action.payload))
     }
     if (action.type === CREATE_ITEM) {
-      const item = next(entityPut(action.payload))
+      const item = next(entityPut(omit(action.payload, 'mainEntity')))
       next(triplePut({
         subject: action.payload.mainEntity, predicate: PREDICATE, object: item.payload,
       }))

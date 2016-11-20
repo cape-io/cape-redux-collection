@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@kaicurry/redux-graph@2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@kaicurry/redux-graph/-/redux-graph-2.6.0.tgz#3baa7f2d49afbc32c8ab844ed9c6b761e573d100"
+"@kaicurry/redux-graph@^2.6.5":
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/@kaicurry/redux-graph/-/redux-graph-2.6.5.tgz#508918cc372fc5ac62ff6ca771fb9d4ac24c0f50"
   dependencies:
     cape-lodash "1.7.0"
     cape-redux "2.1.1"
@@ -770,11 +770,7 @@ babel-types@^6.13.0, babel-types@^6.15.0, babel-types@^6.16.0, babel-types@^6.18
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
 
-babylon@^6.11.0:
-  version "6.12.0"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.12.0.tgz#953e6202e58062f7f5041fc8037e4bd4e17140a9"
-
-babylon@^6.13.0:
+babylon@^6.11.0, babylon@^6.13.0:
   version "6.14.1"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.14.1.tgz#956275fab72753ad9b3435d7afe58f8bf0a29815"
 
@@ -863,7 +859,7 @@ cape-lodash@1.7.0:
   dependencies:
     lodash "^4.16.6"
 
-cape-redux-auth@2.1.0:
+cape-redux-auth@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/cape-redux-auth/-/cape-redux-auth-2.1.0.tgz#6330dec1cff4ef285d18da5e34e0e497aecf5fd9"
   dependencies:
@@ -892,7 +888,7 @@ cape-redux@2.1.1:
     redux "^3.6.0"
     seamless-immutable "^6.3.0"
 
-cape-redux@2.2.0:
+cape-redux@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-2.2.0.tgz#87c374543397a34aaa013259eef9982ef4f88893"
   dependencies:
@@ -901,7 +897,7 @@ cape-redux@2.2.0:
     redux "^3.6.0"
     seamless-immutable "^6.3.0"
 
-cape-select@2.3.0, cape-select@^2.2.1:
+cape-select@^2.2.1, cape-select@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/cape-select/-/cape-select-2.3.0.tgz#5ab320c3bea615893739de7e6826cc921164da07"
   dependencies:
@@ -1961,7 +1957,7 @@ lodash.pickby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.pickby/-/lodash.pickby-4.6.0.tgz#7dea21d8c18d7703a27c704c15d3b84a67e33aff"
 
-lodash@4.17.2, lodash@^4.0.0, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.16.6, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
+lodash@^4.0.0, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.16.6, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
@@ -2373,7 +2369,7 @@ redux-graph@^1.6.1:
     reselect "^2.5.4"
     seamless-immutable "^6.3.0"
 
-redux-history-sync@3.0.1, redux-history-sync@^3.0.1:
+redux-history-sync@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/redux-history-sync/-/redux-history-sync-3.0.1.tgz#297a16eae5779fb4a32c908059193c098bf34619"
   dependencies:

@@ -1,5 +1,5 @@
 import {
-  curry, flow, has, mapValues, negate, over,
+  curry, identity, flow, has, mapValues, negate, over,
   pick, property, rearg, spread,
 } from 'lodash'
 import { find, groupBy, keyBy, map, omitBy, pickBy } from 'lodash/fp'
@@ -20,6 +20,7 @@ import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 export const fpGetRef = curry(rearg(getRef, [ 1, 0 ]), 2)
 export const getPropsItem = select(getProps, 'item')
 export const propsItemKey = simpleSelector(getPropsItem, getKey)
+
 // COLLECTIONS
 
 // Select all CollectionList entities from the database.
@@ -32,6 +33,9 @@ export const collectionListSelector = entityTypeSelector(COLLECTION_TYPE)
 export const listItemSelector = entityTypeSelector(LIST_ITEM)
 // Gets currently active ListItem.
 export const activeListItem = createSelector(listItemSelector, findActionCreated)
+// export const activeListItemList = flow(
+//   activeListItem, property('rangeIncludes')
+// )
 export const activeListItemFull = allChildrenSelector(activeListItem)
 
 export const activeListItems = createSelector(listItemSelector, pickBy(isValidListItem))
@@ -40,7 +44,9 @@ export const listItemsByItem = createSelector(
   groupBy(listItem => getKey(getItemRef(listItem)))
 )
 export const itemCollections = getSelect(listItemsByItem, propsItemKey)
-export const getListCollectionId = flow(fpGetRef('mainEntity'), property('id'))
+export const getListCollectionId = flow(
+  property([ 'rangeIncludes', PREDICATE ]), find(identity), property('id')
+)
 export const itemCollectionsHash = createSelector(itemCollections, keyBy(getListCollectionId))
 
 // USER COLLECTIONS - No props needed.
@@ -56,7 +62,7 @@ export const userCollectionsItem = createSelector(
       set('itemListId', collection, (has(itemHash, id) && itemHash[id].id) || null)
     )
 )
-// export const userCollectionsItem = over(userCollections, itemCollectionsHash)
+
 export const userHasCollections = boolSelector(userCollections)
 export const userNeedsCollection = negate(userHasCollections)
 // Find (first) user favs project from list entities.
@@ -77,33 +83,6 @@ export const userHasFavorites = boolSelector(favListElements)
 export const findItemInFavs = createSelector(favListElements, getPropsItem, findItemInListItems)
 // Used by React selector where item is in props arg.
 export const itemInFavs = boolSelector(findItemInFavs)
-// export function itemsSelectors(selectItems) {
-  // const listItems = createSelector(favListElements, selectItems, fixListItems)
-  // const listItemsSorted = createSelector(listItems, orderListItems)
-  // const favsItemIndex = createSelector(listItems, listItemIndex)
-  // return { listItems, listItemsSorted, favsItemIndex }
-// }
-
-// ITEM LISTS & COLLECTIONS. Uses item prop.
-
-// Need to ListItems this textile shows up on.
-// export const itemParents = entityDomainIncludes(getItemId)
-// export const itemListItems = select(itemParents, 'domainIncludes.item')
-// Reduce to only valid/active listItemElements
-// export const itemActiveListItems = createSelector(itemListItems, pickBy(isValidListItem))
-// Move domainIncludes.PREDICATE to collection.
-// export const itemLists = createSelector(itemActiveListItems, setListItemsCollection)
-
-// Reorder list -> collection to collection -> listItemElement. Returns object or null if no list.
-// export const itemInCollections = boolSelector(itemCollections)
-// Is the item in a favs list?
-// export const itemFavCollection = createSelector(itemCollections, find(isFavList))
-
-// Need to know if we should display a confirm window or a projectEdit window.
-// Find fav or active collection under edit.
-// export const getActiveCollection = simpleSelector(favCollection, firstValArg)
-// export const favId = select('PREDICATE.id', favCollection)
-// export const itemIcon = createSelector(itemCollections, getItemIcon)
 
 export const getCollectionState = property('collection')
 export const getActiveItem = select(getCollectionState, 'item')
@@ -121,8 +100,7 @@ export const itemActiveListItem = (state, { item }) => {
 // Used in the ItemFav container.
 export const mapStateToProps = createStructuredSelector({
   itemActiveListItem, // Single listItem entity.
-  collections: userCollections,
+  collections: userCollectionsItem,
   // inCollections: itemInCollections,
   itemIsActive,
-  userCollections,
 })

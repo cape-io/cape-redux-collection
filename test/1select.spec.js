@@ -9,7 +9,8 @@ import {
   favListFull, favListElements, findItemInListItems, findItemInFavs, itemInFavs,
   itemActiveListItem,
   LIST_ITEM, isListItem, itemIsActive, userCollections, userHasCollections,
-  getActiveItem, itemCollectionsHash, activeListItems, listItemsByItem, propsItemKey,
+  getActiveItem, itemCollections, itemCollectionsHash, activeListItems,
+  listItemsByItem, propsItemKey,
   getListCollectionId, userCollectionsItem, favsListSelector,
 } from '../src'
 
@@ -51,15 +52,16 @@ test('userCollections', (t) => {
 //   t.end()
 // })
 test('activeListItem', (t) => {
-  t.equal(activeListItem({}))
+  t.equal(activeListItem({}), undefined, 'empty object returns undefined')
   const listItem0 = activeListItem(getState())
-  t.equal(listItem0, undefined)
+  t.equal(listItem0, undefined, 'no active items returns undefined.')
   const mainEntity = find(userCollections(getState()))
   const listItem1 = createItemThunk({ mainEntity, item: sailboat })(dispatch, getState).payload
   t.ok(isListItem(listItem1), 'isListItem')
   const listItem3 = activeListItem(getState())
   t.ok(isListItem(listItem3), 'isListItem')
-  t.deepEqual(listItem1, listItem3)
+  t.equal(listItem1.id, listItem3.id)
+  // console.log(JSON.stringify(getState().graph2.CollectionList, null, 2))
   confirmActiveThunk()(dispatch, getState)
   t.equal(activeListItem(getState()), undefined)
   t.end()
@@ -71,6 +73,8 @@ test('favListFull', (t) => {
   t.equal(res.type, COLLECTION_TYPE)
   t.ok(res.creator)
   t.ok(res.editor)
+  // console.log(JSON.stringify(getState().graph2.CollectionList, null, 2))
+  // console.log(res)
   t.equal(find(res.itemListElement).type, LIST_ITEM)
   t.end()
 })
@@ -137,7 +141,11 @@ test('propsItemKey', (t) => {
 test('getListCollectionId', (t) => {
   const listItem = {
     type: 'ListItem',
-    rangeIncludes: {},
+    rangeIncludes: {
+      itemListElement: {
+        CollectionList_x31lx01p: { id: 'x31lx01p', type: COLLECTION_TYPE },
+      },
+    },
     _ref: {
       creator: user,
       editor: user,
@@ -153,14 +161,19 @@ test('getListCollectionId', (t) => {
     dateModified: 1479448467406,
   }
   const res = getListCollectionId(listItem)
-  t.equal(res, list.id)
+  t.equal(res, 'x31lx01p')
+  t.end()
+})
+test('itemCollections', (t) => {
+  const res = itemCollections(getState(), { item: sailboat })
+  t.ok(isArray(res))
   t.end()
 })
 test('itemCollectionsHash', (t) => {
   const res = itemCollectionsHash(getState(), { item: sailboat })
   const firstKey = keys(res)[0]
   t.equal(res[firstKey].type, LIST_ITEM)
-  t.equal(getRef(res[firstKey], 'mainEntity').id, firstKey)
+  t.equal(find(res[firstKey].rangeIncludes.itemListElement).id, firstKey)
   t.equal(getRef(res[firstKey], 'item').id, sailboat.id)
   t.end()
 })
@@ -174,6 +187,7 @@ test('userCollectionsItem', (t) => {
       get(getRefs(collection, 'itemListElement'), `ListItem_${collection.itemListId}.id`, null)
     )
   })
+  // console.log(res)
   t.end()
 })
 test('favsListSelector', (t) => {
