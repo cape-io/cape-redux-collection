@@ -1,6 +1,6 @@
 {
   "name": "cape-redux-collection",
-  "version": "3.2.2",
+  "version": "3.3.0",
   "description": "Redux functions for managing lists of stuff.",
   "main": "lib/index.js",
   "author": "Kai Curry <kai@cape.io> (http://www.cape.io/)",
@@ -23,10 +23,10 @@
     "@kaicurry/redux-graph": "^2.6.7",
     "cape-lodash": "^1.7.0",
     "cape-redux": "^2.2.1",
-    "cape-redux-auth": "^2.2.0",
+    "cape-redux-auth": "^3.0.1",
     "cape-select": "^2.3.1",
     "lodash": "^4.17.2",
-    "redux-history-sync": "^3.0.1",
+    "redux-history-sync": "^3.1.0",
     "reselect": "^2.5.4"
   },
   "devDependencies": {
