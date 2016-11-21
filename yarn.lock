@@ -2,17 +2,16 @@
 # yarn lockfile v1
 
 
-"@kaicurry/redux-graph@^2.6.5":
-  version "2.6.5"
-  resolved "https://registry.yarnpkg.com/@kaicurry/redux-graph/-/redux-graph-2.6.5.tgz#508918cc372fc5ac62ff6ca771fb9d4ac24c0f50"
+"@kaicurry/redux-graph@^2.6.7":
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/@kaicurry/redux-graph/-/redux-graph-2.6.7.tgz#2a4093dc85e6449cd446e9d892c281a7a18ef68c"
   dependencies:
-    cape-lodash "1.7.0"
-    cape-redux "2.1.1"
-    cape-select "^2.2.1"
-    lodash "^4.16.6"
+    cape-lodash "^1.7.0"
+    cape-redux "^2.2.1"
+    cape-select "^2.3.1"
+    lodash "^4.17.2"
     redux "^3.6.0"
     reselect "^2.5.4"
-    seamless-immutable "^6.3.0"
 
 abbrev@1:
   version "1.0.9"
@@ -847,30 +846,29 @@ camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
-cape-lodash, cape-lodash@^1.0.0, cape-lodash@^1.4.1, cape-lodash@^1.5.0:
+cape-lodash:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.5.0.tgz#c93479e708229be444917c3c9245b5b3d7ea05d7"
   dependencies:
     lodash "^4.15.0"
 
-cape-lodash@1.7.0:
+cape-lodash@^1.5.0, cape-lodash@^1.6.0, cape-lodash@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.7.0.tgz#e4988077ed4cf8d3f21f62a0a1ff09828e6bd01f"
   dependencies:
     lodash "^4.16.6"
 
-cape-redux-auth@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/cape-redux-auth/-/cape-redux-auth-2.1.0.tgz#6330dec1cff4ef285d18da5e34e0e497aecf5fd9"
+cape-redux-auth@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/cape-redux-auth/-/cape-redux-auth-2.2.0.tgz#a13e27340b74c60c1293e3eebf4641c02917d3f6"
   dependencies:
-    cape-redux "1.6.1"
-    cape-select "^2.2.1"
-    lodash "^4.16.4"
-    redux-graph "^1.6.1"
+    cape-redux "^2.2.1"
+    cape-select "^2.3.1"
+    lodash "^4.17.2"
+    redux-graph "^1.7.1"
     redux-history-sync "^3.0.1"
-    seamless-immutable "^6.3.0"
 
-cape-redux@1.6.1, cape-redux@^1.5.0:
+cape-redux@^1.5.0, cape-redux@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-1.6.1.tgz#f0847b386c3fb9201110e19c35015af2e34cb9cd"
   dependencies:
@@ -879,30 +877,21 @@ cape-redux@1.6.1, cape-redux@^1.5.0:
     redux "^3.6.0"
     seamless-immutable "^6.3.0"
 
-cape-redux@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-2.1.1.tgz#ff9a80815fc215f33d90c3e04d9e0759b4097fd0"
+cape-redux@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-2.2.1.tgz#12c841bb268dc28f4ace3c1e19f3c7daf356cd25"
   dependencies:
-    cape-lodash "^1.5.0"
-    lodash "^4.16.6"
+    cape-lodash "^1.7.0"
+    lodash "^4.17.2"
     redux "^3.6.0"
     seamless-immutable "^6.3.0"
 
-cape-redux@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-2.2.0.tgz#87c374543397a34aaa013259eef9982ef4f88893"
+cape-select@^2.2.1, cape-select@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/cape-select/-/cape-select-2.3.1.tgz#d86e2ead0be1ea03b3525712b91eb3373e61c6bd"
   dependencies:
-    cape-lodash "^1.5.0"
-    lodash "^4.16.6"
-    redux "^3.6.0"
-    seamless-immutable "^6.3.0"
-
-cape-select@^2.2.1, cape-select@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/cape-select/-/cape-select-2.3.0.tgz#5ab320c3bea615893739de7e6826cc921164da07"
-  dependencies:
-    cape-lodash "^1.0.0"
-    lodash "^4.15.0"
+    cape-lodash "^1.7.0"
+    lodash "^4.17.2"
 
 caseless@~0.11.0:
   version "0.11.0"
@@ -2358,13 +2347,14 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-redux-graph@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/redux-graph/-/redux-graph-1.6.1.tgz#b93e6ee8c3822ec7473e2514791d5248650223a5"
+redux-graph@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/redux-graph/-/redux-graph-1.7.1.tgz#19c65f49ea5cae1a76d1c03791729672d8ff2a10"
   dependencies:
-    cape-lodash "^1.4.1"
-    cape-redux "^1.5.0"
-    lodash "^4.16.4"
+    cape-lodash "^1.6.0"
+    cape-redux "^1.6.1"
+    cape-select "^2.2.1"
+    lodash "^4.16.6"
     redux "^3.6.0"
     reselect "^2.5.4"
     seamless-immutable "^6.3.0"
