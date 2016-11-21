@@ -24,9 +24,15 @@ export function thunkify(actionSelector) {
   return (dispatch, getState) => dispatch(actionSelector(getState()))
 }
 
-export const CLOSE = 'collection/CLOSE'
 // Close edit dialog.
+export const CLOSE = 'collection/CLOSE'
 export const close = createAction(CLOSE, noop)
+// Open edit list.
+export const COLLECTION = 'collection/COLLECTION'
+export const editCollection = createAction(COLLECTION)
+// Open edit list item.
+export const LISTITEM = 'collection/LISTITEM'
+export const editListItem = createAction(LISTITEM)
 
 export const UPDATE_ITEM = 'collection/UPDATE_ITEM'
 
