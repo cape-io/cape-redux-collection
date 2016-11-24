@@ -1,6 +1,6 @@
 import test from 'tape'
 import { isMatch, property } from 'lodash'
-import { entitySelector } from '@kaicurry/redux-graph'
+import { entitySelector } from 'redux-graph'
 
 // import { LIST_ITEM, PREDICATE } from '../src/const'
 import {

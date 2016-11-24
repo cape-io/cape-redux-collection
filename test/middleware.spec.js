@@ -1,6 +1,6 @@
 import test from 'tape'
 // import { now } from 'lodash'
-import { ENTITY_PUT, selectGraph } from '@kaicurry/redux-graph'
+import { ENTITY_PUT, selectGraph } from 'redux-graph'
 import { createListThunk } from '../src'
 import { configStore } from './mock'
 

@@ -2,7 +2,7 @@ import test from 'tape'
 import {
   each, every, find, get, isArray, isEmpty, isObject, keys, overEvery, size,
 } from 'lodash'
-import { getRef, getRefs, selectGraph } from '@kaicurry/redux-graph'
+import { getRef, getRefs, selectGraph } from 'redux-graph'
 import {
   activeListItem, collectionListSelector, confirmActiveThunk, COLLECTION_TYPE,
   createListThunk, isCollectionList, createItemThunk,

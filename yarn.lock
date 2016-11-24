@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@kaicurry/redux-graph@^2.6.7":
+"redux-graph@^2.6.7":
   version "2.6.7"
-  resolved "https://registry.yarnpkg.com/@kaicurry/redux-graph/-/redux-graph-2.6.7.tgz#2a4093dc85e6449cd446e9d892c281a7a18ef68c"
+  resolved "https://registry.yarnpkg.com/redux-graph/-/redux-graph-2.6.7.tgz#2a4093dc85e6449cd446e9d892c281a7a18ef68c"
   dependencies:
     cape-lodash "^1.7.0"
     cape-redux "^2.2.1"
@@ -862,7 +862,7 @@ cape-redux-auth@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/cape-redux-auth/-/cape-redux-auth-3.0.1.tgz#ffdd1fb551791f36f63b359cfbb687e7c94beb9a"
   dependencies:
-    "@kaicurry/redux-graph" "^2.6.7"
+    "redux-graph" "^2.6.7"
     cape-redux "^2.2.1"
     cape-select "^2.3.1"
     lodash "^4.17.2"

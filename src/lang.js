@@ -4,7 +4,7 @@ import {
   negate, overEvery, partial, partialRight,
 } from 'lodash'
 import { eq } from 'lodash/fp'
-import { getRef } from '@kaicurry/redux-graph'
+import { getRef } from 'redux-graph'
 import {
   ASC, COLLECTION_TYPE, CONFIRMED, CREATED, DESC, ENDED, FAV_TITLE, LIST_ITEM,
 } from './const'

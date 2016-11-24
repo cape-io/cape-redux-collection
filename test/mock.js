@@ -1,6 +1,6 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux'
 import auth from 'cape-redux-auth'
-import graph, { entityPutAll, GRAPH_KEY } from '@kaicurry/redux-graph'
+import graph, { entityPutAll, GRAPH_KEY } from 'redux-graph'
 import thunk from 'redux-thunk'
 import collection, { COLLECTION_TYPE, LIST_ITEM, entityMiddleware } from '../src/'
 

@@ -6,7 +6,7 @@ import { createObj } from 'cape-lodash'
 import { createAction } from 'cape-redux'
 import { structuredSelector } from 'cape-select'
 import { isAnonymous } from 'cape-redux-auth'
-import { requireIdType } from '@kaicurry/redux-graph'
+import { requireIdType } from 'redux-graph'
 import { collectionListBuilder, listItemBuilder } from './entity'
 import {
   activeListItem, favsListSelector, findItemInFavs, userNeedsCollection,

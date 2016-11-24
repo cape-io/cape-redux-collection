@@ -9,7 +9,7 @@ import { set } from 'cape-redux'
 import { selectUser } from 'cape-redux-auth'
 import {
   allChildrenSelector, entityMatch, entityTypeSelector, getKey, getRef, predicateFilter,
-} from '@kaicurry/redux-graph'
+} from 'redux-graph'
 // import { getDataFeed, getWebApp } from '../select'
 // import { itemsFilled } from '../select/items'
 
@@ -20,6 +20,12 @@ import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 export const fpGetRef = curry(rearg(getRef, [ 1, 0 ]), 2)
 export const getPropsItem = select(getProps, 'item')
 export const propsItemKey = simpleSelector(getPropsItem, getKey)
+
+// Redux Collection State
+export const getCollectionState = property('collection')
+export const getActiveItem = select(getCollectionState, 'item')
+export const getActiveCollection = select(getCollectionState, 'collection')
+export const getActiveListItem = select(getCollectionState, 'listItem')
 
 // COLLECTIONS
 
@@ -84,8 +90,6 @@ export const findItemInFavs = createSelector(favListElements, getPropsItem, find
 // Used by React selector where item is in props arg.
 export const itemInFavs = boolSelector(findItemInFavs)
 
-export const getCollectionState = property('collection')
-export const getActiveItem = select(getCollectionState, 'item')
 // Is the component item the same as the one used in the most recent `open` action?
 export const itemIsActive = flow(over(getPropsItem, getActiveItem), spread(entityMatch))
 // Is the component item the same as the one used to create the most recent ListItem?

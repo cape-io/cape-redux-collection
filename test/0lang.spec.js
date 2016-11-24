@@ -1,6 +1,6 @@
 import test from 'tape'
 import { now } from 'lodash'
-import { REF } from '@kaicurry/redux-graph'
+import { REF } from 'redux-graph'
 import {
   isActionEnded, isCollectionList, isFavList, getItemRef, isValidListItem,
 } from '../src/lang'

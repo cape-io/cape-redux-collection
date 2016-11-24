@@ -1,5 +1,5 @@
 import { isFunction, omit } from 'lodash'
-import { entityPut, entityUpdate, triplePut } from '@kaicurry/redux-graph'
+import { entityPut, entityUpdate, triplePut } from 'redux-graph'
 import { CREATE_LIST, CREATE_ITEM, UPDATE_ITEM } from './actions'
 import { PREDICATE } from './const'
 
