@@ -9,7 +9,7 @@ export const dispatcher = {
   [UPDATE_ITEM]: entityUpdate,
 }
 
-export function entityMiddleware() {
+export function collectionMiddleware() {
   return next => (action) => {
     if (isFunction(dispatcher[action.type])) {
       return next(dispatcher[action.type](action.payload))
