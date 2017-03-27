@@ -1,3 +1,7 @@
+## 4.2.0
+
+- Update version of `cape-redux`.
+
 ## 4.1.0
 
 - firebase action handlers that can be added to middleware.
