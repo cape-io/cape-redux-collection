@@ -99,6 +99,7 @@ export function toggle(item) {
     const prepAction = toggleActionPrep(getState())
     if (prepAction) dispatch(prepAction)
     const addOpenItem = addOrOpen(getState(), item)
+    console.log(item)
     return dispatch(addOpenItem)
   }
 }

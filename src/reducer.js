@@ -1,5 +1,6 @@
 import { constant } from 'lodash'
-import { createReducer, set } from 'cape-redux'
+import { createReducer } from 'cape-redux'
+import { set } from 'cape-lodash'
 import { CLOSE, COLLECTION, LISTITEM, OPEN } from './actions'
 
 export const defaultState = {
