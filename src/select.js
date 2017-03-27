@@ -5,7 +5,7 @@ import {
 import { find, groupBy, keyBy, map, omitBy, pickBy } from 'lodash/fp'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { boolSelector, getProps, getSelect, select, simpleSelector } from 'cape-select'
-import { set } from 'cape-redux'
+import { set } from 'cape-lodash'
 import { selectUser } from 'cape-redux-auth'
 import {
   allChildrenSelector, entityMatch, entityTypeSelector, getKey, getRef, predicateFilter,
