@@ -51,7 +51,7 @@ export const listItemsByItem = createSelector(
 )
 export const itemCollections = getSelect(listItemsByItem, propsItemKey)
 export const getListCollectionId = flow(
-  property([ 'rangeIncludes', PREDICATE ]), find(identity), property('id')
+  property(['rangeIncludes', PREDICATE]), find(identity), property('id')
 )
 export const itemCollectionsHash = createSelector(itemCollections, keyBy(getListCollectionId))
 
