@@ -5,27 +5,20 @@
     "plugin:import/warnings"
   ],
   "ecmaFeatures": {
-    "jsx": true,
     "modules": true
   },
   "env": {
-    "browser": true,
-    "node": true,
-    "mocha": true
+    "shared-node-browser": true,
+    "es6": true
   },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
-  },
+  "parser": "babel-eslint",
   "rules": {
-    "array-bracket-spacing": [ 2, "always" ],
     "comma-dangle": [2, "always-multiline"],
     "id-length": [2, {
       "min": 3,
       "max": 30,
       "properties": "never",
-      "exceptions": ["t", "io", "id", "fs", "$", "_"]
+      "exceptions": ["t", "at"]
     }],
     "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.spec.js", "**/mock.js"]}],
     "import/no-named-as-default": 2,
