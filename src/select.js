@@ -17,7 +17,7 @@ import { findActionCreated } from './helpers'
 import { getItemRef, isActionEnded, isFavList, isValidListItem } from './lang'
 import { COLLECTION_TYPE, LIST_ITEM, PREDICATE } from './const'
 
-export const fpGetRef = curry(rearg(getRef, [ 1, 0 ]), 2)
+export const fpGetRef = curry(rearg(getRef, [1, 0]), 2)
 export const getPropsItem = select(getProps, 'item')
 export const propsItemKey = simpleSelector(getPropsItem, getKey)
 

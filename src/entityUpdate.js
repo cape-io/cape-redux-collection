@@ -1,19 +1,28 @@
 import { get, set } from 'lodash'
 import {
-  fullRefPath, getEntity, getKey, getPath, getRefPath,
-  pickTypeId,
+  entityPut, fullRefPath, getEntity, getKey, getPath, getRefPath, pickTypeId,
 } from 'redux-graph'
 import { entityDb, entitySet, entityUpdate } from 'cape-firebase'
 import { COLLECTION_TYPE, PREDICATE } from './const'
 import { getListCollectionId } from './select'
-
+import { isFavList } from './lang'
 // ({ action, entityIds, firebase, next, store })
 
+export function createList({ store, action: { payload }, firebase, next }) {
+  if (isFavList(payload)) {
+    // Save to redux right now, so it's there for the ListItem saving.
+    const item = next(entityPut(payload)).payload
+    item.dateModified = firebase.TIMESTAMP
+    return entityDb(firebase.entity, item).set(item)
+    .then(() => item)
+  }
+  return entitySet(store, payload, firebase)
+}
 export function createItem({ action: { payload }, firebase }) {
   const { mainEntity, ...item } = payload
   if (!mainEntity) throw new Error('mainEntity required. See func calling createItem.')
   const subject = pickTypeId(mainEntity)
-  set(item, [ 'rangeIncludes', PREDICATE, getKey(subject) ], subject)
+  set(item, ['rangeIncludes', PREDICATE, getKey(subject)], subject)
   // Save ListItem to the database.
   return entitySet(firebase, item)
   // Get dateModified value of ListItem

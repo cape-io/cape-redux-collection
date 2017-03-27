@@ -1,3 +1,7 @@
+## 4.2.1
+
+- Firebase middleware `createList` handler function to save to redux before saving to fire.
+
 ## 4.2.0
 
 - Update version of `cape-redux`.
