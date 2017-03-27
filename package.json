@@ -21,13 +21,13 @@
   "license": "ISC",
   "dependencies": {
     "cape-lodash": "^1.7.0",
-    "cape-redux": "^2.2.1",
+    "cape-redux": "^3.1.0",
     "cape-redux-auth": "^4.0.0",
     "cape-select": "^2.3.1",
     "lodash": "^4.17.2",
     "redux-graph": "^2.10.0",
     "redux-history-sync": "^3.1.0",
-    "reselect": "^2.5.4"
+    "reselect": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -38,7 +38,7 @@
     "babel-preset-stage-1": "^6.16.0",
     "babel-tape-runner": "^2.0.1",
     "eslint": "^3.10.2",
-    "eslint-config-airbnb-base": "10.0.1",
+    "eslint-config-airbnb-base": "^11.1.1",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^2.2.0",
     "redux": "^3.6.0",

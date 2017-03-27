@@ -11,6 +11,7 @@ import { getListCollectionId } from './select'
 
 export function createItem({ action: { payload }, firebase }) {
   const { mainEntity, ...item } = payload
+  if (!mainEntity) throw new Error('mainEntity required. See func calling createItem.')
   const subject = pickTypeId(mainEntity)
   set(item, [ 'rangeIncludes', PREDICATE, getKey(subject) ], subject)
   // Save ListItem to the database.
