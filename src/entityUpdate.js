@@ -23,13 +23,15 @@ export function createItem({ action: { payload }, firebase }) {
   if (!mainEntity) throw new Error('mainEntity required. See func calling createItem.')
   const subject = pickTypeId(mainEntity)
   set(item, ['rangeIncludes', PREDICATE, getKey(subject)], subject)
+  // item does not have an `id` yet.
   // Save ListItem to the database.
   return entitySet(firebase, item)
   // Get dateModified value of ListItem
-  .then(node => entityDb(firebase.entity, node).child('dateModified').once('value'))
-  .then((dateModified) => {
-    const object = pickTypeId(item)
-    object.dateModified = dateModified.val()
+  // node is the saved item.
+  .then(node => entityDb(firebase.entity, node).once('value'))
+  .then((savedItem) => {
+    // yes, pickTypeId contains dateModified.
+    const object = pickTypeId(savedItem.val())
     // Attach the ListItem to the CollectionList.
     entityDb(firebase.entity, subject).update({
       dateModified: firebase.TIMESTAMP,
